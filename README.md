@@ -2,7 +2,7 @@
 
 A community-driven platform for K-pop fans to trade fan-made goods. Connect with fellow fans, discover unique merchandise, and swap items in a fun and secure environment.
 
-# Goodswap: React + TypeScript + Vite + Jotai + Tailwind CSS
+## Goodswap: React + TypeScript + Vite + Jotai + Tailwind CSS
 
 ## **주의**
 
@@ -21,23 +21,32 @@ A community-driven platform for K-pop fans to trade fan-made goods. Connect with
 ### 프로젝트 설정
 
 1. **레포지토리 클론**:
+
    ```bash
    git clone <your-repo-url>
    cd goodswap
    ```
+
 2. **의존성 설치**:
+
    ```bash
    pnpm install
    ```
+
 3. **개발 서버 실행**:
+
    ```bash
    pnpm run dev
    ```
+
 4. **프로젝트 빌드**:
+
    ```bash
    pnpm run build
    ```
+
 5. **빌드 결과 미리보기**:
+
    ```bash
    pnpm run preview
    ```
@@ -110,7 +119,7 @@ Tailwind와 autoprefixer를 사용하여 CSS 파일을 컴파일합니다.
 
 ## FSD (Feature-Sliced Design) 규칙 정리
 
-## FSD 아키텍처는 기능과 데이터 구조를 명확하게 분리하여 유지보수와 확장성을 높이는 것을 목표로 하는 아키텍처 패턴입니다. 이 패턴을 적용하여 팀 프로젝트를 관리할 때 다음과 같은 규칙과 폴더 구조를 따릅니다.
+## FSD 아키텍처는 기능과 데이터 구조를 명확하게 분리하여 유지보수와 확장성을 높이는 것을 목표로 하는 아키텍처 패턴입니다. 이 패턴을 적용하여 팀 프로젝트를 관리할 때 다음과 같은 규칙과 폴더 구조를 따릅니다
 
 ## 메인 폴더 구조
 
