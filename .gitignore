@@ -1,4 +1,4 @@
-# Logs
+# 로그 파일
 logs
 *.log
 npm-debug.log*
@@ -7,21 +7,21 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Dependency directories
+# 의존성 디렉토리
 node_modules
 
-# Build output directories
+# 빌드 출력 디렉토리
 dist
 dist-ssr
 out/
 coverage/
 
-# Local environment files
+# 로컬 환경 파일
 *.local
 .env
 .env.*
 
-# Editor directories and files
+# 에디터 디렉토리 및 파일
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -32,13 +32,13 @@ coverage/
 *.sln
 *.sw?
 
-# OS generated files
+# 운영체제에서 생성된 파일
 Thumbs.db
 Desktop.ini
 
-# Tool-specific cache files
+# 툴별 캐시 파일
 .eslintcache
 .stylelintcache
 
-# TypeScript compiler cache
+# TypeScript 컴파일러 캐시
 *.tsbuildinfo
