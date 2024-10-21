@@ -1,6 +1,6 @@
 # GoodSwap---Front
 
-A community-driven platform for K-pop fans to trade fan-made goods. Connect with fellow fans, discover unique merchandise, and swap items in a fun and secure environment.
+"K-pop 팬들이 다른 팬들과 즐겁게 소통하고, 독특한 팬메이드 상품을 발견하며 안전한 환경에서 구매할 수 있는 커뮤니티 기반 플랫폼입니다."
 
 ## GoodSwap: React + TypeScript + Vite + Jotai + Tailwind CSS
 
