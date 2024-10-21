@@ -1,7 +1,8 @@
-// 수정된 코드 (Jotai Provider 제거)
+// src/app/App.tsx
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginForm from "./components/LoginForm";
-import MainPage from "./pages/MainPage";
+import MainPage from "@/pages/MainPage"; // 경로 수정
+import LoginForm from "@/features/auth/LoginForm"; // 경로 수정
 
 function App() {
   return (

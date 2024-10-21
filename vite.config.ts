@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "src"),
     },
+    extensions: [".ts", ".tsx", ".js", ".jsx"], // 추가: 해석 가능한 파일 확장자 설정
   },
   css: {
     // PostCSS 플러그인으로 Tailwind CSS와 autoprefixer 설정

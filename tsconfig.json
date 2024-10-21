@@ -3,12 +3,17 @@
     "types": ["node"],
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "composite": true, // 추가: 프로젝트 전반에 걸친 설정
-    "skipLibCheck": false // 추가: 외부 라이브러리 타입 체크 무시
+    "composite": true,
+    "skipLibCheck": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "include": ["src/**/*"] // src 디렉토리 안의 모든 파일 포함
 }
