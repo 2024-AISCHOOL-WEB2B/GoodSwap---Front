@@ -2,11 +2,12 @@
 
 A community-driven platform for K-pop fans to trade fan-made goods. Connect with fellow fans, discover unique merchandise, and swap items in a fun and secure environment.
 
-## Goodswap: React + TypeScript + Vite + Jotai + Tailwind CSS
+## GoodSwap: React + TypeScript + Vite + Jotai + Tailwind CSS
 
 ## **주의**
 
 이 프로젝트는 웹개발을 막시작한 햇병아리가 작성한 문서이기 때문에 수많은 내용들이 오류가 있거나 전문가들이 보시기에 부족한 내용이 있을 수 있음을 미리 알려드리오니 그 점 감안해주시고 읽어주시기를 부탁합니다. 틀린 내용이나 첨언해주실 내용이 있다면 피드백 언제나 적극 환영입니다. 감사합니다.
+
 해당문서는 GoodSwap 프로젝트에서 **React**, **TypeScript**, **Vite**를 사용하여 구성된 프론트엔드 환경에 관한 것으로, 상태 관리를 위해 **Jotai**를, 스타일링을 위해 **Tailwind CSS**를 사용합니다. 협업 개발 워크플로우에 최적화되어 있으며, 의존성 관리를 위해 **PNPM**을 사용합니다.
 
 ## 시작하기
