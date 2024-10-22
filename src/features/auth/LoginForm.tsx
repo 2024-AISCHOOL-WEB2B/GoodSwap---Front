@@ -7,8 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 import { useAtom } from "jotai";
-import { isLoggedInAtom } from "@/atoms/auth";
-import useSessionStorage from "@/shared/hooks/useSessionStorage";
+import { isLoggedInAtom } from "../../atoms/auth";
+import { useSessionStorage } from "../../shared/hooks/useSessionStorage"; // named import로 수정
 
 // LoginFormData 타입 정의
 const schema = z.object({
@@ -29,7 +29,8 @@ interface LoginFormProps {
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
-  const [_isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom); // Jotai atom 사용
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [storedEmail, setStoredEmail] = useSessionStorage("email", "");
@@ -184,4 +185,4 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   );
 };
 
-export default LoginForm;
+export { LoginForm };

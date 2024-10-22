@@ -1,7 +1,7 @@
 // src/shared/hooks/useSessionStorage.ts
 import { useState, useEffect } from "react";
 
-function useSessionStorage(key: string, initialValue: string) {
+export function useSessionStorage(key: string, initialValue: string) { // named export로 변경
   const [storedValue, setStoredValue] = useState(() => {
     try {
       const item = sessionStorage.getItem(key);
@@ -35,5 +35,3 @@ function useSessionStorage(key: string, initialValue: string) {
 
   return [storedValue, setValue] as const;
 }
-
-export default useSessionStorage;

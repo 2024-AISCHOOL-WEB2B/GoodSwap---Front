@@ -1,19 +1,12 @@
 {
   "compilerOptions": {
+    "jsx": "react-jsx",
     "types": ["node"],
     "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
     "strict": true,
-    "composite": true,
     "skipLibCheck": false,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "baseUrl": "."
   },
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "include": ["src/**/*"] // src 디렉토리 안의 모든 파일 포함
 }

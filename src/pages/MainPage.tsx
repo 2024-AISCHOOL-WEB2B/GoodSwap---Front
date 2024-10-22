@@ -47,4 +47,5 @@ const MainPage: React.FC<MainPageProps> = ({ isLoggedIn, onLogout }) => {
   );
 };
 
-export default MainPage;
+// named export로 변경
+export { MainPage };

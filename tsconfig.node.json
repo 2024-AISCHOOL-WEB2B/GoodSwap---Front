@@ -10,6 +10,7 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
+    "noEmit": true,
 
     /* Linting */
     "strict": true,
@@ -19,10 +20,7 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["node"], // Node.js 타입 정의 추가
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "composite": true,
-    "emitDeclarationOnly": true, // emit 설정 변경
-    "outDir": "./dist" // 출력 디렉토리 설정
+    "allowSyntheticDefaultImports": true
   },
   "include": ["vite.config.ts"]
 }

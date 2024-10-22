@@ -8,11 +8,10 @@ import autoprefixer from "autoprefixer";
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    // Alias 설정을 통해 'src' 폴더를 '@'로 접근 가능하게 합니다.
     alias: {
-      "@": path.resolve(__dirname, "src"),
-    },
-    extensions: [".ts", ".tsx", ".js", ".jsx"], // 추가: 해석 가능한 파일 확장자 설정
+      // path를 path-browserify로 대체
+      path: "path-browserify"
+    }
   },
   css: {
     // PostCSS 플러그인으로 Tailwind CSS와 autoprefixer 설정

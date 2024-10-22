@@ -12,6 +12,7 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "jsx": "react-jsx",
+    "noEmit": true,
 
     /* Linting */
     "strict": true,
@@ -20,10 +21,7 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "composite": true, // 추가
-    "emitDeclarationOnly": true, // emit 설정 변경
-    "outDir": "./dist"
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"]
 }
