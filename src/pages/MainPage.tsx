@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form"; // useForm 추가
 
 interface MainPageProps {
   isLoggedIn: boolean;
@@ -10,9 +11,15 @@ interface MainPageProps {
 
 const MainPage: React.FC<MainPageProps> = ({ isLoggedIn, onLogout }) => {
   const navigate = useNavigate();
+  const { setValue } = useForm(); // useForm 훅에서 setValue 가져오기
 
   const handleLogout = () => {
     onLogout(); // 로그아웃 상태로 변경
+    // 이메일과 비밀번호 초기화
+    setValue("email", "");
+    setValue("password", "");
+    sessionStorage.removeItem("email");
+    sessionStorage.removeItem("password");
     navigate("/"); // 로그아웃 후 메인 페이지로 이동
   };
 
@@ -47,5 +54,4 @@ const MainPage: React.FC<MainPageProps> = ({ isLoggedIn, onLogout }) => {
   );
 };
 
-// named export로 변경
 export { MainPage };
