@@ -1,17 +1,38 @@
 // src/app/App.tsx
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { MainPage } from "../pages/MainPage"; // named export에 맞게 수정
-import { LoginForm } from "../features/auth/LoginForm"; // named export에 맞게 수정
+import { MainPage } from "../pages/MainPage";
+import { LoginForm } from "../features/auth/LoginForm";
+import { useAtom } from "jotai";
+import { isLoggedInAtom } from "../atoms/auth";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       <Router>
         <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/main" element={<MainPage />} />
+          <Route
+            path="/"
+            element={<MainPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
+          />
+          <Route
+            path="/login"
+            element={<LoginForm onLogin={handleLogin} />}
+          />
+          <Route
+            path="/main"
+            element={<MainPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
+          />
         </Routes>
       </Router>
     </div>
