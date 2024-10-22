@@ -1,16 +1,17 @@
 // src/features/auth/LoginForm.tsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
-import { useAtom } from "jotai";
-import { isLoggedInAtom } from "../../atoms/auth";
-import { useSessionStorage } from "../../shared/hooks/useSessionStorage"; // named import로 수정
+import { useSessionStorage } from "../../shared/hooks/useSessionStorage";
 
-// LoginFormData 타입 정의
+interface LoginFormProps {
+  onLogin: () => void;
+}
+
 const schema = z.object({
   email: z.string().email({ message: "유효한 이메일을 입력해주세요." }),
   password: z
@@ -24,13 +25,7 @@ const schema = z.object({
 
 type LoginFormData = z.infer<typeof schema>;
 
-interface LoginFormProps {
-  onLogin: () => void;
-}
-
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [storedEmail, setStoredEmail] = useSessionStorage("email", "");
@@ -41,7 +36,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     email: "user@example.com",
     password: "Test@1234",
   };
-
+  
   const {
     register,
     handleSubmit,
@@ -56,15 +51,25 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const email = watch("email");
   const password = watch("password");
 
-  useEffect(() => {
-    setStoredEmail(email);
-    setStoredPassword(password);
-  }, [email, password, setStoredEmail, setStoredPassword]);
+  // 첫 렌더링 여부를 확인하기 위한 useRef
+  const isFirstRender = useRef(true);
 
+  // 첫 번째 useEffect: 컴포넌트가 처음 마운트될 때만 저장된 값을 불러옴
   useEffect(() => {
-    setValue("email", storedEmail);
-    setValue("password", storedPassword);
+    if (isFirstRender.current) {
+      if (storedEmail) setValue("email", storedEmail);
+      if (storedPassword) setValue("password", storedPassword);
+      isFirstRender.current = false; // 이후에는 실행되지 않도록 설정
+    }
   }, [setValue, storedEmail, storedPassword]);
+
+  // 두 번째 useEffect: email과 password가 변경될 때 sessionStorage에 저장
+  useEffect(() => {
+    if (!isFirstRender.current) {
+      setStoredEmail(email);
+      setStoredPassword(password);
+    }
+  }, [email, password, setStoredEmail, setStoredPassword]);
 
   const onSubmit = async (data: LoginFormData) => {
     try {
@@ -76,7 +81,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         sanitizedPassword === mockUserData.password
       ) {
         setErrorMessage(null);
-        setIsLoggedIn(true);
         onLogin();
         navigate("/main");
       } else {
@@ -89,7 +93,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         setErrorMessage("알 수 없는 오류가 발생했습니다.");
       }
       setShowModal(true);
-      setIsLoggedIn(false);
       setStoredEmail("");
       setStoredPassword("");
       setValue("email", "");
@@ -104,18 +107,20 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   return (
     <div className="relative">
       <div
-        className={`mt-6 flex items-start justify-center ${showModal ? "blur-md" : ""}`}
+        className={`flex justify-center items-start mt-6 ${
+          showModal ? "blur-md" : ""
+        }`}
       >
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col justify-center w-[498px] h-[723px] p-6 border"
+          className="w-[498px] h-[723px] border p-6 flex flex-col justify-center"
         >
-          <h1 className="mb-4 text-2xl font-bold text-center">
+          <h1 className="text-2xl font-bold mb-4 text-center">
             덕업일치 계정으로 로그인해주세요.
           </h1>
 
           <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm">
+            <label htmlFor="email" className="block text-sm mb-2">
               이메일
             </label>
             <input
@@ -126,14 +131,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
               placeholder="your@email.com"
             />
             {errors.email && (
-              <p className="mt-1 text-sm text-red-500">
+              <p className="text-red-500 text-sm mt-1">
                 {errors.email?.message?.toString()}
               </p>
             )}
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="block mb-2 text-sm">
+            <label htmlFor="password" className="block text-sm mb-2">
               비밀번호
             </label>
             <input
@@ -144,7 +149,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
               placeholder="비밀번호"
             />
             {errors.password && (
-              <p className="mt-1 text-sm text-red-500">
+              <p className="text-red-500 text-sm mt-1">
                 {errors.password?.message?.toString()}
               </p>
             )}
@@ -152,15 +157,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
           <button
             type="submit"
-            className="w-full py-2 font-semibold text-white bg-gradient-to-r from-pink-400 to-orange-400"
+            className="w-full py-2 bg-gradient-to-r from-pink-400 to-orange-400 text-white font-semibold"
           >
             로그인
           </button>
 
-          <p className="mt-6 text-center">비밀번호를 잊어버리셨나요?</p>
-          <p className="mt-12 text-center">
+          <p className="text-center mt-6">비밀번호를 잊어버리셨나요?</p>
+          <p className="text-center mt-12">
             아직 계정이 없다면?{" "}
-            <a href="#" className="font-semibold text-pink-500">
+            <a href="#" className="text-pink-500 font-semibold">
               덕업일치 계정으로 가입하기
             </a>
           </p>
@@ -168,13 +173,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="p-6 bg-white rounded shadow-lg text-center">
-            <h2 className="mb-4 text-red-500">로그인 실패</h2>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded shadow-lg text-center">
+            <h2 className="text-red-500 mb-4">로그인 실패</h2>
             <p>{errorMessage}</p>
             <button
               onClick={closeModal}
-              className="px-4 py-2 mt-4 text-white bg-gray-800 rounded"
+              className="mt-4 py-2 px-4 bg-gray-800 text-white rounded"
             >
               닫기
             </button>
