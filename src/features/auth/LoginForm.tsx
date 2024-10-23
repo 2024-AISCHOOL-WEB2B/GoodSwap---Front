@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
+import axios from "axios";
 import { useSessionStorage } from "../../shared/hooks/useSessionStorage";
 
 interface LoginFormProps {
@@ -19,8 +20,8 @@ const schema = z.object({
     .min(8, { message: "비밀번호는 최소 8자 이상이어야 합니다." })
     .max(32, { message: "비밀번호는 최대 32자까지만 가능합니다." })
     .regex(/[a-zA-Z]/, "비밀번호에는 영문자가 포함되어야 합니다.")
-    .regex(/[0-9]/, "비밀번호에는 숫자가 포함되어야 합니다.")
-    .regex(/[\W_]/, "비밀번호에는 특수문자가 포함되어야 합니다."),
+    // .regex(/[0-9]/, "비밀번호에는 숫자가 포함되어야 합니다.")
+    // .regex(/[\W_]/, "비밀번호에는 특수문자가 포함되어야 합니다."),
 });
 
 type LoginFormData = z.infer<typeof schema>;
@@ -32,11 +33,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [storedPassword, setStoredPassword] = useSessionStorage("password", "");
   const navigate = useNavigate();
 
-  const mockUserData = {
-    email: "user@example.com",
-    password: "Test@1234",
-  };
-  
   const {
     register,
     handleSubmit,
@@ -51,19 +47,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const email = watch("email");
   const password = watch("password");
 
-  // 첫 렌더링 여부를 확인하기 위한 useRef
   const isFirstRender = useRef(true);
 
-  // 첫 번째 useEffect: 컴포넌트가 처음 마운트될 때만 저장된 값을 불러옴
   useEffect(() => {
     if (isFirstRender.current) {
       if (storedEmail) setValue("email", storedEmail);
       if (storedPassword) setValue("password", storedPassword);
-      isFirstRender.current = false; // 이후에는 실행되지 않도록 설정
+      isFirstRender.current = false;
     }
   }, [setValue, storedEmail, storedPassword]);
 
-  // 두 번째 useEffect: email과 password가 변경될 때 sessionStorage에 저장
   useEffect(() => {
     if (!isFirstRender.current) {
       setStoredEmail(email);
@@ -76,18 +69,37 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       const sanitizedEmail = sanitizeHtml(data.email);
       const sanitizedPassword = sanitizeHtml(data.password);
 
-      if (
-        sanitizedEmail === mockUserData.email &&
-        sanitizedPassword === mockUserData.password
-      ) {
+      // Postman Mock 서버 URL로 변경
+      const mockServerUrl = "https://616f2a32-3be4-47b2-b372-469546ae9e40.mock.pstmn.io";
+
+      // 이메일 존재 여부 확인 (가상 로직)
+      const emailResponse = await axios.post(`${mockServerUrl}/api/check-email`, {
+        email: sanitizedEmail,
+      });
+
+      if (emailResponse.status !== 200) {
+        throw new Error("존재하지 않는 계정입니다.");
+      }
+
+      // 비밀번호 확인
+      const loginResponse = await axios.post(`${mockServerUrl}/api/login`, {
+        email: sanitizedEmail,
+        password: sanitizedPassword,
+      });
+
+      if (loginResponse.status === 200) {
         setErrorMessage(null);
+        setStoredEmail("");
+        setStoredPassword("");
         onLogin();
         navigate("/main");
       } else {
-        throw new Error("이메일 또는 비밀번호가 잘못되었습니다.");
+        throw new Error("비밀번호가 틀렸습니다. 다시 확인해주세요.");
       }
     } catch (error: unknown) {
-      if (error instanceof Error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setErrorMessage(error.response.data.error || "서버 오류가 발생했습니다.");
+      } else if (error instanceof Error) {
         setErrorMessage(error.message);
       } else {
         setErrorMessage("알 수 없는 오류가 발생했습니다.");
@@ -99,6 +111,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       setValue("password", "");
     }
   };
+  
 
   const closeModal = () => {
     setShowModal(false);
