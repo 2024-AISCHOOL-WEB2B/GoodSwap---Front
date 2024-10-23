@@ -1,5 +1,7 @@
-// Error message handler for HTTP status codes
-export const handleErrorResponse = (statusCode: number): string => {
+// src/shared/utils/errorHandlers.ts
+
+// 서버 응답에 따른 에러 메시지 처리 함수
+export const handleErrorResponse = (statusCode: number) => {
   switch (statusCode) {
     case 404:
       return "존재하지 않는 계정입니다.";

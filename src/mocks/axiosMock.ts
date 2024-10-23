@@ -1,7 +1,7 @@
 // src/mocks/axiosMock.ts
 
 import MockAdapter from "axios-mock-adapter";
-import axiosInstance from "../shared/services/axiosInstance";
+import { axiosInstance } from "../shared/services";
 
 const mock = new MockAdapter(axiosInstance);
 

@@ -1,4 +1,6 @@
-import axiosInstance from "../../../shared/services/axiosInstance";
+// src/features/auth/utils/formHandlers.ts
+
+import { axiosInstance } from "../../../shared/services";
 import sanitizeHtml from "sanitize-html";
 import axios from "axios";
 import { handleErrorResponse } from "../../../shared/utils";
