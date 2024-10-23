@@ -6,6 +6,11 @@ import { Provider } from "jotai"; // Jotai Provider 추가
 import App from "./App";
 import "../shared/styles/index.css"; // 상대 경로로 수정
 
+// Mock 설정 임포트
+if (process.env.NODE_ENV === "development") {
+  import("../mocks/axiosMock"); // 개발 환경에서만 Mock 설정 적용
+}
+
 const rootElement = document.getElementById("root");
 if (rootElement) {
   createRoot(rootElement).render(
