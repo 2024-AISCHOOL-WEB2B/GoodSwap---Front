@@ -1,13 +1,13 @@
 // src/features/auth/LoginForm.tsx
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
-import axiosInstance from "../../shared/services/axiosInstance";
 import axios from "axios";
+import axiosInstance from "../../shared/services/axiosInstance";
 import { useSessionStorage } from "../../shared/hooks/useSessionStorage";
 
 interface LoginFormProps {
@@ -27,7 +27,7 @@ const schema = z.object({
 
 type LoginFormData = z.infer<typeof schema>;
 
-const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
+const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [storedEmail, setStoredEmail] = useSessionStorage("email", "");
@@ -42,18 +42,21 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(schema),
-    mode: "onChange",
+    mode: "onBlur",
   });
 
   const email = watch("email");
   const password = watch("password");
-
   const isFirstRender = useRef(true);
 
   useEffect(() => {
     if (isFirstRender.current) {
-      if (storedEmail) setValue("email", storedEmail);
-      if (storedPassword) setValue("password", storedPassword);
+      if (storedEmail) {
+        setValue("email", storedEmail);
+      }
+      if (storedPassword) {
+        setValue("password", storedPassword);
+      }
       isFirstRender.current = false;
     }
   }, [setValue, storedEmail, storedPassword]);
@@ -65,25 +68,29 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     }
   }, [email, password, setStoredEmail, setStoredPassword]);
 
+  const handleErrorResponse = (statusCode: number) => {
+    switch (statusCode) {
+      case 404:
+        return "존재하지 않는 계정입니다.";
+      case 401:
+        return "비밀번호가 틀렸습니다. 다시 확인해주세요.";
+      default:
+        return "서버 오류가 발생했습니다.";
+    }
+  };
+
   const onSubmit = async (data: LoginFormData) => {
     try {
       const sanitizedEmail = sanitizeHtml(data.email);
       const sanitizedPassword = sanitizeHtml(data.password);
 
-      // 백엔드로 로그인 요청 전송
       const loginResponse = await axiosInstance.post("/login", {
         email: sanitizedEmail,
         password: sanitizedPassword,
       });
 
-      // 응답 상태 코드가 200이면 로그인 성공
       if (loginResponse.status === 200) {
-        // 백엔드가 JWT 토큰을 반환하는 경우
-        const token = loginResponse.data.token;
-
-        // 로컬 스토리지나 쿠키에 토큰 저장 (쿠키 사용 시 생략 가능)
-        localStorage.setItem("token", token);
-
+        localStorage.setItem("token", loginResponse.data.token);
         setErrorMessage(null);
         setStoredEmail("");
         setStoredPassword("");
@@ -92,21 +99,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        // 백엔드에서 전송된 상태 코드에 따라 에러 메시지 설정
-        const statusCode = error.response.status;
-
-        // 존재하지 않는 계정에 대한 응답 처리
-        if (statusCode === 404) {
-          setErrorMessage("존재하지 않는 계정입니다.");
-        }
-        // 비밀번호가 틀렸을 때의 응답 처리
-        else if (statusCode === 401) {
-          setErrorMessage("비밀번호가 틀렸습니다. 다시 확인해주세요.");
-        }
-        // 기타 서버 오류
-        else {
-          setErrorMessage("서버 오류가 발생했습니다.");
-        }
+        setErrorMessage(handleErrorResponse(error.response.status));
       } else if (error instanceof Error) {
         setErrorMessage(error.message);
       } else {
@@ -120,16 +113,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     }
   };
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setShowModal(false);
-  };
+  }, []);
 
   return (
     <div className="relative">
       <div
-        className={`flex justify-center items-start mt-6 ${
-          showModal ? "blur-md" : ""
-        }`}
+        className={`flex justify-center items-start mt-6 ${showModal ? "blur-md" : ""}`}
       >
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -152,7 +143,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.email?.message?.toString()}
+                {errors.email.message}
               </p>
             )}
           </div>
@@ -170,7 +161,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.password?.message?.toString()}
+                {errors.password.message}
               </p>
             )}
           </div>
@@ -210,4 +201,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   );
 };
 
-export { LoginForm };
+// React.memo로 컴포넌트 감싸기 및 displayName 설정
+export const LoginForm = React.memo(LoginFormComponent);
+LoginForm.displayName = "LoginForm";
