@@ -5,13 +5,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import sanitizeHtml from "sanitize-html";
-import axios from "axios";
-import axiosInstance from "../../shared/services/axiosInstance";
 import { useSessionStorage } from "../../shared/hooks/useSessionStorage";
 import { loginSchema } from "../../entities/UserSchema";
 import { Modal } from "../../widgets/Modal";
 import { FormLayout } from "../../widgets/FormLayout";
+import { submitLoginForm } from "./utils/formHandlers";
+import { EmailField } from "./components/EmailField";
+import { PasswordField } from "./components/PasswordField";
 
 // 로그인 폼 컴포넌트에 전달할 Props 타입 정의
 interface LoginFormProps {
@@ -75,60 +75,27 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     }
   }, [email, password, setStoredEmail, setStoredPassword]);
 
-  // 서버 응답에 따른 에러 메시지 처리 함수
-  const handleErrorResponse = (statusCode: number) => {
-    switch (statusCode) {
-      case 404:
-        return "존재하지 않는 계정입니다.";
-      case 401:
-        return "비밀번호가 틀렸습니다. 다시 확인해주세요.";
-      default:
-        return "서버 오류가 발생했습니다.";
-    }
-  };
-
   // 폼 제출 시 호출되는 함수
   const onSubmit = async (data: LoginFormData) => {
-    try {
-      // 데이터 정화 - 해커들아 혼난다.
-      const sanitizedEmail = sanitizeHtml(data.email);
-      const sanitizedPassword = sanitizeHtml(data.password);
-
-      // 로그인 요청
-      const loginResponse = await axiosInstance.post("/login", {
-        email: sanitizedEmail,
-        password: sanitizedPassword,
-      });
-
-      // 로그인 성공 시 토큰 저장
-      if (loginResponse.status === 200) {
-        localStorage.setItem("token", loginResponse.data.token);
-        // 에러 메시지 & 세션 스토리지 초기화
+    submitLoginForm(
+      data.email,
+      data.password,
+      () => {
         setErrorMessage(null);
         setStoredEmail("");
         setStoredPassword("");
-        // 로그인 성공 시 호출
         onLogin();
         navigate("/main");
+      },
+      (errorMessage) => {
+        setErrorMessage(errorMessage);
+        setShowModal(true);
+        setStoredEmail("");
+        setStoredPassword("");
+        setValue("email", "");
+        setValue("password", "");
       }
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        // 서버 응답에 따른 메시지 설정
-        setErrorMessage(handleErrorResponse(error.response.status));
-      } else if (error instanceof Error) {
-        // 일반적인 에러 메시지 설정
-        setErrorMessage(error.message);
-      } else {
-        // 기타 에러 메시지
-        setErrorMessage("알 수 없는 오류가 발생했습니다.");
-      }
-      setShowModal(true);
-      setStoredEmail("");
-      setStoredPassword("");
-      // 입력 필드 초기화
-      setValue("email", "");
-      setValue("password", "");
-    }
+    );
   };
 
   // 모달 닫기 함수
@@ -139,39 +106,14 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   return (
     <FormLayout title="덕업일치 계정을 로그인해주세요.">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm mb-2">
-            이메일
-          </label>
-          <input
-            id="email"
-            type="email"
-            {...register("email")}
-            className="w-full p-2 border"
-            placeholder="your@email.com"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="password" className="block text-sm mb-2">
-            비밀번호
-          </label>
-          <input
-            id="password"
-            type="password"
-            {...register("password")}
-            className="w-full p-2 border"
-            placeholder="비밀번호"
-          />
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.password.message}
-            </p>
-          )}
-        </div>
+        <EmailField
+          register={register("email")}
+          errorMessage={errors.email?.message}
+        />
+        <PasswordField
+          register={register("password")}
+          errorMessage={errors.password?.message}
+        />
 
         <button
           type="submit"
