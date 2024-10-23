@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
+import axiosInstance from "../../shared/services/axiosInstance";
 import axios from "axios";
 import { useSessionStorage } from "../../shared/hooks/useSessionStorage";
 
@@ -20,8 +21,8 @@ const schema = z.object({
     .min(8, { message: "비밀번호는 최소 8자 이상이어야 합니다." })
     .max(32, { message: "비밀번호는 최대 32자까지만 가능합니다." })
     .regex(/[a-zA-Z]/, "비밀번호에는 영문자가 포함되어야 합니다.")
-    // .regex(/[0-9]/, "비밀번호에는 숫자가 포함되어야 합니다.")
-    // .regex(/[\W_]/, "비밀번호에는 특수문자가 포함되어야 합니다."),
+    .regex(/[0-9]/, "비밀번호에는 숫자가 포함되어야 합니다.")
+    .regex(/[\W_]/, "비밀번호에는 특수문자가 포함되어야 합니다."),
 });
 
 type LoginFormData = z.infer<typeof schema>;
@@ -69,36 +70,43 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       const sanitizedEmail = sanitizeHtml(data.email);
       const sanitizedPassword = sanitizeHtml(data.password);
 
-      // Postman Mock 서버 URL로 변경
-      const mockServerUrl = "https://616f2a32-3be4-47b2-b372-469546ae9e40.mock.pstmn.io";
-
-      // 이메일 존재 여부 확인 (가상 로직)
-      const emailResponse = await axios.post(`${mockServerUrl}/api/check-email`, {
-        email: sanitizedEmail,
-      });
-
-      if (emailResponse.status !== 200) {
-        throw new Error("존재하지 않는 계정입니다.");
-      }
-
-      // 비밀번호 확인
-      const loginResponse = await axios.post(`${mockServerUrl}/api/login`, {
+      // 백엔드로 로그인 요청 전송
+      const loginResponse = await axiosInstance.post("/login", {
         email: sanitizedEmail,
         password: sanitizedPassword,
       });
 
+      // 응답 상태 코드가 200이면 로그인 성공
       if (loginResponse.status === 200) {
+        // 백엔드가 JWT 토큰을 반환하는 경우
+        const token = loginResponse.data.token;
+
+        // 로컬 스토리지나 쿠키에 토큰 저장 (쿠키 사용 시 생략 가능)
+        localStorage.setItem("token", token);
+
         setErrorMessage(null);
         setStoredEmail("");
         setStoredPassword("");
         onLogin();
         navigate("/main");
-      } else {
-        throw new Error("비밀번호가 틀렸습니다. 다시 확인해주세요.");
       }
-    } catch (error: unknown) {
+    } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        setErrorMessage(error.response.data.error || "서버 오류가 발생했습니다.");
+        // 백엔드에서 전송된 상태 코드에 따라 에러 메시지 설정
+        const statusCode = error.response.status;
+
+        // 존재하지 않는 계정에 대한 응답 처리
+        if (statusCode === 404) {
+          setErrorMessage("존재하지 않는 계정입니다.");
+        }
+        // 비밀번호가 틀렸을 때의 응답 처리
+        else if (statusCode === 401) {
+          setErrorMessage("비밀번호가 틀렸습니다. 다시 확인해주세요.");
+        }
+        // 기타 서버 오류
+        else {
+          setErrorMessage("서버 오류가 발생했습니다.");
+        }
       } else if (error instanceof Error) {
         setErrorMessage(error.message);
       } else {
@@ -111,7 +119,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       setValue("password", "");
     }
   };
-  
 
   const closeModal = () => {
     setShowModal(false);
