@@ -10,8 +10,7 @@ export function useSessionStorage(key: string, initialValue: string) {
       // sessionStorage에서 key에 해당하는 값을 가져옴
       return sessionStorage.getItem(key) ?? initialValue;
     } catch (error) {
-      // sessionStorage 접근 중 에러 발생 시 초기값을 반환
-      console.error("Error accessing sessionStorage:", error);
+      console.error(`Error accessing sessionStorage for key "${key}":`, error); // sessionStorage 접근 중 에러 발생 시 초기값을 반환
       return initialValue;
     }
   });
@@ -25,8 +24,10 @@ export function useSessionStorage(key: string, initialValue: string) {
         // sessionStorage에 새로운 값 저장
         sessionStorage.setItem(key, value);
       } catch (error) {
-        // 값 설정 중 에러 발생 시 콘솔에 출력
-        console.error("Error setting sessionStorage value:", error);
+        console.error(
+          `Error setting sessionStorage value for key "${key}":`,
+          error
+        ); // 값 설정 중 에러 발생 시 콘솔에 출력
       }
     },
     [key] // key가 변경될 때마다 함수 재생성
@@ -41,8 +42,10 @@ export function useSessionStorage(key: string, initialValue: string) {
         // 값을 업데이트하거나, 없으면 초기값으로 설정
         setStoredValue(item ?? initialValue);
       } catch (error) {
-        // 변경 감지 중 에러 발생 시 콘솔에 출력
-        console.error("Error reading sessionStorage on change:", error);
+        console.error(
+          `Error reading sessionStorage on change for key "${key}":`,
+          error
+        ); // 변경 감지 중 에러 발생 시 콘솔에 출력
       }
     };
 
