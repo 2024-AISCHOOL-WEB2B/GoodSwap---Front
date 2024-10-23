@@ -74,29 +74,30 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     }
   }, [email, password, setStoredEmail, setStoredPassword]);
 
+  // 폼 필드와 세션 스토리지를 초기화하는 함수
+  const resetForm = useCallback(() => {
+    setStoredEmail(""); // 세션 스토리지의 이메일 초기화
+    setStoredPassword(""); // 세션 스토리지의 비밀번호 초기화
+    setValue("email", ""); // 폼 필드 초기화
+    setValue("password", ""); // 폼 필드 초기화
+  }, [setStoredEmail, setStoredPassword, setValue]);
+
   // 폼 제출 시 호출되는 함수
   const onSubmit = async (data: LoginFormData) => {
     submitLoginForm(
       data.email,
       data.password,
       () => {
-        // 초기화 - 에러 메시지 & 세션 스토리지
         setErrorMessage(null);
-        setStoredEmail("");
-        setStoredPassword("");
+        resetForm();
         onLogin();
         navigate("/main");
       },
       (errorMessage) => {
-        // 초기화
         setErrorMessage(errorMessage);
         // 오류 모달 표시
         setShowModal(true);
-        setStoredEmail("");
-        setStoredPassword("");
-        // 폼 필드 초기화
-        setValue("email", "");
-        setValue("password", "");
+        resetForm();
       }
     );
   };
@@ -118,20 +119,9 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
           errorMessage={errors.password?.message} // 비밀번호 필드의 오류 메시지 표시
         />
 
-        <button
-          type="submit"
-          className="w-full py-2 bg-gradient-to-r from-pink-400 to-orange-400 text-white font-semibold"
-        >
-          로그인
-        </button>
-
-        <p className="text-center mt-6">비밀번호를 잊어버리셨나요?</p>
-        <p className="text-center mt-12">
-          아직 계정이 없다면?{" "}
-          <a href="#" className="text-pink-500 font-semibold">
-            덕업일치 계정으로 가입하기
-          </a>
-        </p>
+        <SubmitButton />
+        <ForgotPasswordText />
+        <SignUpLink />
       </form>
 
       {showModal && (
@@ -143,6 +133,31 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     </FormLayout>
   );
 };
+
+// 제출 버튼 컴포넌트
+const SubmitButton = () => (
+  <button
+    type="submit"
+    className="w-full py-2 bg-gradient-to-r from-pink-400 to-orange-400 text-white font-semibold"
+  >
+    로그인
+  </button>
+);
+
+// 비밀번호 찾기 텍스트 컴포넌트
+const ForgotPasswordText = () => (
+  <p className="text-center mt-6">비밀번호를 잊어버리셨나요?</p>
+);
+
+// 회원가입 링크 컴포넌트
+const SignUpLink = () => (
+  <p className="text-center mt-12">
+    아직 계정이 없다면?{" "}
+    <a href="#" className="text-pink-500 font-semibold">
+      덕업일치 계정으로 가입하기
+    </a>
+  </p>
+);
 
 // React.memo로 컴포넌트 감싸기 및 displayName 설정
 export const LoginForm = React.memo(LoginFormComponent);
