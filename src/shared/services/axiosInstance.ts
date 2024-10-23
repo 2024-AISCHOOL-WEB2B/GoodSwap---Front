@@ -12,12 +12,22 @@ export const axiosInstance = axios.create({
   withCredentials: true, // CORS 요청 시 인증 정보(쿠키 등) 포함
 });
 
-// 요청 인터셉터 설정: 모든 요청에 토큰을 헤더에 추가
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token"); // 토큰을 로컬 스토리지에서 가져옴 (쿠키에 저장 시에는 생략)
-  if (token) {
-    // 토큰이 있으면 Authorization 헤더에 추가
-    config.headers.Authorization = `Bearer ${token}`;
+// 토큰을 헤더에 추가하는 인터셉터 설정
+axiosInstance.interceptors.request.use(
+  (config) => {
+    try {
+      const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`; // 토큰이 있으면 Authorization 헤더에 추가
+      }
+      return config; // 수정된 config 반환
+    } catch (error) {
+      console.error("Error setting authorization token:", error); // 에러 발생 시 로그 출력
+      return config; // 에러 발생 시에도 기본 config 반환
+    }
+  },
+  (error) => {
+    console.error("Request error:", error); // 요청 인터셉터 에러 처리
+    return Promise.reject(error);
   }
-  return config; // 수정된 config 반환
-});
+);
