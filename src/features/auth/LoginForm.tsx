@@ -32,7 +32,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   // 페이지 이동을 위한 navigate 훅
   const navigate = useNavigate();
 
-  // RHF을 이용한 폼 관리
+  // RHF(React Hook Form)을 이용한 폼 관리
   const {
     register,
     handleSubmit,
@@ -54,6 +54,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   // 컴포넌트가 처음 렌더링 될 때, 세션 스토리지에서 값 불러오기
   useEffect(() => {
     if (isFirstRender.current) {
+      // 세션에 저장된 값을 폼에 설정
       if (storedEmail) {
         setValue("email", storedEmail);
       }
@@ -79,6 +80,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
       data.email,
       data.password,
       () => {
+        // 초기화 - 에러 메시지 & 세션 스토리지
         setErrorMessage(null);
         setStoredEmail("");
         setStoredPassword("");
@@ -86,10 +88,13 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
         navigate("/main");
       },
       (errorMessage) => {
+        // 초기화
         setErrorMessage(errorMessage);
+        // 오류 모달 표시
         setShowModal(true);
         setStoredEmail("");
         setStoredPassword("");
+        // 폼 필드 초기화
         setValue("email", "");
         setValue("password", "");
       }
@@ -105,12 +110,12 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     <FormLayout title="덕업일치 계정을 로그인해주세요.">
       <form onSubmit={handleSubmit(onSubmit)}>
         <EmailField
-          register={register("email")}
-          errorMessage={errors.email?.message}
+          register={register("email")} // 이메일 필드 등록
+          errorMessage={errors.email?.message} // 이메일 필드 오류 메시지 표시
         />
         <PasswordField
-          register={register("password")}
-          errorMessage={errors.password?.message}
+          register={register("password")} // 비밀번호 필드 등록
+          errorMessage={errors.password?.message} // 비밀번호 필드의 오류 메시지 표시
         />
 
         <button

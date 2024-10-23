@@ -1,3 +1,5 @@
+// src/entities/UserSchema.ts
+
 import { z } from "zod";
 import {
   createEmailValidation,
@@ -6,6 +8,7 @@ import {
 
 // 로그인 입력값 유효성 검사 스키마
 export const loginSchema = z.object({
+  // 유효성 검사를 위한 함수 호출
   email: createEmailValidation(),
   password: createPasswordValidation(),
 });

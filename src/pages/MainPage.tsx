@@ -29,7 +29,7 @@ const MainPageComponent: React.FC<MainPageProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      {isLoggedIn ? (
+      {isLoggedIn ? ( // 로그인 상태에 따라 렌더링 분기
         <>
           <h1 className="text-3xl font-bold mb-6">로그인에 성공하셨습니다!</h1>
           <button
@@ -58,4 +58,5 @@ const MainPageComponent: React.FC<MainPageProps> = ({
 const MainPage = React.memo(MainPageComponent);
 MainPage.displayName = "MainPage";
 
+// MainPage 컴포넌트를 named export로 내보내기
 export { MainPage };

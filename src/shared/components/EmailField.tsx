@@ -3,11 +3,13 @@
 import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
+// 인터페이스 정의
 interface EmailFieldProps {
-  register: UseFormRegisterReturn;
-  errorMessage?: string;
+  register: UseFormRegisterReturn; // React Hook Form에서 제공하는 register 반환 타입
+  errorMessage?: string; // 오류 메시지 (선택적 프로퍼티)
 }
 
+// EmailField 컴포넌트 정의
 export const EmailField: React.FC<EmailFieldProps> = ({
   register,
   errorMessage,
@@ -23,7 +25,7 @@ export const EmailField: React.FC<EmailFieldProps> = ({
       className="w-full p-2 border"
       placeholder="your@email.com"
     />
-    {errorMessage && (
+    {errorMessage && ( // 오류 메시지가 있을 경우 화면에 표시
       <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
     )}
   </div>

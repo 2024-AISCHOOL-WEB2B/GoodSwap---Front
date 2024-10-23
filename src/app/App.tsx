@@ -8,6 +8,7 @@ import { useAtom } from "jotai";
 import { isLoggedInAtom } from "../atoms/auth";
 
 function App() {
+  // 로그인 상태를 전역으로 관리하는 jotai atom 사용
   const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
 
   // 페이지 로드 시 로그인 상태 복원
@@ -18,13 +19,15 @@ function App() {
     }
   }, [setIsLoggedIn]);
 
+  // 로그인 핸들러
   const handleLogin = () => {
     setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem("token"); // 로그아웃 시 토큰 삭제
+    // 로그아웃 시 로컬 스토리지에서 토큰 삭제
+    localStorage.removeItem("token");
   };
 
   return (
@@ -50,4 +53,5 @@ function App() {
   );
 }
 
+// App 컴포넌트를 기본 내보내기로 설정
 export default App;

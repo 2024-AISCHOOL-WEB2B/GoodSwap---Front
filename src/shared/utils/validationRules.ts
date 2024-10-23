@@ -1,3 +1,5 @@
+// src/shared/utils/validationRules.ts
+
 import { z } from "zod";
 
 // 이메일 유효성 검사 함수
