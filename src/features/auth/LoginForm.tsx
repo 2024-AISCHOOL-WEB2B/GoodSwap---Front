@@ -53,7 +53,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   } = useForm<LoginFormData>({
     // 입력창 필드 유효성 검사 스키마 설정
     resolver: zodResolver(schema),
-    mode: "onBlur", // 포커스를 잃었을 때 유효성 검사
+    mode: "onChange", // 입력된 값이 변경될 때마다 유효성 검사
   });
 
   // 입력값 감지

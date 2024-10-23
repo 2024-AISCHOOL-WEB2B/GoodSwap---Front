@@ -2,32 +2,29 @@
 
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 
+// MainPageProps 인터페이스 정의
 interface MainPageProps {
-  isLoggedIn: boolean;
-  onLogout: () => void;
+  isLoggedIn: boolean; // 로그인 상태를 나타내는 프로퍼티
+  onLogout: () => void; // 로그아웃을 처리하는 함수
 }
 
+// MainPageComponent 컴포넌트 정의
 const MainPageComponent: React.FC<MainPageProps> = ({
   isLoggedIn,
   onLogout,
 }) => {
   const navigate = useNavigate();
-  const { setValue } = useForm();
 
+  // 로그아웃 처리 함수
   const handleLogout = useCallback(() => {
     onLogout(); // 로그아웃 상태로 변경
-    // 이메일과 비밀번호 초기화
-    setValue("email", "");
-    setValue("password", "");
-    sessionStorage.removeItem("email");
-    sessionStorage.removeItem("password");
     navigate("/"); // 로그아웃 후 메인 페이지로 이동
-  }, [navigate, onLogout, setValue]);
+  }, [navigate, onLogout]);
 
+  // 로그인 페이지로 이동하는 함수
   const handleLoginClick = useCallback(() => {
-    navigate("/login"); // 로그인 페이지로 이동
+    navigate("/login");
   }, [navigate]);
 
   return (
