@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
+    "lib": ["dom", "es6"],
     "jsx": "react-jsx",
     "types": ["node"],
     "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "strict": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "baseUrl": "."
   },
   "include": ["src/**/*"] // src 디렉토리 안의 모든 파일 포함
