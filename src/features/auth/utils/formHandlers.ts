@@ -1,7 +1,7 @@
 import axiosInstance from "../../../shared/services/axiosInstance";
 import sanitizeHtml from "sanitize-html";
 import axios from "axios";
-import { handleErrorResponse } from "../../../shared/utils/errorHandlers";
+import { handleErrorResponse } from "../../../shared/utils";
 
 export const submitLoginForm = async (
   email: string,

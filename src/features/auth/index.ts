@@ -6,4 +6,4 @@ export * from "./LoginForm";
 // export * from "./PasswordStep";
 // export * from "./UsernameStep";
 export * from "./utils";
-export * from "./components";
+export * from "../../shared/components";
