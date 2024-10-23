@@ -1,4 +1,4 @@
-// src/features/auth/components/EmailField.tsx
+// src/shared/components/EmailField.tsx
 
 import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
