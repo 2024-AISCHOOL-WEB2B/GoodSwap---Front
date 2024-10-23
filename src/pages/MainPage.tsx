@@ -1,19 +1,22 @@
 // src/pages/MainPage.tsx
 
-import React from "react";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form"; // useForm 추가
+import { useForm } from "react-hook-form";
 
 interface MainPageProps {
   isLoggedIn: boolean;
   onLogout: () => void;
 }
 
-const MainPage: React.FC<MainPageProps> = ({ isLoggedIn, onLogout }) => {
+const MainPageComponent: React.FC<MainPageProps> = ({
+  isLoggedIn,
+  onLogout,
+}) => {
   const navigate = useNavigate();
-  const { setValue } = useForm(); // useForm 훅에서 setValue 가져오기
+  const { setValue } = useForm();
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     onLogout(); // 로그아웃 상태로 변경
     // 이메일과 비밀번호 초기화
     setValue("email", "");
@@ -21,11 +24,11 @@ const MainPage: React.FC<MainPageProps> = ({ isLoggedIn, onLogout }) => {
     sessionStorage.removeItem("email");
     sessionStorage.removeItem("password");
     navigate("/"); // 로그아웃 후 메인 페이지로 이동
-  };
+  }, [navigate, onLogout, setValue]);
 
-  const handleLoginClick = () => {
+  const handleLoginClick = useCallback(() => {
     navigate("/login"); // 로그인 페이지로 이동
-  };
+  }, [navigate]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -53,5 +56,9 @@ const MainPage: React.FC<MainPageProps> = ({ isLoggedIn, onLogout }) => {
     </div>
   );
 };
+
+// React.memo로 컴포넌트 감싸기 및 displayName 설정
+const MainPage = React.memo(MainPageComponent);
+MainPage.displayName = "MainPage";
 
 export { MainPage };
