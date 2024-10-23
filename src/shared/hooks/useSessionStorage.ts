@@ -1,7 +1,6 @@
-// src/shared/hooks/useSessionStorage.ts
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-export function useSessionStorage(key: string, initialValue: string) { // named export로 변경
+export function useSessionStorage(key: string, initialValue: string) {
   const [storedValue, setStoredValue] = useState(() => {
     try {
       const item = sessionStorage.getItem(key);
@@ -12,14 +11,17 @@ export function useSessionStorage(key: string, initialValue: string) { // named 
     }
   });
 
-  const setValue = (value: string) => {
-    try {
-      setStoredValue(value);
-      sessionStorage.setItem(key, value);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const setValue = useCallback(
+    (value: string) => {
+      try {
+        setStoredValue(value);
+        sessionStorage.setItem(key, value);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [key]
+  );
 
   useEffect(() => {
     const handleStorageChange = () => {
