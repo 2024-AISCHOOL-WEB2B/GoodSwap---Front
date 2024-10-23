@@ -9,6 +9,9 @@ import sanitizeHtml from "sanitize-html";
 import axios from "axios";
 import axiosInstance from "../../shared/services/axiosInstance";
 import { useSessionStorage } from "../../shared/hooks/useSessionStorage";
+import { loginSchema } from "../../entities/UserSchema";
+import { Modal } from "../../widgets/Modal";
+import { FormLayout } from "../../widgets/FormLayout";
 
 // 로그인 폼 컴포넌트에 전달할 Props 타입 정의
 interface LoginFormProps {
@@ -16,20 +19,8 @@ interface LoginFormProps {
   onLogin: () => void;
 }
 
-// 로그인 입력값 유효성 검사 스키마 정의
-const schema = z.object({
-  email: z.string().email({ message: "유효한 이메일을 입력해주세요." }),
-  password: z
-    .string()
-    .min(8, { message: "비밀번호는 최소 8자 이상이어야 합니다." })
-    .max(32, { message: "비밀번호는 최대 32자까지만 가능합니다." })
-    .regex(/[a-zA-Z]/, "비밀번호에는 영문자가 포함되어야 합니다.")
-    .regex(/[0-9]/, "비밀번호에는 숫자가 포함되어야 합니다.")
-    .regex(/[\W_]/, "비밀번호에는 특수문자가 포함되어야 합니다."),
-});
-
 // 유효성 검사 스키마 타입 추론
-type LoginFormData = z.infer<typeof schema>;
+type LoginFormData = z.infer<typeof loginSchema>;
 
 // 로그인 폼 컴포넌트 정의
 const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
@@ -52,7 +43,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     formState: { errors },
   } = useForm<LoginFormData>({
     // 입력창 필드 유효성 검사 스키마 설정
-    resolver: zodResolver(schema),
+    resolver: zodResolver(loginSchema),
     mode: "onChange", // 입력된 값이 변경될 때마다 유효성 검사
   });
 
@@ -146,86 +137,65 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   }, []);
 
   return (
-    <div className="relative">
-      <div
-        className={`flex justify-center items-start mt-6 ${showModal ? "blur-md" : ""}`}
-      >
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-[498px] h-[723px] border p-6 flex flex-col justify-center"
+    <FormLayout title="덕업일치 계정을 로그인해주세요.">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-sm mb-2">
+            이메일
+          </label>
+          <input
+            id="email"
+            type="email"
+            {...register("email")}
+            className="w-full p-2 border"
+            placeholder="your@email.com"
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="password" className="block text-sm mb-2">
+            비밀번호
+          </label>
+          <input
+            id="password"
+            type="password"
+            {...register("password")}
+            className="w-full p-2 border"
+            placeholder="비밀번호"
+          />
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-2 bg-gradient-to-r from-pink-400 to-orange-400 text-white font-semibold"
         >
-          <h1 className="text-2xl font-bold mb-4 text-center">
-            덕업일치 계정으로 로그인해주세요.
-          </h1>
+          로그인
+        </button>
 
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm mb-2">
-              이메일
-            </label>
-            <input
-              id="email"
-              type="email"
-              {...register("email")}
-              className="w-full p-2 border"
-              placeholder="your@email.com"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-sm mb-2">
-              비밀번호
-            </label>
-            <input
-              id="password"
-              type="password"
-              {...register("password")}
-              className="w-full p-2 border"
-              placeholder="비밀번호"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="w-full py-2 bg-gradient-to-r from-pink-400 to-orange-400 text-white font-semibold"
-          >
-            로그인
-          </button>
-
-          <p className="text-center mt-6">비밀번호를 잊어버리셨나요?</p>
-          <p className="text-center mt-12">
-            아직 계정이 없다면?{" "}
-            <a href="#" className="text-pink-500 font-semibold">
-              덕업일치 계정으로 가입하기
-            </a>
-          </p>
-        </form>
-      </div>
+        <p className="text-center mt-6">비밀번호를 잊어버리셨나요?</p>
+        <p className="text-center mt-12">
+          아직 계정이 없다면?{" "}
+          <a href="#" className="text-pink-500 font-semibold">
+            덕업일치 계정으로 가입하기
+          </a>
+        </p>
+      </form>
 
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded shadow-lg text-center">
-            <h2 className="text-red-500 mb-4">로그인 실패</h2>
-            <p>{errorMessage}</p>
-            <button
-              onClick={closeModal}
-              className="mt-4 py-2 px-4 bg-gray-800 text-white rounded"
-            >
-              닫기
-            </button>
-          </div>
-        </div>
+        <Modal isVisible={showModal} onClose={closeModal}>
+          <h2 className="text-red-500 mb-4">로그인 실패</h2>
+          <p>{errorMessage}</p>
+        </Modal>
       )}
-    </div>
+    </FormLayout>
   );
 };
 
