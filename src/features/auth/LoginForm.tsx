@@ -10,10 +10,13 @@ import axios from "axios";
 import axiosInstance from "../../shared/services/axiosInstance";
 import { useSessionStorage } from "../../shared/hooks/useSessionStorage";
 
+// 로그인 폼 컴포넌트에 전달할 Props 타입 정의
 interface LoginFormProps {
+  // 로그인 성공 시 호출될 함수
   onLogin: () => void;
 }
 
+// 로그인 입력값 유효성 검사 스키마 정의
 const schema = z.object({
   email: z.string().email({ message: "유효한 이메일을 입력해주세요." }),
   password: z
@@ -25,15 +28,22 @@ const schema = z.object({
     .regex(/[\W_]/, "비밀번호에는 특수문자가 포함되어야 합니다."),
 });
 
+// 유효성 검사 스키마 타입 추론
 type LoginFormData = z.infer<typeof schema>;
 
+// 로그인 폼 컴포넌트 정의
 const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
+  // 에러 메시지 상태
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // 모달 표시 상태
   const [showModal, setShowModal] = useState(false);
+  // 세션 스토리지에서 이메일 & 비밀번호 가져오기
   const [storedEmail, setStoredEmail] = useSessionStorage("email", "");
   const [storedPassword, setStoredPassword] = useSessionStorage("password", "");
+  // 페이지 이동을 위한 navigate 훅
   const navigate = useNavigate();
 
+  // RHF을 이용한 폼 관리
   const {
     register,
     handleSubmit,
@@ -41,14 +51,18 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     watch,
     formState: { errors },
   } = useForm<LoginFormData>({
+    // 입력창 필드 유효성 검사 스키마 설정
     resolver: zodResolver(schema),
-    mode: "onBlur",
+    mode: "onBlur", // 포커스를 잃었을 때 유효성 검사
   });
 
+  // 입력값 감지
   const email = watch("email");
   const password = watch("password");
+  // 첫 랜더링 여부 체크
   const isFirstRender = useRef(true);
 
+  // 컴포넌트가 처음 렌더링 될 때, 세션 스토리지에서 값 불러오기
   useEffect(() => {
     if (isFirstRender.current) {
       if (storedEmail) {
@@ -57,17 +71,20 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
       if (storedPassword) {
         setValue("password", storedPassword);
       }
-      isFirstRender.current = false;
+      isFirstRender.current = false; // 첫 렌더링 체크 업데이트
     }
   }, [setValue, storedEmail, storedPassword]);
 
+  // 입력값이 변경될 때 세션 스토리지에 저장
   useEffect(() => {
     if (!isFirstRender.current) {
+      // 스토리지 업데이트
       setStoredEmail(email);
       setStoredPassword(password);
     }
   }, [email, password, setStoredEmail, setStoredPassword]);
 
+  // 서버 응답에 따른 에러 메시지 처리 함수
   const handleErrorResponse = (statusCode: number) => {
     switch (statusCode) {
       case 404:
@@ -79,40 +96,51 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     }
   };
 
+  // 폼 제출 시 호출되는 함수
   const onSubmit = async (data: LoginFormData) => {
     try {
+      // 데이터 정화 - 해커들아 혼난다.
       const sanitizedEmail = sanitizeHtml(data.email);
       const sanitizedPassword = sanitizeHtml(data.password);
 
+      // 로그인 요청
       const loginResponse = await axiosInstance.post("/login", {
         email: sanitizedEmail,
         password: sanitizedPassword,
       });
 
+      // 로그인 성공 시 토큰 저장
       if (loginResponse.status === 200) {
         localStorage.setItem("token", loginResponse.data.token);
+        // 에러 메시지 & 세션 스토리지 초기화
         setErrorMessage(null);
         setStoredEmail("");
         setStoredPassword("");
+        // 로그인 성공 시 호출
         onLogin();
         navigate("/main");
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
+        // 서버 응답에 따른 메시지 설정
         setErrorMessage(handleErrorResponse(error.response.status));
       } else if (error instanceof Error) {
+        // 일반적인 에러 메시지 설정
         setErrorMessage(error.message);
       } else {
+        // 기타 에러 메시지
         setErrorMessage("알 수 없는 오류가 발생했습니다.");
       }
       setShowModal(true);
       setStoredEmail("");
       setStoredPassword("");
+      // 입력 필드 초기화
       setValue("email", "");
       setValue("password", "");
     }
   };
 
+  // 모달 닫기 함수
   const closeModal = useCallback(() => {
     setShowModal(false);
   }, []);
