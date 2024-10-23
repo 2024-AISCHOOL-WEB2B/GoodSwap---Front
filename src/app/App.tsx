@@ -5,6 +5,7 @@ import { MainPage } from "../pages/MainPage";
 import { LoginForm } from "../features/auth/LoginForm";
 import { useAtom } from "jotai";
 import { isLoggedInAtom } from "../atoms/auth";
+import PaymentForm from "../pages/PaymentForm";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
@@ -23,16 +24,19 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<MainPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
+            element={
+              <MainPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+            }
           />
-          <Route
-            path="/login"
-            element={<LoginForm onLogin={handleLogin} />}
-          />
+          <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
           <Route
             path="/main"
-            element={<MainPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
+            element={
+              <MainPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+            }
           />
+          <Route path="/payment" element={<PaymentForm />} />{" "}
+          {/* PaymentForm 경로 추가 */}
         </Routes>
       </Router>
     </div>

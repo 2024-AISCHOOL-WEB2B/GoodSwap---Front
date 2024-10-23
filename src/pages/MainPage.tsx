@@ -27,6 +27,10 @@ const MainPage: React.FC<MainPageProps> = ({ isLoggedIn, onLogout }) => {
     navigate("/login"); // 로그인 페이지로 이동
   };
 
+  const handlePaymentClick = () => {
+    navigate("/payment"); // 결제 페이지로 이동
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       {isLoggedIn ? (
@@ -50,6 +54,13 @@ const MainPage: React.FC<MainPageProps> = ({ isLoggedIn, onLogout }) => {
           </button>
         </>
       )}
+      {/* 결제 버튼 추가 */}
+      <button
+        onClick={handlePaymentClick}
+        className="px-4 py-2 bg-green-500 text-white font-semibold rounded"
+      >
+        결제
+      </button>
     </div>
   );
 };
