@@ -11,10 +11,9 @@ if (process.env.NODE_ENV === "development") {
   import("../mocks/axiosMock"); // 개발 환경에서만 Mock 설정 적용
 }
 
-// HTML 파일에서 "root"라는 ID를 가진 요소를 가져옴
+// HTML 파일에서 "root"라는 ID를 가진 요소를 가져옴 -- if문을 제거해서 에러가 발생하게 변경
 const rootElement = document.getElementById("root");
-if (rootElement) {
-  createRoot(rootElement).render(
+  createRoot(rootElement!).render( // "!" 타입 가드용어
     <StrictMode>
       {/* Jotai의 전역 상태 관리 제공 */}
       <Provider>
@@ -23,4 +22,3 @@ if (rootElement) {
       </Provider>
     </StrictMode>
   );
-}

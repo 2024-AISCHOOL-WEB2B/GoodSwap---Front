@@ -1,6 +1,6 @@
 // src/app/App.tsx
 
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MainPage } from "../pages/MainPage";
 import { LoginForm } from "../features/auth/LoginForm";
@@ -12,7 +12,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
 
   // 페이지 로드 시 로그인 상태 복원
-  useEffect(() => {
+  useLayoutEffect(() => { // 랜더링 후에 동작
     const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
     if (token) {
       setIsLoggedIn(true); // 토큰이 존재하면 로그인 상태로 설정
