@@ -40,7 +40,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     register,
     handleSubmit,
     setValue,
-    watch,
+    watch, // useWatch로 대체 대부분은 useWatch 사용
     formState: { errors },
   } = useForm<LoginFormData>({
     // 입력창 필드 유효성 검사 스키마 설정
@@ -52,20 +52,23 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   const email = watch("email");
   const password = watch("password");
   // 첫 랜더링 여부 체크
-  const isFirstRender = useRef(true);
+  const isFirstRender = useRef(true); // useLayoutEffect를 사용해보고 로직을 조금 더 단순화 해보자.
+ // useRef를 사용하면 리엑트 life cycle 무시하게 된다. -- 지양하자.
 
   // 컴포넌트가 처음 렌더링 될 때, 세션 스토리지에서 값 불러오기
   useEffect(() => {
-    if (isFirstRender.current) {
-      // 세션에 저장된 값을 폼에 설정
-      if (storedEmail) {
-        setValue("email", storedEmail);
-      }
-      if (storedPassword) {
-        setValue("password", storedPassword);
-      }
-      isFirstRender.current = false; // 첫 렌더링 체크 업데이트
+    // early return를 사용해서 if 중첩문 줄이기. 가독성도 높아짐
+    if (!isFirstRender.current) return
+
+    // 세션에 저장된 값을 폼에 설정
+    if (storedEmail) {
+      setValue("email", storedEmail);
     }
+    if (storedPassword) {
+      setValue("password", storedPassword);
+    }
+    isFirstRender.current = false; // 첫 렌더링 체크 업데이트
+
   }, [setValue, storedEmail, storedPassword]);
 
   // 입력값이 변경될 때 세션 스토리지에 저장
@@ -117,9 +120,10 @@ const handleSignUpClick = useCallback(() => {
 
   return (
     <FormLayout title={showSignUpForm ? "회원가입" : "덕업일치 계정을 로그인해주세요."}>
-      {showSignUpForm ? (
+      {showSignUpForm ? ( 
         <MultiStepForm /> // 회원가입 멀티스텝 폼 렌더링
       ) : (
+        // 컨벤션 더 쪼개보자.
       <form onSubmit={handleSubmit(onSubmit)}>
         <EmailField
           register={register("email")} // 이메일 필드 등록

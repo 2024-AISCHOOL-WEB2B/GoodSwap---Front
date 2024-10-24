@@ -5,5 +5,5 @@ export * from "./MultiStepForm";
 export * from "./EmailStep";
 export * from "./PasswordStep";
 export * from "./UsernameStep";
-export * from "./utils";
+export * from "../features/utils";
 export * from "../../shared/components";
