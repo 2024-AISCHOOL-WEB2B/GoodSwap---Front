@@ -10,6 +10,7 @@ import { loginSchema } from "../../entities";
 import { Modal, FormLayout } from "../../widgets";
 import { submitLoginForm } from "./utils";
 import { EmailField, PasswordField } from "../../shared/components";
+import { MultiStepForm } from "./MultiStepForm";
 
 // 로그인 폼 컴포넌트에 전달할 Props 타입 정의
 interface LoginFormProps {
@@ -26,6 +27,8 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // 모달 표시 상태
   const [showModal, setShowModal] = useState(false);
+  // 회원가입 폼 표시 상태
+  const [showSignUpForm, setShowSignUpForm] = useState(false);
   // 세션 스토리지에서 이메일 & 비밀번호 가져오기
   const [storedEmail, setStoredEmail] = useSessionStorage("email", "");
   const [storedPassword, setStoredPassword] = useSessionStorage("password", "");
@@ -107,8 +110,16 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     setShowModal(false);
   }, []);
 
+  // 회원가입 폼 표시 상태를 업데이트하는 함수
+const handleSignUpClick = useCallback(() => {
+  setShowSignUpForm(true); // 회원가입 폼을 표시하도록 상태 업데이트
+}, []);
+
   return (
-    <FormLayout title="덕업일치 계정을 로그인해주세요.">
+    <FormLayout title={showSignUpForm ? "회원가입" : "덕업일치 계정을 로그인해주세요."}>
+      {showSignUpForm ? (
+        <MultiStepForm /> // 회원가입 멀티스텝 폼 렌더링
+      ) : (
       <form onSubmit={handleSubmit(onSubmit)}>
         <EmailField
           register={register("email")} // 이메일 필드 등록
@@ -121,9 +132,10 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
 
         <SubmitButton />
         <ForgotPasswordText />
-        <SignUpLink />
+        <SignUpLink onClick={handleSignUpClick} />
       </form>
-
+      )}
+      
       {showModal && (
         <Modal isVisible={showModal} onClose={closeModal}>
           <h2 className="text-red-500 mb-4">로그인 실패</h2>
@@ -150,10 +162,17 @@ const ForgotPasswordText = () => (
 );
 
 // 회원가입 링크 컴포넌트
-const SignUpLink = () => (
+const SignUpLink: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <p className="text-center mt-12">
     아직 계정이 없다면?{" "}
-    <a href="#" className="text-pink-500 font-semibold">
+    <a
+      href="#"
+      onClick={(e) => {
+        e.preventDefault();
+        onClick();
+      }}
+      className="text-pink-500 font-semibold"
+    >
       덕업일치 계정으로 가입하기
     </a>
   </p>
