@@ -2,6 +2,7 @@
 
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../shared/services";
 
 // MainPageProps 인터페이스 정의
 interface MainPageProps {
@@ -17,9 +18,15 @@ const MainPageComponent: React.FC<MainPageProps> = ({
   const navigate = useNavigate();
 
   // 로그아웃 처리 함수
-  const handleLogout = useCallback(() => {
-    onLogout(); // 로그아웃 상태로 변경
-    navigate("/"); // 로그아웃 후 메인 페이지로 이동
+  const handleLogout = useCallback(async () => {
+    try {
+      // 백엔드에 로그아웃 요청 전송
+      await axiosInstance.post("/logout");
+      onLogout(); // 로그아웃 상태로 변경
+      navigate("/"); // 로그아웃 후 메인 페이지로 이동
+    } catch (error) {
+      console.error("Logout failed:", error); // 로그아웃 실패 시 에러 출력
+    }
   }, [navigate, onLogout]);
 
   // 로그인 페이지로 이동하는 함수

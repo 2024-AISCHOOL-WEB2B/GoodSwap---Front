@@ -12,17 +12,23 @@ export const axiosInstance = axios.create({
   withCredentials: true, // CORS 요청 시 인증 정보(쿠키 등) 포함
 });
 
-// 토큰을 헤더에 추가하는 인터셉터 설정
+// CSRF 토큰을 헤더에 추가하는 인터셉터 설정
 axiosInstance.interceptors.request.use(
   (config) => {
     try {
-      const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`; // 토큰이 있으면 Authorization 헤더에 추가
+      // CSRF 토큰을 쿠키에서 가져와 설정 (Spring Security가 쿠키에 CSRF 토큰을 저장한다고 가정)
+      const csrfToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("XSRF-TOKEN="))
+        ?.split("=")[1];
+
+      if (csrfToken) {
+        config.headers["X-XSRF-TOKEN"] = csrfToken; // CSRF 토큰을 요청 헤더에 추가
       }
+
       return config; // 수정된 config 반환
     } catch (error) {
-      console.error("Error setting authorization token:", error); // 에러 발생 시 로그 출력
+      console.error("Error setting CSRF token:", error); // 에러 발생 시 로그 출력
       return config; // 에러 발생 시에도 기본 config 반환
     }
   },
