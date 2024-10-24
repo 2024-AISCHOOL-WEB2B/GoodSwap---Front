@@ -38,9 +38,12 @@ export default [
       ...typescriptEslint.configs.recommended.rules, // TypeScript 추천 규칙
       ...react.configs.recommended.rules, // React 추천 규칙
       ...reactHooks.configs.recommended.rules, // React Hooks 추천 규칙
-      "@typescript-eslint/no-unused-vars": ["warn"], // 사용되지 않는 변수 경고
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_" },
+      ], // 매개변수는 무시
       "react/react-in-jsx-scope": "off", // Vite와 최신 React에서는 불필요
-      "tailwindcss/classnames-order": "warn",
+      "tailwindcss/classnames-order": "off",
       "tailwindcss/enforces-shorthand": "warn", // Tailwind에서 권장하는 축약형 사용
       "tailwindcss/no-custom-classname": "off", // Tailwind와 custom 클래스가 충돌나지 않도록 허용
       "react-refresh/only-export-components": [

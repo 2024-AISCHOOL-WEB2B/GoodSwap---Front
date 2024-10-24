@@ -1,20 +1,24 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
 import tailwindcss from "tailwindcss";
 import autoprefixer from "autoprefixer";
+import { nodePolyfills } from 'vite-plugin-node-polyfills'; // 이름 있는 export 사용
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    nodePolyfills({
+      exclude: ['fs'], // fs 모듈은 브라우저에서 사용할 수 없으므로 제외
+      protocolImports: true,
+    }),
+  ],
   resolve: {
-    // Alias 설정을 통해 'src' 폴더를 '@'로 접근 가능하게 합니다.
     alias: {
-      "@": path.resolve(__dirname, "src"),
+      // Node.js 호환 모듈을 브라우저 버전으로 대체
+      url: "rollup-plugin-node-polyfills/polyfills/url",
     },
   },
   css: {
-    // PostCSS 플러그인으로 Tailwind CSS와 autoprefixer 설정
     postcss: {
       plugins: [tailwindcss, autoprefixer],
     },
