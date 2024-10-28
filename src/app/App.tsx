@@ -4,7 +4,9 @@ import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MainPage } from "../pages/MainPage";
 import { LoginForm } from "../features/auth/LoginForm";
-import PostListPage from "../pages/post/PostListPage"; // PostListPage import 수정
+import PostListPage from "../pages/post/PostListPage";
+import PostCreate from "../pages/post/PostCreate"; // PostCreate import 추가
+import Post from "../pages/post/Post"; // Post 페이지 import
 import { useAtom } from "jotai";
 import { isLoggedInAtom } from "../atoms/auth";
 
@@ -40,7 +42,9 @@ function App() {
             path="/main"
             element={<MainPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
           />
-          <Route path="/postlist" element={<PostListPage />} /> {/* PostListPage 경로 추가 */}
+          <Route path="/postlist" element={<PostListPage />} /> 
+          <Route path="/post/create" element={<PostCreate />} /> {/* PostCreate 페이지 경로 추가 */}
+          <Route path="/post/:postId" element={<Post />} /> {/* Post 페이지 경로 추가 */}
         </Routes>
       </Router>
     </div>

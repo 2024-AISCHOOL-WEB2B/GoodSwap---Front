@@ -33,7 +33,7 @@ const PostListPage = () => {
   };
 
   const handleCreatePostClick = () => {
-    navigate(`/create-post`);
+    navigate('/post/create'); // 올바른 URL로 수정
   };
 
   return (
