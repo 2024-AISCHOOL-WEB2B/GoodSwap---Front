@@ -1,4 +1,4 @@
-// src/shared/utils/validationRules.ts
+// src/features/auth/utils/validationRules.ts
 
 import { z } from "zod";
 

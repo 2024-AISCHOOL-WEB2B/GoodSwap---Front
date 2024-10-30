@@ -1,9 +1,9 @@
 // src/features/auth/utils/formHandlers.ts
 
-import { axiosInstance } from "../../../shared/services";
+import { axiosInstance } from "../APIs/axiosInstance";
 import sanitizeHtml from "sanitize-html";
 import axios from "axios";
-import { handleErrorResponse } from "../../../shared/utils";
+import { handleErrorResponse } from "./errorHandlers";
 
 // 로그인 폼 제출 함수
 export const submitLoginForm = async (

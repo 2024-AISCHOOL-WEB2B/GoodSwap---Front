@@ -1,4 +1,4 @@
-// src/shared/utils/errorHandlers.ts
+// src/features/auth/utils/errorHandlers.ts
 
 // 서버 응답에 따른 에러 메시지 처리 함수
 export const handleErrorResponse = (statusCode: number) => {

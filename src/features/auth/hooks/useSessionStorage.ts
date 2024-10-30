@@ -1,4 +1,4 @@
-// src/shared/hooks/useSessionStorage.ts
+// src/features/auth/hooks/useSessionStorage.ts
 
 import { useState, useEffect, useCallback } from "react";
 

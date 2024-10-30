@@ -1,4 +1,4 @@
-// src/shared/components/PasswordField.tsx
+// src/features/auth/shared/PasswordField.tsx
 
 import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";

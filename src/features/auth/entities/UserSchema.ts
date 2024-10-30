@@ -1,10 +1,10 @@
-// src/entities/UserSchema.ts
+// src/features/auth/entities/UserSchema.ts
 
 import { z } from "zod";
 import {
   createEmailValidation,
   createPasswordValidation,
-} from "../shared/utils";
+} from "../utils/validationRules";
 
 // 로그인 입력값 유효성 검사 스키마
 export const loginSchema = z.object({

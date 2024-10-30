@@ -1,4 +1,4 @@
-// src/mocks/axiosMock.ts
+// src/features/auth/mocks/axiosMock.ts
 
 import MockAdapter from "axios-mock-adapter";
 import { axiosInstance } from "../APIs/axiosInstance";
