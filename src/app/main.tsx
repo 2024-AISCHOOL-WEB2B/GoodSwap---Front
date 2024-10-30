@@ -8,7 +8,7 @@ import "../shared/styles/index.css"; // 글로벌 스타일 적용
 
 // Mock 설정 임포트
 if (process.env.NODE_ENV === "development") {
-  import("../features/auth/mocks/axiosMock"); // 개발 환경에서만 Mock 설정 적용
+  // import("../features/auth/mocks/axiosMock"); // 개발 환경에서만 Mock 설정 적용
 }
 
 // HTML 파일에서 "root"라는 ID를 가진 요소를 가져옴 -- if문을 제거해서 에러가 발생하게 변경

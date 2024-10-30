@@ -29,7 +29,7 @@ export const submitLoginForm = async (
 
     // 로그인 요청을 서버에 보냄
     const loginResponse = await axiosInstance.post(
-      "/login",
+      "/auth/login",
       {
         email: sanitizedEmail,
         password: sanitizedPassword,
