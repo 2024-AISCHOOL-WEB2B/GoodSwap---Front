@@ -10,10 +10,11 @@ export const axiosInstance = axios.create({
     "Content-Type": "application/json", // 요청 헤더에 JSON 형식 지정
     Accept: "application/json", // 응답 형식으로 JSON을 기대
   },
-  withCredentials: true, // CORS 요청 시 인증 정보(쿠키 등) 포함
+  // withCredentials: true, // CORS 요청 시 인증 정보(쿠키 등) 포함
 });
 
 // CSRF 토큰을 헤더에 추가하는 인터셉터 설정 - body로 내려줬을때도 가정해서 처리해보자.
+/*
 axiosInstance.interceptors.request.use(
   (config) => {
     try {
@@ -38,3 +39,4 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+*/

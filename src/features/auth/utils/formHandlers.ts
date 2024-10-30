@@ -20,10 +20,12 @@ export const submitLoginForm = async (
     const sanitizedPassword = sanitizeHtml(password);
 
     // CSRF 토큰을 쿠키에서 가져오기
+    /*
     const csrfToken = document.cookie
       .split("; ")
       .find((row) => row.startsWith("XSRF-TOKEN="))
       ?.split("=")[1];
+    */
 
     // 로그인 요청을 서버에 보냄
     const loginResponse = await axiosInstance.post(
@@ -34,7 +36,9 @@ export const submitLoginForm = async (
       },
       {
         // CSRF 토큰이 있을 때만 헤더에 추가
+        /*
         headers: csrfToken ? { "X-XSRF-TOKEN": csrfToken } : {},
+        */
       }
     );
 
