@@ -6,7 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { useSessionStorage } from "../../shared/hooks";
-import { loginSchema } from "../../entities";
+import { loginSchema } from "./entities";
 import { Modal, FormLayout } from "../../widgets";
 import { submitLoginForm } from "./utils";
 import { EmailField, PasswordField } from "../../shared/components";
@@ -53,12 +53,12 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   const password = watch("password");
   // 첫 랜더링 여부 체크
   const isFirstRender = useRef(true); // useLayoutEffect를 사용해보고 로직을 조금 더 단순화 해보자.
- // useRef를 사용하면 리엑트 life cycle 무시하게 된다. -- 지양하자.
+  // useRef를 사용하면 리엑트 life cycle 무시하게 된다. -- 지양하자.
 
   // 컴포넌트가 처음 렌더링 될 때, 세션 스토리지에서 값 불러오기
   useEffect(() => {
     // early return를 사용해서 if 중첩문 줄이기. 가독성도 높아짐
-    if (!isFirstRender.current) return
+    if (!isFirstRender.current) return;
 
     // 세션에 저장된 값을 폼에 설정
     if (storedEmail) {
@@ -68,7 +68,6 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
       setValue("password", storedPassword);
     }
     isFirstRender.current = false; // 첫 렌더링 체크 업데이트
-
   }, [setValue, storedEmail, storedPassword]);
 
   // 입력값이 변경될 때 세션 스토리지에 저장
@@ -114,32 +113,34 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   }, []);
 
   // 회원가입 폼 표시 상태를 업데이트하는 함수
-const handleSignUpClick = useCallback(() => {
-  setShowSignUpForm(true); // 회원가입 폼을 표시하도록 상태 업데이트
-}, []);
+  const handleSignUpClick = useCallback(() => {
+    setShowSignUpForm(true); // 회원가입 폼을 표시하도록 상태 업데이트
+  }, []);
 
   return (
-    <FormLayout title={showSignUpForm ? "회원가입" : "덕업일치 계정을 로그인해주세요."}>
-      {showSignUpForm ? ( 
+    <FormLayout
+      title={showSignUpForm ? "회원가입" : "덕업일치 계정을 로그인해주세요."}
+    >
+      {showSignUpForm ? (
         <MultiStepForm /> // 회원가입 멀티스텝 폼 렌더링
       ) : (
         // 컨벤션 더 쪼개보자.
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <EmailField
-          register={register("email")} // 이메일 필드 등록
-          errorMessage={errors.email?.message} // 이메일 필드 오류 메시지 표시
-        />
-        <PasswordField
-          register={register("password")} // 비밀번호 필드 등록
-          errorMessage={errors.password?.message} // 비밀번호 필드의 오류 메시지 표시
-        />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <EmailField
+            register={register("email")} // 이메일 필드 등록
+            errorMessage={errors.email?.message} // 이메일 필드 오류 메시지 표시
+          />
+          <PasswordField
+            register={register("password")} // 비밀번호 필드 등록
+            errorMessage={errors.password?.message} // 비밀번호 필드의 오류 메시지 표시
+          />
 
-        <SubmitButton />
-        <ForgotPasswordText />
-        <SignUpLink onClick={handleSignUpClick} />
-      </form>
+          <SubmitButton />
+          <ForgotPasswordText />
+          <SignUpLink onClick={handleSignUpClick} />
+        </form>
       )}
-      
+
       {showModal && (
         <Modal isVisible={showModal} onClose={closeModal}>
           <h2 className="text-red-500 mb-4">로그인 실패</h2>
