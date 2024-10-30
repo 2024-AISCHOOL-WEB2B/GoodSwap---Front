@@ -1,4 +1,4 @@
-// src/shared/services/axiosInstance.ts
+// src/features/auth/APIs/axiosInstance.ts
 
 import axios from "axios";
 

@@ -1,15 +1,17 @@
-// src/features/auth/LoginForm.tsx
+// src/features/auth/components/LoginForm.tsx
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useSessionStorage } from "../../shared/hooks";
-import { loginSchema } from "./entities";
-import { Modal, FormLayout } from "../../widgets";
-import { submitLoginForm } from "./utils";
-import { EmailField, PasswordField } from "../../shared/components";
+import { useSessionStorage } from "../hooks/useSessionStorage";
+import { loginSchema } from "../entities/UserSchema";
+import { Modal } from "../../../widgets/Modal";
+import { FormLayout } from "../../../widgets/FormLayout";
+import { submitLoginForm } from "../utils/formHandlers";
+import { EmailField } from "../shared/EmailField";
+import { PasswordField } from "../shared/PasswordField";
 import { MultiStepForm } from "./MultiStepForm";
 
 // 로그인 폼 컴포넌트에 전달할 Props 타입 정의

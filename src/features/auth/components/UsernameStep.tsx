@@ -1,10 +1,10 @@
-// src/features/auth/UsernameStep.tsx
+// src/features/auth/components/UsernameStep.tsx
 
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSessionStorage } from "../../shared/hooks";
+import { useSessionStorage } from "../hooks/useSessionStorage";
 
 // 유저네임 유효성 검사 스키마
 const usernameSchema = z.object({
@@ -12,7 +12,10 @@ const usernameSchema = z.object({
     .string()
     .min(1, { message: "닉네임은 최소 1자 이상이어야 합니다." })
     .max(32, { message: "닉네임은 최대 32자까지만 가능합니다." })
-    .regex(/^[a-zA-Z0-9]+$/, "닉네임에는 특수문자나 공백을 사용할 수 없습니다."),
+    .regex(
+      /^[a-zA-Z0-9]+$/,
+      "닉네임에는 특수문자나 공백을 사용할 수 없습니다."
+    ),
 });
 
 // `UsernameStep` 컴포넌트 타입 정의
@@ -55,7 +58,9 @@ const UsernameStep: React.FC<UsernameStepProps> = ({ onNext }) => {
             placeholder="닉네임을 입력하세요"
           />
           {errors.username && (
-            <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.username.message}
+            </p>
           )}
         </div>
         <button

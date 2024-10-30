@@ -1,26 +1,28 @@
-// src/features/auth/PasswordStep.tsx
+// src/features/auth/components/PasswordStep.tsx
 
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PasswordField } from "../../shared/components";
-import { useSessionStorage } from "../../shared/hooks";
+import { PasswordField } from "../shared/PasswordField";
+import { useSessionStorage } from "../hooks/useSessionStorage";
 
 // 비밀번호 유효성 검사 스키마
-const passwordSchema = z.object({
-  password: z
-    .string()
-    .min(8, { message: "비밀번호는 최소 8자 이상이어야 합니다." })
-    .max(32, { message: "비밀번호는 최대 32자까지만 가능합니다." })
-    .regex(/[a-zA-Z]/, "비밀번호에는 영문자가 포함되어야 합니다.")
-    .regex(/[0-9]/, "비밀번호에는 숫자가 포함되어야 합니다.")
-    .regex(/[\W_]/, "비밀번호에는 특수문자가 포함되어야 합니다."),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "비밀번호가 일치하지 않습니다.",
-  path: ["confirmPassword"],
-});
+const passwordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "비밀번호는 최소 8자 이상이어야 합니다." })
+      .max(32, { message: "비밀번호는 최대 32자까지만 가능합니다." })
+      .regex(/[a-zA-Z]/, "비밀번호에는 영문자가 포함되어야 합니다.")
+      .regex(/[0-9]/, "비밀번호에는 숫자가 포함되어야 합니다.")
+      .regex(/[\W_]/, "비밀번호에는 특수문자가 포함되어야 합니다."),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "비밀번호가 일치하지 않습니다.",
+    path: ["confirmPassword"],
+  });
 
 // `PasswordStep` 컴포넌트 타입 정의
 interface PasswordStepProps {

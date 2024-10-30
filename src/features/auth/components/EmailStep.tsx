@@ -1,11 +1,11 @@
-// src/features/auth/EmailStepForm.tsx
+// src/features/auth/components/EmailStep.tsx
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EmailField } from "../../shared/components";
-import { useSessionStorage } from "../../shared/hooks";
+import { EmailField } from "../shared/EmailField";
+import { useSessionStorage } from "../hooks/useSessionStorage";
 
 // 이메일 유효성 검사 스키마
 const emailSchema = z.object({

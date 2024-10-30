@@ -1,7 +1,7 @@
 // src/mocks/axiosMock.ts
 
 import MockAdapter from "axios-mock-adapter";
-import { axiosInstance } from "../shared/services";
+import { axiosInstance } from "../APIs/axiosInstance";
 
 // axiosInstance를 기반으로 MockAdapter 인스턴스 생성
 const mock = new MockAdapter(axiosInstance);
@@ -38,4 +38,4 @@ mock.onPost("/login").reply((config) => {
 });
 
 // mock 인스턴스 내보내기
-export default mock;
+export { mock };

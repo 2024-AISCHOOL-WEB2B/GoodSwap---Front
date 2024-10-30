@@ -1,9 +1,9 @@
 // src/app/App.tsx
 
-import { useEffect, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MainPage } from "../pages/MainPage";
-import { LoginForm } from "../features/auth/LoginForm";
+import { LoginForm } from "../features/auth/components/LoginForm";
 import { useAtom } from "jotai";
 import { isLoggedInAtom } from "../features/auth/atoms/auth";
 
@@ -54,5 +54,5 @@ function App() {
   );
 }
 
-// App 컴포넌트를 기본 내보내기로 설정
-export default App;
+// App 컴포넌트를 named export로 설정
+export { App };

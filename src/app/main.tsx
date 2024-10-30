@@ -3,7 +3,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "jotai"; // Jotai Provider 추가
-import App from "./App";
+import { App } from "./App";
 import "../shared/styles/index.css"; // 글로벌 스타일 적용
 
 // Mock 설정 임포트
