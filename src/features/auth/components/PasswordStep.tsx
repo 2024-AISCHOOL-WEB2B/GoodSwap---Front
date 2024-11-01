@@ -36,7 +36,6 @@ const PasswordStep: React.FC<PasswordStepProps> = ({ onNext }) => {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(passwordSchema),

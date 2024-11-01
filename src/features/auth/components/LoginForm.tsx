@@ -1,6 +1,6 @@
 // src/features/auth/components/LoginForm.tsx
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useLayoutEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,32 +53,21 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   // 입력값 감지
   const email = watch("email");
   const password = watch("password");
-  // 첫 랜더링 여부 체크
-  const isFirstRender = useRef(true); // useLayoutEffect를 사용해보고 로직을 조금 더 단순화 해보자.
-  // useRef를 사용하면 리엑트 life cycle 무시하게 된다. -- 지양하자.
 
-  // 컴포넌트가 처음 렌더링 될 때, 세션 스토리지에서 값 불러오기
-  useEffect(() => {
-    // early return를 사용해서 if 중첩문 줄이기. 가독성도 높아짐
-    if (!isFirstRender.current) return;
-
-    // 세션에 저장된 값을 폼에 설정
+  // 컴포넌트가 처음 렌더링될 때 세션 스토리지에서 값 불러오기 (깜박임 방지)
+  useLayoutEffect(() => {
     if (storedEmail) {
       setValue("email", storedEmail);
     }
     if (storedPassword) {
       setValue("password", storedPassword);
     }
-    isFirstRender.current = false; // 첫 렌더링 체크 업데이트
   }, [setValue, storedEmail, storedPassword]);
 
-  // 입력값이 변경될 때 세션 스토리지에 저장
-  useEffect(() => {
-    if (!isFirstRender.current) {
-      // 스토리지 업데이트
-      setStoredEmail(email);
-      setStoredPassword(password);
-    }
+  // 입력값이 변경될 때마다 세션 스토리지에 저장
+  useLayoutEffect(() => {
+    setStoredEmail(email);
+    setStoredPassword(password);
   }, [email, password, setStoredEmail, setStoredPassword]);
 
   // 폼 필드와 세션 스토리지를 초기화하는 함수
