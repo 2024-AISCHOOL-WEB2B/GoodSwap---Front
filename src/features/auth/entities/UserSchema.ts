@@ -13,6 +13,9 @@ export const loginSchema = z.object({
   password: createPasswordValidation(),
 });
 
+// 로그인 입력값 타입 추론
+export type LoginSchema = z.infer<typeof loginSchema>;
+
 // 닉네임 유효성 검사 스키마
 export const usernameSchema = z.object({
   username: z
@@ -24,3 +27,6 @@ export const usernameSchema = z.object({
       "닉네임에는 특수문자나 공백을 사용할 수 없습니다."
     ),
 });
+
+// 닉네임 스키마 타입 추론
+export type UsernameSchema = z.infer<typeof usernameSchema>;

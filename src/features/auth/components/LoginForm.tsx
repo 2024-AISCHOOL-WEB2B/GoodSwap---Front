@@ -1,12 +1,11 @@
 // src/features/auth/components/LoginForm.tsx
 
-import React, { useState, useLayoutEffect, useCallback } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { useSessionStorage } from "../hooks/useSessionStorage";
-import { loginSchema } from "../entities/UserSchema";
+import { loginSchema, LoginSchema } from "../entities/UserSchema";
 import { Modal } from "../../../widgets/Modal";
 import { FormLayout } from "../../../widgets/FormLayout";
 import { submitLoginForm } from "../utils/formHandlers";
@@ -15,13 +14,10 @@ import { PasswordField } from "../shared/PasswordField";
 import { MultiStepForm } from "./MultiStepForm";
 
 // 로그인 폼 컴포넌트에 전달할 Props 타입 정의
-interface LoginFormProps {
+type LoginFormProps = {
   // 로그인 성공 시 호출될 함수
   onLogin: () => void;
-}
-
-// 유효성 검사 스키마 타입 추론
-type LoginFormData = z.infer<typeof loginSchema>;
+};
 
 // 로그인 폼 컴포넌트 정의
 const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
@@ -44,7 +40,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     setValue,
     watch, // useWatch로 대체 대부분은 useWatch 사용
     formState: { errors },
-  } = useForm<LoginFormData>({
+  } = useForm<LoginSchema>({
     // 입력창 필드 유효성 검사 스키마 설정
     resolver: zodResolver(loginSchema),
     mode: "onChange", // 입력된 값이 변경될 때마다 유효성 검사
@@ -54,7 +50,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   const email = watch("email");
   const password = watch("password");
 
-  // 컴포넌트가 처음 렌더링될 때 세션 스토리지에서 값 불러오기 (깜박임 방지)
+  // 초기 로딩 시에만 세션 스토리지에서 값 불러오기
   useLayoutEffect(() => {
     if (storedEmail) {
       setValue("email", storedEmail);
@@ -62,24 +58,25 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     if (storedPassword) {
       setValue("password", storedPassword);
     }
-  }, [setValue, storedEmail, storedPassword]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setValue]);
 
   // 입력값이 변경될 때마다 세션 스토리지에 저장
-  useLayoutEffect(() => {
+  useEffect(() => {
     setStoredEmail(email);
     setStoredPassword(password);
   }, [email, password, setStoredEmail, setStoredPassword]);
 
   // 폼 필드와 세션 스토리지를 초기화하는 함수
-  const resetForm = useCallback(() => {
+  const resetForm = () => {
     setStoredEmail(""); // 세션 스토리지의 이메일 초기화
     setStoredPassword(""); // 세션 스토리지의 비밀번호 초기화
     setValue("email", ""); // 폼 필드 초기화
     setValue("password", ""); // 폼 필드 초기화
-  }, [setStoredEmail, setStoredPassword, setValue]);
+  };
 
   // 폼 제출 시 호출되는 함수
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: LoginSchema) => {
     submitLoginForm(
       data.email,
       data.password,
@@ -99,14 +96,14 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   };
 
   // 모달 닫기 함수
-  const closeModal = useCallback(() => {
+  const closeModal = () => {
     setShowModal(false);
-  }, []);
+  };
 
   // 회원가입 폼 표시 상태를 업데이트하는 함수
-  const handleSignUpClick = useCallback(() => {
+  const handleSignUpClick = () => {
     setShowSignUpForm(true); // 회원가입 폼을 표시하도록 상태 업데이트
-  }, []);
+  };
 
   return (
     <FormLayout
