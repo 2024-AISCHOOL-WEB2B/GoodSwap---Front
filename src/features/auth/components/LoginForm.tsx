@@ -28,8 +28,8 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   // 회원가입 폼 표시 상태
   const [showSignUpForm, setShowSignUpForm] = useState(false);
   // 세션 스토리지에서 이메일 & 비밀번호 가져오기
-  const [storedEmail, setStoredEmail] = useSessionStorage("user_email", "");
-  const [storedPassword, setStoredPassword] = useSessionStorage("user_pw", "");
+  const [storedEmail, setStoredEmail] = useSessionStorage("email", "");
+  const [storedPassword, setStoredPassword] = useSessionStorage("password", "");
   const navigate = useNavigate(); // 페이지 이동을 위한 navigate 훅
 
   // React Hook Form 설정, 세션 스토리지의 값으로 필드 초기화
@@ -37,21 +37,21 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     resolver: zodResolver(loginSchema), // Zod 스키마로 유효성 검사 설정
     mode: "onBlur",
     defaultValues: {
-      user_email: storedEmail || "", // undefined 방지를 위해 빈 문자열로 기본값 설정
-      user_pw: storedPassword || "",
+      email: storedEmail || "", // undefined 방지를 위해 빈 문자열로 기본값 설정
+      password: storedPassword || "",
     },
   });
 
   const { handleSubmit, control } = methods;
 
   // 폼 필드 값이 변경될 때마다 세션 스토리지에 저장
-  const user_email = useWatch({ control, name: "user_email" });
-  const user_pw = useWatch({ control, name: "user_pw" });
+  const email = useWatch({ control, name: "email" });
+  const password = useWatch({ control, name: "password" });
 
   useEffect(() => {
-    setStoredEmail(user_email);
-    setStoredPassword(user_pw);
-  }, [user_email, user_pw, setStoredEmail, setStoredPassword]);
+    setStoredEmail(email);
+    setStoredPassword(password);
+  }, [email, password, setStoredEmail, setStoredPassword]);
 
   // 폼 필드와 세션 스토리지를 초기화하는 함수
   const resetForm = () => {
@@ -63,8 +63,8 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   // 폼 제출 시 호출되는 함수, 로그인 성공 및 실패 시 동작 정의
   const onSubmit = async (data: LoginSchema) => {
     submitLoginForm(
-      data.user_email,
-      data.user_pw,
+      data.email,
+      data.password,
       () => {
         setErrorMessage(null); // 에러 메시지 초기화
         resetForm(); // 폼 필드 초기화

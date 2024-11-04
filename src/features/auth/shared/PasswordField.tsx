@@ -23,15 +23,15 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
         비밀번호
       </label>
       <input
-        id="user_pw"
+        id="password"
         type="password"
-        {...register("user_pw")}
+        {...register("password")}
         className="w-full p-2 border"
         placeholder={placeholder}
       />
-      {errors.user_pw && ( // 오류 메시지가 있을 경우 화면에 표시
+      {errors.password && ( // 오류 메시지가 있을 경우 화면에 표시
         <p className="text-red-500 text-sm mt-1">
-          {String(errors.user_pw.message)}
+          {String(errors.password.message)}
         </p>
       )}
     </div>

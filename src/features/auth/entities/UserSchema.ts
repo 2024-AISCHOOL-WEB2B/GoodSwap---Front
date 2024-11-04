@@ -9,8 +9,8 @@ import {
 // 로그인 입력값 유효성 검사 스키마
 export const loginSchema = z.object({
   // 유효성 검사를 위한 함수 호출
-  user_email: createEmailValidation(),
-  user_pw: createPasswordValidation(),
+  email: createEmailValidation(),
+  password: createPasswordValidation(),
 });
 
 // 로그인 입력값 타입 추론

@@ -22,15 +22,15 @@ const EmailField: React.FC<EmailFieldProps> = ({
         이메일
       </label>
       <input
-        id="user_email"
+        id="email"
         type="email"
-        {...register("user_email")}
+        {...register("email")}
         className="w-full p-2 border"
         placeholder={placeholder}
       />
-      {errors.user_email && ( // 오류 메시지가 있을 경우 화면에 표시
+      {errors.email && ( // 오류 메시지가 있을 경우 화면에 표시
         <p className="text-red-500 text-sm mt-1">
-          {String(errors.user_email.message)}
+          {String(errors.email.message)}
         </p>
       )}
     </div>
