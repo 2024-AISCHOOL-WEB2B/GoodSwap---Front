@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { EmailStep } from "./EmailStep";
 import { PasswordStep } from "./PasswordStep";
 import { UsernameStep } from "./UsernameStep";
-import { FormLayout } from "../../../widgets/FormLayout";
 
 // 각 단계에 대한 타입 정의
 type Step = "email" | "password" | "username";
@@ -37,7 +36,7 @@ const MultiStepForm: React.FC = () => {
     }
   };
 
-  return <FormLayout title="회원가입 진행">{renderStep()}</FormLayout>;
+  return <>{renderStep()}</>; // FormLayout 제거
 };
 
 export { MultiStepForm };

@@ -95,7 +95,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
         title={showSignUpForm ? "회원가입" : "덕업일치 계정을 로그인해주세요."}
       >
         {showSignUpForm ? (
-          <MultiStepForm /> // 회원가입 멀티스텝 폼 렌더링
+          <MultiStepForm /> // MultiStepForm 컴포넌트만 랜더링
         ) : (
           // 컨벤션 더 쪼개보자.
           <form onSubmit={handleSubmit(onSubmit)}>
