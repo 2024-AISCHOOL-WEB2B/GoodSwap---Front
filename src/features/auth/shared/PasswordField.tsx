@@ -23,9 +23,9 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
         비밀번호
       </label>
       <input
-        id="password"
+        id="user_pw"
         type="password"
-        {...register("password")}
+        {...register("user_pw")}
         className="w-full p-2 border"
         placeholder={placeholder}
       />

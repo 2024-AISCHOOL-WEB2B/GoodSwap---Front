@@ -22,9 +22,9 @@ const EmailField: React.FC<EmailFieldProps> = ({
         이메일
       </label>
       <input
-        id="email"
+        id="user_email"
         type="email"
-        {...register("email")}
+        {...register("user_email")}
         className="w-full p-2 border"
         placeholder={placeholder}
       />

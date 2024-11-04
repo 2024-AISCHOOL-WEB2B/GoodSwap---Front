@@ -7,8 +7,8 @@ import { handleErrorResponse } from "./errorHandlers";
 
 // 로그인 폼 제출 함수
 export const submitLoginForm = async (
-  email: string,
-  password: string,
+  user_email: string,
+  user_pw: string,
   // 성공 시 호출할 콜백 함수
   onSuccess: () => void,
   // 오류 발생 시 호출할 콜백 함수
@@ -16,13 +16,13 @@ export const submitLoginForm = async (
 ) => {
   try {
     // 이메일과 비밀번호를 HTML로부터 안전하게 정제
-    const sanitizedEmail = sanitizeHtml(email);
-    const sanitizedPassword = sanitizeHtml(password);
+    const sanitizedEmail = sanitizeHtml(user_email);
+    const sanitizedPassword = sanitizeHtml(user_pw);
 
     // 로그인 요청을 서버에 보냄
     const loginResponse = await axiosInstance.post("/auth/login", {
-      email: sanitizedEmail,
-      password: sanitizedPassword,
+      user_email: sanitizedEmail,
+      user_pw: sanitizedPassword,
     });
 
     // 요청이 성공적으로 완료되었을 때
