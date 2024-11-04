@@ -28,9 +28,9 @@ const EmailField: React.FC<EmailFieldProps> = ({
         className="w-full p-2 border"
         placeholder={placeholder}
       />
-      {errors.email && ( // 오류 메시지가 있을 경우 화면에 표시
+      {errors.user_email && ( // 오류 메시지가 있을 경우 화면에 표시
         <p className="text-red-500 text-sm mt-1">
-          {String(errors.email.message)}
+          {String(errors.user_email.message)}
         </p>
       )}
     </div>
