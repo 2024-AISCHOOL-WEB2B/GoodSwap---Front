@@ -1,7 +1,7 @@
 // src/features/auth/components/LoginForm.tsx
 
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { useForm, FormProvider, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { useSessionStorage } from "../hooks/useSessionStorage";
@@ -30,38 +30,24 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   // 세션 스토리지에서 이메일 & 비밀번호 가져오기
   const [storedEmail, setStoredEmail] = useSessionStorage("email", "");
   const [storedPassword, setStoredPassword] = useSessionStorage("password", "");
-  // 페이지 이동을 위한 navigate 훅
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // 페이지 이동을 위한 navigate 훅
 
-  // RHF(React Hook Form)을 이용한 폼 관리
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch, // useWatch로 대체 대부분은 useWatch 사용
-    formState: { errors },
-  } = useForm<LoginSchema>({
-    // 입력창 필드 유효성 검사 스키마 설정
-    resolver: zodResolver(loginSchema),
-    mode: "onChange", // 입력된 값이 변경될 때마다 유효성 검사
+  // React Hook Form 설정, 세션 스토리지의 값으로 필드 초기화
+  const methods = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema), // Zod 스키마로 유효성 검사 설정
+    mode: "onBlur",
+    defaultValues: {
+      email: storedEmail || "", // undefined 방지를 위해 빈 문자열로 기본값 설정
+      password: storedPassword || "",
+    },
   });
 
-  // 입력값 감지
-  const email = watch("email");
-  const password = watch("password");
+  const { handleSubmit, control } = methods;
 
-  // 초기 로딩 시에만 세션 스토리지에서 값 불러오기
-  useLayoutEffect(() => {
-    if (storedEmail) {
-      setValue("email", storedEmail);
-    }
-    if (storedPassword) {
-      setValue("password", storedPassword);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setValue]);
+  // 폼 필드 값이 변경될 때마다 세션 스토리지에 저장
+  const email = useWatch({ control, name: "email" });
+  const password = useWatch({ control, name: "password" });
 
-  // 입력값이 변경될 때마다 세션 스토리지에 저장
   useEffect(() => {
     setStoredEmail(email);
     setStoredPassword(password);
@@ -71,25 +57,23 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   const resetForm = () => {
     setStoredEmail(""); // 세션 스토리지의 이메일 초기화
     setStoredPassword(""); // 세션 스토리지의 비밀번호 초기화
-    setValue("email", ""); // 폼 필드 초기화
-    setValue("password", ""); // 폼 필드 초기화
+    methods.reset(); // 폼 초기화
   };
 
-  // 폼 제출 시 호출되는 함수
+  // 폼 제출 시 호출되는 함수, 로그인 성공 및 실패 시 동작 정의
   const onSubmit = async (data: LoginSchema) => {
     submitLoginForm(
       data.email,
       data.password,
       () => {
-        setErrorMessage(null);
-        resetForm();
-        onLogin();
-        navigate("/main");
+        setErrorMessage(null); // 에러 메시지 초기화
+        resetForm(); // 폼 필드 초기화
+        onLogin(); // 로그인 성공 콜백 호출
+        navigate("/main"); // 메인 페이지로 이동
       },
       (errorMessage) => {
-        setErrorMessage(errorMessage);
-        // 오류 모달 표시
-        setShowModal(true);
+        setErrorMessage(errorMessage); // 에러 메시지 설정
+        setShowModal(true); // 오류 모달 표시
         resetForm();
       }
     );
@@ -106,36 +90,32 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   };
 
   return (
-    <FormLayout
-      title={showSignUpForm ? "회원가입" : "덕업일치 계정을 로그인해주세요."}
-    >
-      {showSignUpForm ? (
-        <MultiStepForm /> // 회원가입 멀티스텝 폼 렌더링
-      ) : (
-        // 컨벤션 더 쪼개보자.
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <EmailField
-            register={register("email")} // 이메일 필드 등록
-            errorMessage={errors.email?.message} // 이메일 필드 오류 메시지 표시
-          />
-          <PasswordField
-            register={register("password")} // 비밀번호 필드 등록
-            errorMessage={errors.password?.message} // 비밀번호 필드의 오류 메시지 표시
-          />
+    <FormProvider {...methods}>
+      <FormLayout
+        title={showSignUpForm ? "회원가입" : "덕업일치 계정을 로그인해주세요."}
+      >
+        {showSignUpForm ? (
+          <MultiStepForm /> // 회원가입 멀티스텝 폼 렌더링
+        ) : (
+          // 컨벤션 더 쪼개보자.
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <EmailField />
+            <PasswordField />
 
-          <SubmitButton />
-          <ForgotPasswordText />
-          <SignUpLink onClick={handleSignUpClick} />
-        </form>
-      )}
+            <SubmitButton />
+            <ForgotPasswordText />
+            <SignUpLink onClick={handleSignUpClick} />
+          </form>
+        )}
 
-      {showModal && (
-        <Modal isVisible={showModal} onClose={closeModal}>
-          <h2 className="text-red-500 mb-4">로그인 실패</h2>
-          <p>{errorMessage}</p>
-        </Modal>
-      )}
-    </FormLayout>
+        {showModal && (
+          <Modal isVisible={showModal} onClose={closeModal}>
+            <h2 className="text-red-500 mb-4">로그인 실패</h2>
+            <p>{errorMessage}</p>
+          </Modal>
+        )}
+      </FormLayout>
+    </FormProvider>
   );
 };
 

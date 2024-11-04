@@ -19,28 +19,11 @@ export const submitLoginForm = async (
     const sanitizedEmail = sanitizeHtml(email);
     const sanitizedPassword = sanitizeHtml(password);
 
-    // CSRF 토큰을 쿠키에서 가져오기
-    /*
-    const csrfToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("XSRF-TOKEN="))
-      ?.split("=")[1];
-    */
-
     // 로그인 요청을 서버에 보냄
-    const loginResponse = await axiosInstance.post(
-      "/auth/login",
-      {
-        email: sanitizedEmail,
-        password: sanitizedPassword,
-      },
-      {
-        // CSRF 토큰이 있을 때만 헤더에 추가
-        /*
-        headers: csrfToken ? { "X-XSRF-TOKEN": csrfToken } : {},
-        */
-      }
-    );
+    const loginResponse = await axiosInstance.post("/auth/login", {
+      email: sanitizedEmail,
+      password: sanitizedPassword,
+    });
 
     // 요청이 성공적으로 완료되었을 때
     if (loginResponse.status === 200) {
