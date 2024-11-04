@@ -36,7 +36,7 @@ const MultiStepForm: React.FC = () => {
     }
   };
 
-  return <>{renderStep()}</>; // FormLayout 제거
+  return <>{renderStep()}</>;
 };
 
 export { MultiStepForm };

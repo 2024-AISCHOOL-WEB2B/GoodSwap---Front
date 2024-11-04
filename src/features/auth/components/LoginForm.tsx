@@ -100,7 +100,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
           // 컨벤션 더 쪼개보자.
           <form onSubmit={handleSubmit(onSubmit)}>
             <EmailField />
-            <PasswordField />
+            <PasswordField name={""} />
 
             <SubmitButton />
             <ForgotPasswordText />

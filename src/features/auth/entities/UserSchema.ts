@@ -30,3 +30,19 @@ export const usernameSchema = z.object({
 
 // 닉네임 스키마 타입 추론
 export type UsernameSchema = z.infer<typeof usernameSchema>;
+
+// 비밀번호 및 비밀번호 확인 유효성 검사 스키마
+export const passwordConfirmationSchema = z
+  .object({
+    password: createPasswordValidation(),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "비밀번호가 일치하지 않습니다.",
+    path: ["confirmPassword"],
+  });
+
+// 비밀번호 확인 스키마 타입 추론
+export type PasswordConfirmationSchema = z.infer<
+  typeof passwordConfirmationSchema
+>;

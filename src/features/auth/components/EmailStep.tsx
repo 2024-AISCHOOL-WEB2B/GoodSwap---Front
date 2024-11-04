@@ -1,37 +1,28 @@
 // src/features/auth/components/EmailStep.tsx
 
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EmailField } from "../shared/EmailField";
 import { useSessionStorage } from "../hooks/useSessionStorage";
-
-// 이메일 유효성 검사 스키마
-const emailSchema = z.object({
-  email: z.string().email({ message: "유효한 이메일을 입력해주세요." }),
-});
+import { loginSchema } from "../entities/UserSchema";
 
 // `EmailStep` 컴포넌트 타입 정의
-interface EmailStepProps {
+type EmailStepProps = {
   onNext: () => void; // 다음 스텝으로 이동하는 콜백 함수
-}
+};
 
 const EmailStep: React.FC<EmailStepProps> = ({ onNext }) => {
   const [storedEmail, setStoredEmail] = useSessionStorage("email", "");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [, setErrorMessage] = useState<string | null>(null);
 
-  // React Hook Form을 이용한 폼 관리
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(emailSchema),
-    mode: "onChange",
-    defaultValues: { email: storedEmail },
+  const methods = useForm({
+    resolver: zodResolver(loginSchema.pick({ email: true })),
+    mode: "onBlur",
+    defaultValues: { email: storedEmail || "" },
   });
+
+  const { handleSubmit } = methods;
 
   // 폼 제출 시 호출되는 함수
   const onSubmit = (data: { email: string }) => {
@@ -43,12 +34,9 @@ const EmailStep: React.FC<EmailStepProps> = ({ onNext }) => {
   };
 
   return (
-    <div>
+    <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <EmailField
-          register={register("email")}
-          errorMessage={errors.email?.message || errorMessage}
-        />
+        <EmailField />
         <button
           type="submit"
           className="w-full py-2 bg-blue-500 text-white font-semibold rounded"
@@ -56,7 +44,7 @@ const EmailStep: React.FC<EmailStepProps> = ({ onNext }) => {
           다음
         </button>
       </form>
-    </div>
+    </FormProvider>
   );
 };
 

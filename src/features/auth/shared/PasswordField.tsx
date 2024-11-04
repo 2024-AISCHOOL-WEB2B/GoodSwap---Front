@@ -5,6 +5,7 @@ import { useFormContext } from "react-hook-form";
 
 type PasswordFieldProps = {
   placeholder?: string; // placeholder를 props로 받도록 설정
+  name: string;
 };
 
 // PasswordField 컴포넌트 정의
