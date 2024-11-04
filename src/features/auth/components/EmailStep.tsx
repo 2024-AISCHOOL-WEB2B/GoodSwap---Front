@@ -39,7 +39,7 @@ const EmailStep: React.FC<EmailStepProps> = ({ onNext }) => {
         <EmailField />
         <button
           type="submit"
-          className="w-full py-2 bg-blue-500 text-white font-semibold rounded"
+          className="w-full py-2 bg-gradient-to-r from-custom_magenta to-custom_appricot text-white font-semibold rounded"
         >
           다음
         </button>

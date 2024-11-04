@@ -20,7 +20,7 @@ export type LoginSchema = z.infer<typeof loginSchema>;
 export const usernameSchema = z.object({
   username: z
     .string()
-    .min(1, { message: "닉네임은 최소 1자 이상이어야 합니다." })
+    .min(5, { message: "닉네임은 최소 5자 이상이어야 합니다." })
     .max(32, { message: "닉네임은 최대 32자까지만 가능합니다." })
     .regex(
       /^[a-zA-Z0-9]+$/,

@@ -20,7 +20,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   return (
     <div className="relative flex justify-center items-start mt-6">
       <div
-        className="border p-6 flex flex-col justify-center"
+        className="non-border rounded-lg bg-white p-6 flex flex-col justify-center shadow-lg"
         style={{ width, height }} // width와 height를 props로 받아 동적으로 설정
       >
         <h1 className="text-2xl font-bold mb-4 text-center">{title}</h1>

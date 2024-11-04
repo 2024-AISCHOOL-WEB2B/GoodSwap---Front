@@ -1,6 +1,6 @@
 // src/features/auth/components/LoginForm.tsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useForm, FormProvider, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
@@ -89,6 +89,17 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     setShowSignUpForm(true); // 회원가입 폼을 표시하도록 상태 업데이트
   };
 
+  // 전체 배경색을 렌더링 전에 설정
+  useLayoutEffect(() => {
+    document.documentElement.style.backgroundColor = "rgb(250, 250, 250)";
+    document.body.style.backgroundColor = "rgb(250, 250, 250)";
+
+    return () => {
+      document.documentElement.style.backgroundColor = "";
+      document.body.style.backgroundColor = "";
+    };
+  }, []);
+
   return (
     <FormProvider {...methods}>
       <FormLayout
@@ -123,7 +134,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
 const SubmitButton = () => (
   <button
     type="submit"
-    className="w-full py-2 bg-gradient-to-r from-pink-400 to-orange-400 text-white font-semibold"
+    className="w-full py-2 bg-gradient-to-r from-custom_magenta to-custom_appricot text-white font-semibold rounded"
   >
     로그인
   </button>
@@ -144,7 +155,7 @@ const SignUpLink: React.FC<{ onClick: () => void }> = ({ onClick }) => (
         e.preventDefault();
         onClick();
       }}
-      className="text-pink-500 font-semibold"
+      className="text-custom_magenta font-semibold"
     >
       덕업일치 계정으로 가입하기
     </a>
