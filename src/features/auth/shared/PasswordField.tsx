@@ -11,27 +11,32 @@ type PasswordFieldProps = {
 // PasswordField 컴포넌트 정의
 const PasswordField: React.FC<PasswordFieldProps> = ({
   placeholder = "비밀번호",
+  name,
 }) => {
   const {
     register,
     formState: { errors },
   } = useFormContext();
 
+  // name 속성에 따라 동적으로 라벨 텍스트 설정
+  const labelText =
+    name === "password" ? "새로운 비밀번호" : "새로운 비밀번호 확인";
+
   return (
     <div className="mb-4">
-      <label htmlFor="password" className="block text-sm mb-2">
-        비밀번호
+      <label htmlFor={name} className="block text-sm mb-2">
+        {labelText}
       </label>
       <input
-        id="password"
+        id={name}
         type="password"
-        {...register("password")}
+        {...register(name)}
         className="w-full p-2 border"
         placeholder={placeholder}
       />
-      {errors.password && ( // 오류 메시지가 있을 경우 화면에 표시
+      {errors[name] && ( // 오류 메시지가 있을 경우 화면에 표시
         <p className="text-red-500 text-sm mt-1">
-          {String(errors.password.message)}
+          {String(errors[name]?.message)}
         </p>
       )}
     </div>

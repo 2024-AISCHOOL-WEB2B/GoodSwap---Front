@@ -33,9 +33,9 @@ const UsernameStep: React.FC<UsernameStepProps> = ({ onNext, onPrevious }) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <p className="text-center text-gray-500 text-sm mb-4">
-          5–32자 길이로 숫자, 특수문자 조합의 공통 닉네임이며, 나중에 계정
-          설정에서 변경할 수 있습니다.
+        <p className="text-center text-gray-500 text-sm mb-4 whitespace-pre-line">
+          5–32자 길이로 숫자, 특수문자 조합의 공통 닉네임이며,{"\n"}
+          나중에 계정 설정에서 변경할 수 있습니다.
         </p>
         <div className="mb-4">
           <label htmlFor="username" className="block text-sm mb-2">

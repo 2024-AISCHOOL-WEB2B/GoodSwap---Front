@@ -26,6 +26,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   // 모달 표시 상태
   const [showModal, setShowModal] = useState(false);
   // 회원가입 폼 표시 상태
+  const [title, setTitle] = useState("덕업일치 계정을 로그인해주세요.");
   const [showSignUpForm, setShowSignUpForm] = useState(false);
   // 세션 스토리지에서 이메일 & 비밀번호 가져오기
   const [storedEmail, setStoredEmail] = useSessionStorage("email", "");
@@ -87,6 +88,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   // 회원가입 폼 표시 상태를 업데이트하는 함수
   const handleSignUpClick = () => {
     setShowSignUpForm(true); // 회원가입 폼을 표시하도록 상태 업데이트
+    setTitle("새로운 이메일 주소로 회원가입 해주세요"); // 회원가입 폼 초기 제목 설정
   };
 
   // 전체 배경색을 렌더링 전에 설정
@@ -102,16 +104,14 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
 
   return (
     <FormProvider {...methods}>
-      <FormLayout
-        title={showSignUpForm ? "회원가입" : "덕업일치 계정을 로그인해주세요."}
-      >
+      <FormLayout title={title}>
         {showSignUpForm ? (
-          <MultiStepForm /> // MultiStepForm 컴포넌트만 랜더링
+          <MultiStepForm setTitle={setTitle} /> // MultiStepForm 컴포넌트만 랜더링
         ) : (
           // 컨벤션 더 쪼개보자.
           <form onSubmit={handleSubmit(onSubmit)}>
             <EmailField />
-            <PasswordField name={""} />
+            <PasswordField name="password" />
 
             <SubmitButton />
             <ForgotPasswordText />

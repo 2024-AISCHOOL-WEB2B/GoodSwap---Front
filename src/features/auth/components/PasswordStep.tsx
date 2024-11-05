@@ -5,7 +5,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PasswordField } from "../shared/PasswordField";
 import { useSessionStorage } from "../hooks/useSessionStorage";
-import { loginSchema } from "../entities/UserSchema";
+import { passwordConfirmationSchema } from "../entities/UserSchema";
 
 // `PasswordStep` 컴포넌트 타입 정의
 type PasswordStepProps = {
@@ -18,7 +18,7 @@ const PasswordStep: React.FC<PasswordStepProps> = ({ onNext, onPrevious }) => {
 
   // React Hook Form을 이용한 폼 관리
   const methods = useForm({
-    resolver: zodResolver(loginSchema.pick({ password: true })),
+    resolver: zodResolver(passwordConfirmationSchema),
     mode: "onBlur",
     defaultValues: { password: storedPassword || "", confirmPassword: "" },
   });
