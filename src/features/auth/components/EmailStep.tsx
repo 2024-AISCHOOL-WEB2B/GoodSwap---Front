@@ -1,6 +1,6 @@
 // src/features/auth/components/EmailStep.tsx
 
-import React, { useState } from "react";
+import React from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EmailField } from "../shared/EmailField";
@@ -14,7 +14,6 @@ type EmailStepProps = {
 
 const EmailStep: React.FC<EmailStepProps> = ({ onNext }) => {
   const [storedEmail, setStoredEmail] = useSessionStorage("email", "");
-  const [, setErrorMessage] = useState<string | null>(null);
 
   const methods = useForm({
     resolver: zodResolver(loginSchema.pick({ email: true })),
@@ -29,7 +28,7 @@ const EmailStep: React.FC<EmailStepProps> = ({ onNext }) => {
     // 서버와 통신하여 이메일 중복 확인을 할 수 있습니다.
     // 예시로 이메일을 세션에 저장하고 다음 스텝으로 이동합니다.
     setStoredEmail(data.email);
-    setErrorMessage(null);
+
     onNext();
   };
 

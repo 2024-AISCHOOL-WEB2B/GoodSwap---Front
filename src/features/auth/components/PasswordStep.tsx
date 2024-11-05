@@ -10,9 +10,10 @@ import { loginSchema } from "../entities/UserSchema";
 // `PasswordStep` 컴포넌트 타입 정의
 type PasswordStepProps = {
   onNext: () => void; // 다음 스텝으로 이동하는 콜백 함수
+  onPrevious: () => void; // 이전 단계로 이동하는 콜백 함수
 };
 
-const PasswordStep: React.FC<PasswordStepProps> = ({ onNext }) => {
+const PasswordStep: React.FC<PasswordStepProps> = ({ onNext, onPrevious }) => {
   const [storedPassword, setStoredPassword] = useSessionStorage("password", "");
 
   // React Hook Form을 이용한 폼 관리
@@ -33,14 +34,26 @@ const PasswordStep: React.FC<PasswordStepProps> = ({ onNext }) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <PasswordField name="password" />
-        <PasswordField name="confirmPassword" />
+        <PasswordField name="password" placeholder="새로운 비밀번호" />
+        <div className="text-sm text-gray-500 my-5">
+          8 - 32자 영문, 숫자, 특수문자 포함해야 합니다.
+        </div>
+        <PasswordField
+          name="confirmPassword"
+          placeholder="새로운 비밀번호 확인"
+        />
         <button
           type="submit"
           className="w-full py-2 bg-gradient-to-r from-custom_magenta to-custom_appricot text-white font-semibold rounded"
         >
           다음
         </button>
+        <p
+          onClick={onPrevious}
+          className="text-center mt-4 text-gray-400 hover:text-custom_magenta cursor-pointer underline"
+        >
+          이전
+        </p>
       </form>
     </FormProvider>
   );

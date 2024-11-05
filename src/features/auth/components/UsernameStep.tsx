@@ -9,9 +9,10 @@ import { usernameSchema } from "../entities/UserSchema";
 // `UsernameStep` 컴포넌트 타입 정의
 type UsernameStepProps = {
   onNext: () => void; // 다음 스텝으로 이동하는 콜백 함수
+  onPrevious: () => void; // 이전 단계로 이동하는 콜백 함수
 };
 
-const UsernameStep: React.FC<UsernameStepProps> = ({ onNext }) => {
+const UsernameStep: React.FC<UsernameStepProps> = ({ onNext, onPrevious }) => {
   const [storedUsername, setStoredUsername] = useSessionStorage("username", "");
 
   // React Hook Form을 이용한 폼 관리
@@ -32,9 +33,13 @@ const UsernameStep: React.FC<UsernameStepProps> = ({ onNext }) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <p className="text-center text-gray-500 text-sm mb-4">
+          5–32자 길이로 숫자, 특수문자 조합의 공통 닉네임이며, 나중에 계정
+          설정에서 변경할 수 있습니다.
+        </p>
         <div className="mb-4">
           <label htmlFor="username" className="block text-sm mb-2">
-            닉네임을 입력해주세요
+            닉네임
           </label>
           <input
             id="username"
@@ -55,6 +60,12 @@ const UsernameStep: React.FC<UsernameStepProps> = ({ onNext }) => {
         >
           다음
         </button>
+        <p
+          onClick={onPrevious}
+          className="text-center mt-4 text-gray-400 hover:text-custom_magenta cursor-pointer underline"
+        >
+          이전
+        </p>
       </form>
     </FormProvider>
   );

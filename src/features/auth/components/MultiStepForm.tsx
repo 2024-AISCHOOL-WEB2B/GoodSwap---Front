@@ -22,15 +22,28 @@ const MultiStepForm: React.FC = () => {
     }
   };
 
+  // 이전 스텝으로 이동하는 함수
+  const goToPreviousStep = () => {
+    if (currentStep === "username") {
+      setCurrentStep("password");
+    } else if (currentStep === "password") {
+      setCurrentStep("email");
+    }
+  };
+
   // 각 스텝 컴포넌트 렌더링
   const renderStep = () => {
     switch (currentStep) {
       case "email":
         return <EmailStep onNext={goToNextStep} />;
       case "password":
-        return <PasswordStep onNext={goToNextStep} />;
+        return (
+          <PasswordStep onNext={goToNextStep} onPrevious={goToPreviousStep} />
+        );
       case "username":
-        return <UsernameStep onNext={goToNextStep} />;
+        return (
+          <UsernameStep onNext={goToNextStep} onPrevious={goToPreviousStep} />
+        );
       default:
         return null;
     }
