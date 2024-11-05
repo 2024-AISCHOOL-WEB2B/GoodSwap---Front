@@ -1,9 +1,9 @@
 // src/features/auth/utils/formHandlers.ts
 
-import { axiosInstance } from "../../../shared/services";
+import { axiosInstance } from "../APIs/axiosInstance";
 import sanitizeHtml from "sanitize-html";
 import axios from "axios";
-import { handleErrorResponse } from "../../../shared/utils";
+import { handleErrorResponse } from "./errorHandlers";
 
 // 로그인 폼 제출 함수
 export const submitLoginForm = async (
@@ -20,7 +20,7 @@ export const submitLoginForm = async (
     const sanitizedPassword = sanitizeHtml(password);
 
     // 로그인 요청을 서버에 보냄
-    const loginResponse = await axiosInstance.post("/login", {
+    const loginResponse = await axiosInstance.post("/auth/login", {
       email: sanitizedEmail,
       password: sanitizedPassword,
     });
