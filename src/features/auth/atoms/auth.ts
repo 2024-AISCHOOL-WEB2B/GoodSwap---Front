@@ -1,4 +1,4 @@
-// src/atoms/auth.ts
+// src/features/auth/atoms/auth.ts
 import { atom } from "jotai";
 
 // 로그인 상태 전역관리 atom

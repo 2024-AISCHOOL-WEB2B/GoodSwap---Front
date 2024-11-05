@@ -1,6 +1,6 @@
 // src/shared/utils/requestHandler.ts
 
-import { axiosInstance } from "../../shared/services";
+import { axiosInstance } from "../../features/auth/APIs/axiosInstance";
 import axios from "axios";
 
 // 요청 처리기 함수
