@@ -1,49 +1,73 @@
 // src/features/auth/shared/PasswordField.tsx
 
-import React from "react";
+import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
+import { ShowPasswordIcon } from "../../../shared/assets/icons/ShowPasswordIcon";
+import { HidePasswordIcon } from "../../../shared/assets/icons/HidePasswordIcon";
+import { ClearInputIcon } from "../../../shared/assets/icons/ClearInputIcon";
 
 type PasswordFieldProps = {
-  placeholder?: string; // placeholder를 props로 받도록 설정
+  placeholder?: string;
   name: string;
 };
 
-// PasswordField 컴포넌트 정의
 const PasswordField: React.FC<PasswordFieldProps> = ({
   placeholder = "비밀번호",
   name,
 }) => {
   const {
     register,
+    setValue,
     formState: { errors },
   } = useFormContext();
+  const [showPassword, setShowPassword] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
-  // name 속성에 따라 동적으로 라벨 텍스트 설정
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+
+  const handleClearInput = () => {
+    setValue(name, "");
+    setInputValue("");
+  };
+
   const labelText =
     name === "password" ? "새로운 비밀번호" : "새로운 비밀번호 확인";
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 relative">
       <label htmlFor={name} className="block text-sm mb-2">
         {labelText}
       </label>
-      <input
-        id={name}
-        type="password"
-        {...register(name)}
-        className="w-full p-2 border"
-        placeholder={placeholder}
-      />
-      {errors[name] && ( // 오류 메시지가 있을 경우 화면에 표시
-        <p className="text-red-500 text-sm mt-1">
-          {String(errors[name]?.message)}
-        </p>
-      )}
+      <div className="flex items-center border-b">
+        <input
+          id={name}
+          type={showPassword ? "text" : "password"}
+          {...register(name, {
+            onChange: (e) => setInputValue(e.target.value),
+          })}
+          value={inputValue}
+          className="w-full p-2 focus:outline-none"
+          placeholder={placeholder}
+        />
+        {inputValue && (
+          <ClearInputIcon
+            onClick={handleClearInput}
+            className="absolute right-10 top-1/2 transform -translate-y-1/2"
+          />
+        )}
+        <div className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
+          {showPassword ? (
+            <HidePasswordIcon onClick={togglePasswordVisibility} />
+          ) : (
+            <ShowPasswordIcon onClick={togglePasswordVisibility} />
+          )}
+        </div>
+      </div>
+      <div className="text-red-500 text-sm mt-1 min-h-[1.25rem]">
+        {errors[name] ? String(errors[name]?.message) : ""}
+      </div>
     </div>
   );
 };
 
-const MemoizedPasswordField = React.memo(PasswordField);
-MemoizedPasswordField.displayName = "PasswordField";
-
-export { MemoizedPasswordField as PasswordField };
+export { PasswordField };

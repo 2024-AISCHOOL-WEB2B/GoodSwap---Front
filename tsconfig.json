@@ -10,5 +10,5 @@
     "skipLibCheck": true,
     "baseUrl": "."
   },
-  "include": ["src/**/*"] // src 디렉토리 안의 모든 파일 포함
+  "include": ["src/**/*", "src/shared/assets/.tsx"] // src 디렉토리 안의 모든 파일 포함
 }
