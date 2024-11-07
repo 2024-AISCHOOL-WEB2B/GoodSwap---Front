@@ -4,7 +4,7 @@ import React from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PasswordField } from "../shared/PasswordField";
-import { useSessionStorage } from "../hooks/useSessionStorage";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 import { passwordConfirmationSchema } from "../entities/UserSchema";
 
 // `PasswordStep` 컴포넌트 타입 정의
@@ -14,12 +14,12 @@ type PasswordStepProps = {
 };
 
 const PasswordStep: React.FC<PasswordStepProps> = ({ onNext, onPrevious }) => {
-  const [storedPassword, setStoredPassword] = useSessionStorage("password", "");
+  const [storedPassword, setStoredPassword] = useLocalStorage("password", "");
 
   // React Hook Form을 이용한 폼 관리
   const methods = useForm({
     resolver: zodResolver(passwordConfirmationSchema),
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: { password: storedPassword || "", confirmPassword: "" },
   });
 
@@ -27,7 +27,7 @@ const PasswordStep: React.FC<PasswordStepProps> = ({ onNext, onPrevious }) => {
 
   // 폼 제출 시 호출되는 함수
   const onSubmit = (data: { password: string; confirmPassword: string }) => {
-    setStoredPassword(data.password); // 비밀번호를 세션 스토리지에 저장
+    setStoredPassword(data.password); // 비밀번호를 로컬 스토리지에 저장
     onNext(); // 다음 스텝으로 이동
   };
 

@@ -3,7 +3,7 @@
 import React from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSessionStorage } from "../hooks/useSessionStorage";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 import { usernameSchema } from "../entities/UserSchema";
 
 // `UsernameStep` 컴포넌트 타입 정의
@@ -13,12 +13,12 @@ type UsernameStepProps = {
 };
 
 const UsernameStep: React.FC<UsernameStepProps> = ({ onNext, onPrevious }) => {
-  const [storedUsername, setStoredUsername] = useSessionStorage("username", "");
+  const [storedUsername, setStoredUsername] = useLocalStorage("username", "");
 
   // React Hook Form을 이용한 폼 관리
   const methods = useForm({
     resolver: zodResolver(usernameSchema),
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: { username: storedUsername || "" },
   });
 
@@ -26,7 +26,7 @@ const UsernameStep: React.FC<UsernameStepProps> = ({ onNext, onPrevious }) => {
 
   // 폼 제출 시 호출되는 함수
   const onSubmit = (data: { username: string }) => {
-    setStoredUsername(data.username); // 유저네임을 세션 스토리지에 저장
+    setStoredUsername(data.username); // 유저네임을 로컬 스토리지에 저장
     onNext(); // 다음 스텝으로 이동
   };
 

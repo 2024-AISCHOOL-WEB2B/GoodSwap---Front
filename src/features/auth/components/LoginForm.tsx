@@ -4,7 +4,7 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useForm, FormProvider, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useSessionStorage } from "../hooks/useSessionStorage";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 import { loginSchema, LoginSchema } from "../entities/UserSchema";
 import { Modal } from "../../../widgets/Modal";
 import { FormLayout } from "../../../widgets/FormLayout";
@@ -28,15 +28,15 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
   // 회원가입 폼 표시 상태
   const [title, setTitle] = useState("덕업일치 계정을 로그인해주세요.");
   const [showSignUpForm, setShowSignUpForm] = useState(false);
-  // 세션 스토리지에서 이메일 & 비밀번호 가져오기
-  const [storedEmail, setStoredEmail] = useSessionStorage("email", "");
-  const [storedPassword, setStoredPassword] = useSessionStorage("password", "");
+  // 로컬 스토리지를 사용해 이메일 및 비밀번호 값 저장 및 동기화
+  const [storedEmail, setStoredEmail] = useLocalStorage("email", "");
+  const [storedPassword, setStoredPassword] = useLocalStorage("password", "");
   const navigate = useNavigate(); // 페이지 이동을 위한 navigate 훅
 
-  // React Hook Form 설정, 세션 스토리지의 값으로 필드 초기화
+  // React Hook Form 설정, 로컬 스토리지의 값으로 필드 초기화
   const methods = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema), // Zod 스키마로 유효성 검사 설정
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: {
       email: storedEmail || "", // undefined 방지를 위해 빈 문자열로 기본값 설정
       password: storedPassword || "",
@@ -45,7 +45,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
 
   const { handleSubmit, control } = methods;
 
-  // 폼 필드 값이 변경될 때마다 세션 스토리지에 저장
+  // 폼 필드 값이 변경될 때마다 로컬 스토리지에 저장
   const email = useWatch({ control, name: "email" });
   const password = useWatch({ control, name: "password" });
 
@@ -54,10 +54,10 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     setStoredPassword(password);
   }, [email, password, setStoredEmail, setStoredPassword]);
 
-  // 폼 필드와 세션 스토리지를 초기화하는 함수
+  // 로컬 스토리지를 초기화하여 폼 필드 값을 리셋
   const resetForm = () => {
-    setStoredEmail(""); // 세션 스토리지의 이메일 초기화
-    setStoredPassword(""); // 세션 스토리지의 비밀번호 초기화
+    setStoredEmail(""); // 로컬 스토리지의 이메일 초기화
+    setStoredPassword(""); // 로컬 스토리지의 비밀번호 초기화
     methods.reset(); // 폼 초기화
   };
 
