@@ -56,6 +56,7 @@ const GoodsPost = () => {
         </div>
       </div> */}
 
+
       {/* 상품 제목 */}
       <div className="text-[#292c33] text-left text-[50px] font-normal absolute left-[calc(50%_-_353px)] top-[calc(50%_-_395.5px)] w-[573px] h-[63px] flex items-center justify-start">
         테스트 제목

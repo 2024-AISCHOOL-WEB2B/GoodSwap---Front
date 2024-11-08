@@ -15,7 +15,7 @@ const PostListPage = () => {
   const [selectedArtist, setSelectedArtist] = useAtom(selectedArtistAtom);
   const [showDropdown, setShowDropdown] = useState(false); // 드롭다운 표시 여부 상태
 
-  const posts = useTemporaryPosts(23);
+  const posts = useTemporaryPosts(40);
   const filteredPosts = selectedArtist ? posts.filter((post) => post.artistId === selectedArtist) : posts;
 
   const indexOfLastPost = currentPage * postsPerPage;
