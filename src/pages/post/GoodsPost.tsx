@@ -1,31 +1,24 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import Header from '../../shared/components/Header';
+import BackgroundImage from '../../shared/components/BackgroundImage';
 
 const GoodsPost = () => {
   const { postId } = useParams<{ postId: string }>(); // URL에서 postId를 받아옴
 
   return (
-    <div className="bg-[#ffffff] h-[1023px] relative">
-      {/* 상단 네비게이션 */}
-      <div className="w-[768px] h-[58px] static">
-        <div className="border-solid border-[#ebedf2] border-b w-[768px] h-[58px] absolute left-[calc(50%_-_384px)] top-[calc(50%_-_511.5px)]">
-          <img
-            className="size-6 absolute left-[641px] top-[17px] overflow-visible"
-            src="/GoodsPost/icon-feather-icon0.svg"
-            alt="icon1"
-          />
-          <img
-            className="size-6 absolute left-[679px] top-[17px] overflow-visible"
-            src="/GoodsPost/icon-feather-icon1.svg"
-            alt="icon2"
-          />
-          <img
-            className="size-6 absolute left-[717px] top-4 overflow-visible"
-            src="/GoodsPost/icon-lucide-icon0.svg"
-            alt="icon3"
-          />
-        </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      
+      {/* 배경 이미지 */}
+      <div className="relative w-[768px] h-[1006px] bg-white border overflow-hidden">
+        <BackgroundImage src="/PostList/rectangle-970.svg" alt="rectangle" />
+
+
+      {/* 상단 아이콘들 */}
+      <div className="relative">
+        <Header />
       </div>
+
 
       {/* 상품 이미지 */}
       <img
@@ -51,7 +44,7 @@ const GoodsPost = () => {
 
 
       {/* 카테고리 */}
-      <div className="w-[103px] h-[53px] static">
+      {/* <div className="w-[103px] h-[53px] static">
         <div
           className="rounded border-solid border-black border p-2 flex flex-row items-center justify-center w-[103px] h-[24.15px] absolute left-[calc(50%_-_353px)] top-[calc(50%_-_427.74px)] overflow-hidden"
           style={{
@@ -61,7 +54,7 @@ const GoodsPost = () => {
         <div className="text-[#ffffff] text-center text-[15px] absolute left-[calc(50%_-_353px)] top-[calc(50%_-_442.5px)] w-[100.62px] h-[53px] flex items-center justify-center">
           카테고리
         </div>
-      </div>
+      </div> */}
 
       {/* 상품 제목 */}
       <div className="text-[#292c33] text-left text-[50px] font-normal absolute left-[calc(50%_-_353px)] top-[calc(50%_-_395.5px)] w-[573px] h-[63px] flex items-center justify-start">
@@ -185,7 +178,7 @@ const GoodsPost = () => {
           </div>
         </div>
       </div>
-
+      </div>
     </div>
   );
 };

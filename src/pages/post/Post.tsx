@@ -1,34 +1,29 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import Header from '../../shared/components/Header';
+import BackgroundImage from '../../shared/components/BackgroundImage';
+
 
 const Post = () => {
   const { postId } = useParams<{ postId: string }>(); // URL에서 postId를 받아옴
 
   return (
-    <div className="bg-[#ffffff] h-[1023px] relative">
-      <div className="relative w-[768px] h-[1023px] mx-auto">
-        
-        {/* 배경 이미지 */}
-        <img
-          className="absolute top-0 left-0 size-full"
-          src="/Post/rectangle-970.svg"
-          alt="background"
-        />
+    <div className="relative w-full h-screen flex items-center justify-center bg-white">
+      
+      {/* 배경 이미지 */}
+      <div className="relative w-[768px] h-[1006px] bg-white border overflow-hidden">
+        <BackgroundImage src="/PostList/rectangle-970.svg" alt="rectangle" />
 
         {/* 나머지 요소들 */}
         <div className="relative size-full">
 
         {/* 상단 아이콘들 */}
-        <div className="absolute flex flex-col gap-2 px-6 py-4 bg-white w-full top-0 left-0">
-          <h2 className="text-2xl font-semibold text-left">Goodswap</h2>
-          <div className="absolute flex items-center justify-start gap-2 top-7 right-6">
-            <img className="size-6" src="/PostList/icon-feather-icon0.svg" alt="icon" />
-            <img className="size-6" src="/PostList/icon-feather-icon1.svg" alt="icon" />
-            <img className="size-6" src="/PostList/icon-lucide-icon0.svg" alt="icon" />
-          </div>
+        <div className="relative">
+          <Header />
         </div>
 
-          <div className="w-[130px] h-[79px]">
+        {/* 카테고리 */}
+        {/* <div className="w-[130px] h-[79px]">
             <div
               className="rounded border-solid border-black border p-2 flex flex-row items-center justify-center w-[130px] h-9 absolute left-[19px] top-20 overflow-hidden"
               style={{
@@ -38,9 +33,9 @@ const Post = () => {
             <div className="text-[#ffffff] text-center font-['Inter-Regular',_sans-serif] text-[28px] font-normal absolute left-[19px] top-[58px] w-[127px] h-[79px] flex items-center justify-center">
               카테고리
             </div>
-          </div>
+          </div> */}
 
-          <div className="text-[#292c33] text-left font-['Inter-Regular',_sans-serif] text-[50px] font-normal absolute left-[31px] top-[116px] w-[573px] h-[63px] flex items-center justify-start">
+          <div className="text-[#292c33] text-left font-['Inter-Regular',_sans-serif] text-[50px] font-normal absolute left-[31px] top-[110px] w-[573px] h-[63px] flex items-center justify-start">
             테스트 제목
           </div>
 

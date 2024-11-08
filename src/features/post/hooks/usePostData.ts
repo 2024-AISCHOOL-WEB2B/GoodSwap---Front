@@ -64,7 +64,7 @@ const usePostData = ({ mode, page = 1, limit = 8 }: UsePostDataOptions) => {
     };
 
     fetchPosts();
-  }, [mode, page, limit]);
+  }, [mode, page, limit, posts.length]); // posts.length를 의존성 배열에 추가
 
   return { posts, hasMore };
 };

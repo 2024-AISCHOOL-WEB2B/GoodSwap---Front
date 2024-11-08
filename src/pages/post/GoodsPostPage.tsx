@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from '../../shared/components/Header';
 import InfiniteScroll from '../../features/post/components/InfiniteScroll'; // 무한 스크롤 컴포넌트 임포트
 import useTemporaryPosts from '../../features/post/hooks/useTemporaryPosts'; // 임시 게시물 데이터 훅
 
@@ -26,7 +27,7 @@ const GoodsPostPage = () => {
 
   // 무한스크롤을 위한 함수: 새로운 게시글 추가
   const loadMorePosts = () => {
-    if (goodsPosts.length >= 30) {
+    if (goodsPosts.length >= 100) {
       setHasMore(false); // 더 이상 불러올 게시글이 없으면 false로 설정
     }
   };
@@ -36,14 +37,10 @@ const GoodsPostPage = () => {
       <div className="relative w-[768px] h-[1023px] overflow-y-scroll">
         
         {/* 상단 아이콘들 */}
-        <div className="absolute flex flex-col gap-2 px-6 py-4 bg-white w-full top-0 left-0">
-          <h2 className="text-2xl font-semibold text-left">Goodswap</h2>
-          <div className="absolute flex items-center justify-start gap-2 top-7 right-6">
-            <img className="w-6 h-6" src="/PostList/icon-feather-icon0.svg" alt="icon" />
-            <img className="w-6 h-6" src="/PostList/icon-feather-icon1.svg" alt="icon" />
-            <img className="w-6 h-6" src="/PostList/icon-lucide-icon0.svg" alt="icon" />
-          </div>
+        <div className="relative">
+          <Header />
         </div>
+        
 
         {/* 거래글 작성 버튼 */}
         <div className="absolute top-[147px] left-[627px]">
@@ -59,12 +56,12 @@ const GoodsPostPage = () => {
         <div className="absolute flex flex-col gap-1 left-[105px] top-[96px] w-[198px] h-[40px]">
           <p className="text-gray-700 font-medium text-center">커뮤니티</p>
         </div>
-        <img className="absolute top-[96px] left-[130px] w-6 h-6" src="/PostList/icon-lucide-icon2.svg" alt="커뮤니티 아이콘" />
+        <img className="absolute top-[96px] left-[130px] size-6" src="/PostList/icon-lucide-icon2.svg" alt="커뮤니티 아이콘" />
 
         <div className="absolute flex flex-col gap-1 left-[512px] top-[96px]">
           <p className="text-gray-700 font-medium text-center">아티스트 게시판</p>
         </div>
-        <img className="absolute top-[96px] left-[calc(50%--100px)] w-6 h-6" src="/PostList/icon-favourite0.svg" alt="favourite icon" />
+        <img className="absolute top-[96px] left-[478px] size-6" src="/PostList/icon-favourite0.svg" alt="favourite icon" />
 
         {/* PostListPage로 돌아가는 버튼 */}
         <div
@@ -76,7 +73,7 @@ const GoodsPostPage = () => {
 
         {/* 검색 입력 필드 */}
         <div className="absolute top-[146px] left-[369px] flex items-center gap-2 p-2 w-[248px] h-[29px] bg-white border border-gray-400 rounded-lg">
-          <img className="w-6 h-6" src="/PostList/icon-feather-icon12.svg" alt="search icon" />
+          <img className="size-6" src="/PostList/icon-feather-icon12.svg" alt="search icon" />
           <input
             type="text"
             placeholder="Search..."
@@ -90,15 +87,14 @@ const GoodsPostPage = () => {
             {goodsPosts.map((post) => (
               <div
                 key={post.id}
-                className="w-40 h-40 bg-white border rounded cursor-pointer"
+                className="size-40 bg-white border rounded cursor-pointer"
                 onClick={() => handlePostClick(post.id)} // 게시글 클릭 시 이동
               >
                 {post.imageUrl ? (
-                  <img className="w-full h-full object-cover" src={post.imageUrl} alt={`Goods post ${post.id}`} />
+                  <img className="size-full object-cover" src={post.imageUrl} alt={`Goods post ${post.id}`} />
                 ) : (
-                  <div className="flex items-center justify-center w-full h-full text-gray-500">
-                    기본 아이콘
-                  </div>
+                   // 이미지 URL이 없을 경우 기본 아이콘만 표시
+                  <img className="size-full object-cover" src="/GoodsPostPage/icon-feather-icon3.svg" alt="default icon" />
                 )}
               </div>
             ))}
