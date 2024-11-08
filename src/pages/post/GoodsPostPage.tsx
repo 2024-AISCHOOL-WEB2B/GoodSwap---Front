@@ -1,79 +1,113 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAtom } from 'jotai';
 import Header from '../../shared/components/Header';
-import InfiniteScroll from '../../features/post/components/InfiniteScroll'; // 무한 스크롤 컴포넌트 임포트
-import useTemporaryPosts from '../../features/post/hooks/useTemporaryPosts'; // 임시 게시물 데이터 훅
+import InfiniteScroll from '../../features/post/components/InfiniteScroll';
+import useTemporaryPosts from '../../features/post/hooks/useTemporaryPosts';
+import ArtistDropdown from '../../shared/components/ArtistDropdown';
+import { selectedArtistAtom } from '../../shared/state/artistState';
 
 const GoodsPostPage = () => {
-  const goodsPosts = useTemporaryPosts(30); // 30개의 임시 게시물 데이터를 가져옴
-  const [hasMore, setHasMore] = React.useState(true); // 더 불러올 게시글이 있는지 여부
-
+  const goodsPosts = useTemporaryPosts(30); // 임시 게시물 데이터
+  const [hasMore, setHasMore] = useState(true);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedArtist, setSelectedArtist] = useAtom(selectedArtistAtom);
   const navigate = useNavigate();
 
-  // PostListPage로 이동하는 함수
-  const handlePostListPageNavigation = () => {
-    navigate('/postlist'); // PostListPage로 이동
-  };
+  // 필터링된 게시물 리스트
+  const filteredPosts = selectedArtist
+    ? goodsPosts.filter((post) => post.artistId === selectedArtist)
+    : goodsPosts;
 
-  // 게시글 클릭 시 GoodsPost.tsx로 이동
-  const handlePostClick = (postId: number) => {
-    navigate(`/goods-post/${postId}`);
-  };
-
-  // 게시글 작성 버튼 클릭 시 PostCreate 페이지로 이동
-  const handleCreatePostClick = () => {
-    navigate('/post/create'); // PostCreate 페이지로 이동
-  };
-
-  // 무한스크롤을 위한 함수: 새로운 게시글 추가
+  // 무한 스크롤 로드 함수
   const loadMorePosts = () => {
     if (goodsPosts.length >= 100) {
-      setHasMore(false); // 더 이상 불러올 게시글이 없으면 false로 설정
+      setHasMore(false);
     }
+  };
+
+  // 드롭다운 토글 함수
+  const handleArtistClick = () => {
+    setShowDropdown((prev) => !prev);
+  };
+
+  // 아티스트 선택 함수
+  const handleArtistSelect = (artistId: number) => {
+    setSelectedArtist(artistId);
+    setShowDropdown(false);
+  };
+
+  // PostListPage로 이동
+  const handlePostListPageNavigation = () => {
+    navigate('/postlist');
+  };
+
+  // GoodsPostCreate 페이지로 이동
+  const handleCreateGoodsPostClick = () => {
+    navigate('/goods-post-create');
+  };
+
+  // 게시글 클릭 시 상세 페이지로 이동
+  const handlePostClick = (postId: number) => {
+    navigate(`/goods-post/${postId}`);
   };
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-white">
       <div className="relative w-[768px] h-[1023px] overflow-y-scroll">
-        
-        {/* 상단 아이콘들 */}
-        <div className="relative">
-          <Header />
-        </div>
-        
+        <Header />
 
-        {/* 거래글 작성 버튼 */}
-        <div className="absolute top-[147px] left-[627px]">
+        {/* 커뮤니티 카테고리 */}
+        <div className="absolute flex flex-col gap-1 left-[120px] top-[96px] w-[198px] h-[40px] z-40">
+          <p className="text-gray-700 font-medium text-center">커뮤니티</p>
+        </div>
+        <img
+          className="absolute top-[96px] left-[150px] w-6 h-6 z-40"
+          src="/PostList/icon-lucide-icon2.svg"
+          alt="커뮤니티 아이콘"
+        />
+
+        {/* 아티스트 게시판 */}
+        <div
+          className="absolute flex flex-col gap-1 left-[455px] top-[96px] w-[198px] h-[40px] cursor-pointer z-40"
+          onClick={handleArtistClick}
+        >
+          <p className="text-gray-700 font-medium text-center">아티스트</p>
+        </div>
+        <img
+          className="absolute top-[96px] left-[490px] w-6 h-6 z-40"
+          src="/PostList/icon-favourite0.svg"
+          alt="아티스트 게시판 아이콘"
+        />
+
+        {/* 아티스트 드롭다운 */}
+        {showDropdown && (
+          <div className="absolute left-[520px] top-[136px] z-50">
+            <ArtistDropdown onSelect={handleArtistSelect} />
+          </div>
+        )}
+
+        {/* 게시글 작성 버튼 */}
+        <div className="absolute top-[147px] left-[627px] z-40">
           <button
-            onClick={handleCreatePostClick}
+            onClick={handleCreateGoodsPostClick}
             className="flex items-center justify-center w-[95px] h-[26px] bg-white border border-black rounded font-semibold text-black"
           >
             게시글 작성
           </button>
         </div>
 
-        {/* 게시판 카테고리 */}
-        <div className="absolute flex flex-col gap-1 left-[105px] top-[96px] w-[198px] h-[40px]">
-          <p className="text-gray-700 font-medium text-center">커뮤니티</p>
-        </div>
-        <img className="absolute top-[96px] left-[130px] size-6" src="/PostList/icon-lucide-icon2.svg" alt="커뮤니티 아이콘" />
-
-        <div className="absolute flex flex-col gap-1 left-[512px] top-[96px]">
-          <p className="text-gray-700 font-medium text-center">아티스트 게시판</p>
-        </div>
-        <img className="absolute top-[96px] left-[478px] size-6" src="/PostList/icon-favourite0.svg" alt="favourite icon" />
-
         {/* PostListPage로 돌아가는 버튼 */}
         <div
-          className="absolute flex flex-col gap-1 left-[27px] top-[147px] w-[185px] h-[32px] bg-white border rounded cursor-pointer"
-          onClick={handlePostListPageNavigation} // 클릭 시 PostListPage로 이동
+          className="absolute flex flex-col gap-1 left-[27px] top-[147px] w-[185px] h-[32px] bg-white border rounded cursor-pointer z-40"
+          onClick={handlePostListPageNavigation}
         >
           <p className="text-gray-700 font-medium text-center">자유 게시판 이동</p>
         </div>
 
         {/* 검색 입력 필드 */}
-        <div className="absolute top-[146px] left-[369px] flex items-center gap-2 p-2 w-[248px] h-[29px] bg-white border border-gray-400 rounded-lg">
-          <img className="size-6" src="/PostList/icon-feather-icon12.svg" alt="search icon" />
+        <div className="absolute top-[146px] left-[369px] flex items-center gap-2 p-2 w-[248px] h-[29px] bg-white border border-gray-400 rounded-lg z-40">
+          <img className="w-6 h-6" src="/PostList/icon-feather-icon12.svg" alt="search icon" />
           <input
             type="text"
             placeholder="Search..."
@@ -84,16 +118,15 @@ const GoodsPostPage = () => {
         {/* 게시글 표시 영역 */}
         <InfiniteScroll loadMore={loadMorePosts} hasMore={hasMore}>
           <div className="grid grid-cols-3 gap-20 absolute top-[188px] left-[76px]">
-            {goodsPosts.map((post) => (
+            {filteredPosts.map((post) => (
               <div
                 key={post.id}
                 className="size-40 bg-white border rounded cursor-pointer"
-                onClick={() => handlePostClick(post.id)} // 게시글 클릭 시 이동
+                onClick={() => handlePostClick(post.id)}
               >
                 {post.imageUrl ? (
                   <img className="size-full object-cover" src={post.imageUrl} alt={`Goods post ${post.id}`} />
                 ) : (
-                   // 이미지 URL이 없을 경우 기본 아이콘만 표시
                   <img className="size-full object-cover" src="/GoodsPostPage/icon-feather-icon3.svg" alt="default icon" />
                 )}
               </div>

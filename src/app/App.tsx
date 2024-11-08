@@ -6,9 +6,10 @@ import { MainPage } from "../pages/MainPage";
 import { LoginForm } from "../features/auth/LoginForm";
 import PostListPage from "../pages/post/PostListPage";
 import PostCreate from "../pages/post/PostCreate";
-import GoodsPostPage from "../pages/post/GoodsPostPage"; // GoodsPostPage import 추가
-import GoodsPost from "../pages/post/GoodsPost"; // GoodsPost (상세 페이지) import 추가
-import Post from "../pages/post/Post"; // Post 페이지 import
+import GoodsPostPage from "../pages/post/GoodsPostPage";
+import GoodsPost from "../pages/post/GoodsPost";
+import Post from "../pages/post/Post";
+import GoodsPostCreate from "../pages/post/GoodsPostCreate"; // GoodsPostCreate import 추가
 import { useAtom } from "jotai";
 import { isLoggedInAtom } from "../atoms/auth";
 
@@ -47,10 +48,11 @@ function App() {
           <Route path="/postlist" element={<PostListPage />} />
           <Route path="/post/create" element={<PostCreate />} />
           <Route path="/post/:postId" element={<Post />} />
-          <Route path="/goods-post" element={<GoodsPostPage />} /> {/* GoodsPostPage 경로 추가 */}
+          <Route path="/goods-post" element={<GoodsPostPage />} />
+          <Route path="/goods-post/:postId" element={<GoodsPost />} />
           
-          {/* GoodsPost 상세 페이지 경로 추가 */}
-          <Route path="/goods-post/:postId" element={<GoodsPost />} /> 
+          {/* GoodsPostCreate 페이지 경로 추가 */}
+          <Route path="/goods-post-create" element={<GoodsPostCreate />} />
         </Routes>
       </Router>
     </div>
