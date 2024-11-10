@@ -1,47 +1,33 @@
 // src/features/auth/shared/PasswordField.tsx
 
-import React, { useEffect } from "react";
+import React from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { ShowPasswordIcon } from "../../../shared/assets/icons/ShowPasswordIcon";
 import { HidePasswordIcon } from "../../../shared/assets/icons/HidePasswordIcon";
 import { ClearInputIcon } from "../../../shared/assets/icons/ClearInputIcon";
-import { useAtom } from "jotai";
-import { passwordAtom } from "../atoms/auth";
 
 type PasswordFieldProps = {
   placeholder?: string;
   name: string;
-  enableLocalStorage?: boolean; // 로컬 스토리지 업데이트 활성화 여부 추가
 };
 
 const PasswordField: React.FC<PasswordFieldProps> = ({
   placeholder = "비밀번호",
   name,
-  enableLocalStorage = false, // 기본값: 로컬 스토리지 비활성화
 }) => {
   const {
     register,
     setValue,
     formState: { errors },
   } = useFormContext();
-  const [password, setPassword] = useAtom(passwordAtom);
 
   const [showPassword, setShowPassword] = React.useState(false);
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
-  // useWatch로 입력 값을 실시간 감지
-  const inputValue = useWatch({ name, defaultValue: password });
-
-  // 입력 값이 변경될 때마다 로컬 스토리지에 업데이트 (회원가입 폼에서만 활성화)
-  useEffect(() => {
-    if (enableLocalStorage && name === "password") {
-      setPassword(inputValue);
-    }
-  }, [inputValue, setPassword, enableLocalStorage, name]);
+  const inputValue = useWatch({ name, defaultValue: "" });
 
   const handleClearInput = () => {
     setValue(name, "");
-    setPassword("");
   };
 
   const labelText = name === "password" ? "비밀번호" : "새로운 비밀번호 확인";

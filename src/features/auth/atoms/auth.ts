@@ -1,15 +1,19 @@
 // src/features/auth/atoms/auth.ts
 
 import { atom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
 
-// 각 스텝 데이터를 관리하는 Atom - localStorage에 자동 저장
-export const emailAtom = atomWithStorage<string>("email", "");
-export const passwordAtom = atomWithStorage<string>("password", "");
-export const usernameAtom = atomWithStorage<string>("username", "");
+// accessToken 상태 관리용 atom
+export const accessTokenAtom = atom<string | null>(null);
 
-// JWT 토큰을 저장하는 atomWithStorage - localStorage와 동기화
-export const jwtTokenAtom = atomWithStorage<string | null>("jwtToken", null);
+// 사용자 로그인 상태를 관리하는 atom
+export const isAuthenticatedAtom = atom((get) => Boolean(get(accessTokenAtom)));
 
-// 로그인 상태를 관리하는 atom - jwtTokenAtom의 존재 여부로 판단
-export const isLoggedInAtom = atom<boolean>((get) => !!get(jwtTokenAtom));
+// 로그인을 위한 액션을 수행하는 atom
+export const loginAtom = atom(null, (get, set, newAccessToken: string) => {
+  set(accessTokenAtom, newAccessToken);
+});
+
+// 로그아웃을 위한 액션을 수행하는 atom
+export const logoutAtom = atom(null, (get, set) => {
+  set(accessTokenAtom, null);
+});
