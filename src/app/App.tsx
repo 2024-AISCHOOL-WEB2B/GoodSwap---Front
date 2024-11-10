@@ -5,30 +5,30 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MainPage } from "../pages/MainPage";
 import { LoginForm } from "../features/auth/components/LoginForm";
 import { MultiStepForm } from "../features/auth/components/MultiStepForm";
-import { useAtom } from "jotai";
-import { isLoggedInAtom } from "../features/auth/atoms/auth";
+import { useAtomValue, useSetAtom } from "jotai";
+import { isLoggedInAtom, jwtTokenAtom } from "../features/auth/atoms/auth";
 
 function App() {
-  // 로그인 상태를 전역으로 관리하는 jotai atom 사용
-  const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
+  const isLoggedIn = useAtomValue(isLoggedInAtom); // 로그인 상태 값을 가져옴
+  const setJwtToken = useSetAtom(jwtTokenAtom); // jwtTokenAtom을 설정하는 함수
 
   // 페이지 로드 시 로그인 상태 복원
   useLayoutEffect(() => {
-    const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
+    const token = localStorage.getItem("jwtToken"); // 로컬 스토리지에서 토큰 가져오기
     if (token) {
-      setIsLoggedIn(true); // 토큰이 존재하면 로그인 상태로 설정
+      setJwtToken(token); // jwtToken 설정 - 로그인 상태 자동 업데이트
     }
-  }, [setIsLoggedIn]);
+  }, [setJwtToken]);
 
   // 로그인 핸들러
-  const handleLogin = () => {
-    setIsLoggedIn(true);
+  const handleLogin = (token: string) => {
+    setJwtToken(token); // JWT 토큰 설정 - 로그인 상태는 자동으로 업데이트됨
   };
 
   // 로그아웃 핸들러
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem("token"); // 로컬 스토리지에서 토큰 삭제
+    localStorage.removeItem("jwtToken"); // 토큰을 null 대신 완전히 삭제
+    setJwtToken(null); // Jotai 상태도 초기화
   };
 
   return (
@@ -49,5 +49,4 @@ function App() {
   );
 }
 
-// App 컴포넌트를 named export로 설정
 export { App };

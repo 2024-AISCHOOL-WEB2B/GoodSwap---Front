@@ -1,13 +1,14 @@
 // src/features/auth/components/MultiStepForm.tsx
 
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import { emailAtom, passwordAtom, usernameAtom } from "../atoms/auth";
 import { EmailStep } from "./EmailStep";
 import { PasswordStep } from "./PasswordStep";
 import { UsernameStep } from "./UsernameStep";
 import { FormLayout } from "../../../widgets/FormLayout";
+import { submitRegistrationForm } from "../utils/formHandlers";
 
 // 각 단계에 대한 타입 정의
 type Step = "email" | "password" | "username";
@@ -24,6 +25,7 @@ const MultiStepForm: React.FC = () => {
   const [username] = useAtom(usernameAtom);
 
   const location = useLocation(); // 라우트 경로를 가져오는 훅
+  const navigate = useNavigate();
 
   // 단계별 제목 설정
   const titleMap: Record<Step, string> = {
@@ -50,7 +52,6 @@ const MultiStepForm: React.FC = () => {
       localStorage.removeItem("password");
       localStorage.removeItem("username");
     };
-
     return () => {
       // 현재 경로가 `/signup`이 아닐 때에만 초기화
       if (!location.pathname.startsWith("/signup")) {
@@ -74,10 +75,22 @@ const MultiStepForm: React.FC = () => {
   };
 
   // 최종 제출 함수
-  const handleFinalSubmit = () => {
+  const handleFinalSubmit = async () => {
     const formData = { email, password, username };
-    console.log("최종 제출 데이터:", formData);
-    // 추후 submitRegistrationForm 함수를 통해 백엔드로 전송 예정
+    try {
+      await submitRegistrationForm(
+        formData,
+        () => {
+          console.log("회원가입 성공");
+          navigate("/login"); // 회원가입 후 로그인 페이지로 이동
+        },
+        (errorMessage) => {
+          console.error("회원가입 실패:", errorMessage);
+        }
+      );
+    } catch (error) {
+      console.error("회원가입 중 알 수 없는 오류 발생:", error);
+    }
   };
 
   // 각 스텝 컴포넌트 렌더링

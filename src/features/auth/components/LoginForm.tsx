@@ -14,7 +14,7 @@ import { PasswordField } from "../shared/PasswordField";
 // 로그인 폼 컴포넌트에 전달할 Props 타입 정의
 type LoginFormProps = {
   // 로그인 성공 시 호출될 함수
-  onLogin: () => void;
+  onLogin: (token: string) => void;
 };
 
 // 로그인 폼 컴포넌트 정의
@@ -51,10 +51,11 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     submitLoginForm(
       data.email,
       data.password,
-      () => {
+      (token: string) => {
+        localStorage.setItem("jwtToken", token); // 토큰이 제대로 저장되는지 확인
         setErrorMessage(null); // 에러 메시지 초기화
         resetForm(); // 폼 초기화
-        onLogin(); // 로그인 성공 콜백 호출
+        onLogin(token); // 로그인 성공 콜백 호출
         navigate("/main"); // 메인 페이지로 이동
       },
       (errorMessage) => {

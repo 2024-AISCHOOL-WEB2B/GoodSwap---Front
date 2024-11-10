@@ -8,8 +8,7 @@ import { EmailField } from "../shared/EmailField";
 import { loginSchema } from "../entities/UserSchema";
 import { emailAtom } from "../atoms/auth";
 import { Modal } from "../../../widgets/Modal";
-import { axiosInstance } from "../APIs/axiosInstance";
-import { AxiosError } from "axios";
+import axios from "axios";
 
 // `EmailStep` 컴포넌트 타입 정의
 type EmailStepProps = {
@@ -32,17 +31,21 @@ const EmailStep: React.FC<EmailStepProps> = ({ onNext }) => {
 
   // 폼 제출 및 이메일 중복 확인 함수
   const onSubmit = async (data: { email: string }) => {
+    console.log("Submitting form with email:", data.email); // 확인용 로그
     try {
-      const response = await axiosInstance.post("/check-email", {
-        email: data.email,
-      });
+      const response = await axios.get(
+        "http://localhost:8081/auth/check-email",
+        {
+          params: { email: data.email },
+        }
+      );
 
       if (response.status === 200) {
         setEmail(data.email);
         onNext(); // 중복이 없으면 다음 스텝으로 이동
       }
     } catch (error) {
-      if ((error as AxiosError).response?.status === 409) {
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
         setErrorMessage("이미 사용 중인 이메일입니다.");
         setShowModal(true);
         methods.setValue("email", "");

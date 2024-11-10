@@ -9,8 +9,8 @@ import { handleErrorResponse } from "./errorHandlers";
 export const submitLoginForm = async (
   email: string,
   password: string,
-  // 성공 시 호출할 콜백 함수
-  onSuccess: () => void,
+  // 성공 시 호출할 콜백 함수, token을 인수로 받음
+  onSuccess: (token: string) => void,
   // 오류 발생 시 호출할 콜백 함수
   onError: (errorMessage: string) => void
 ) => {
@@ -27,9 +27,12 @@ export const submitLoginForm = async (
 
     // 요청이 성공적으로 완료되었을 때
     if (loginResponse.status === 200) {
-      // 토큰을 로컬 스토리지에 저장
-      localStorage.setItem("token", loginResponse.data.token);
-      onSuccess(); // 성공 시 호출
+      const token = loginResponse.data.accessToken || loginResponse.data.token; // 정확한 키 확인
+      if (token) {
+        onSuccess(token); // 토큰이 있는 경우에만 성공 콜백 호출
+      } else {
+        onError("Token not found in response");
+      }
     }
   } catch (error) {
     // Axios 오류 처리
@@ -59,8 +62,8 @@ export const submitRegistrationForm = async (
     };
 
     // 회원가입 요청을 서버에 전송
-    const registrationResponse = await axiosInstance.post(
-      "/register",
+    const registrationResponse = await axios.post(
+      "http://localhost:8081/register",
       sanitizedData
     );
 
@@ -78,8 +81,6 @@ export const submitRegistrationForm = async (
       } else {
         onError(handleErrorResponse(error.response.status));
       }
-    } else if (error instanceof Error) {
-      onError(error.message);
     } else {
       onError("알 수 없는 오류가 발생했습니다.");
     }

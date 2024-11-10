@@ -7,9 +7,8 @@ import { useAtom } from "jotai";
 import { usernameSchema } from "../entities/UserSchema";
 import { usernameAtom, emailAtom, passwordAtom } from "../atoms/auth";
 import { Modal } from "../../../widgets/Modal";
-import { axiosInstance } from "../APIs/axiosInstance";
 import { submitRegistrationForm } from "../utils/formHandlers";
-import { AxiosError } from "axios";
+import axios from "axios";
 
 // `UsernameStep` 컴포넌트 타입 정의
 type UsernameStepProps = {
@@ -36,15 +35,18 @@ const UsernameStep: React.FC<UsernameStepProps> = ({ onNext, onPrevious }) => {
   // 폼 제출 및 유저네임 중복 확인 함수
   const onSubmit = async (data: { username: string }) => {
     try {
-      const response = await axiosInstance.post("/check-username", {
-        username: data.username,
-      });
+      const response = await axios.post(
+        "http://localhost:8081/check-username",
+        {
+          username: data.username,
+        }
+      );
 
       if (response.status === 200) {
         setUsername(data.username);
         await submitRegistrationForm(
           { email, password, username: data.username },
-          () => onNext(),
+          onNext,
           (errorMessage) => {
             setErrorMessage(errorMessage);
             setShowModal(true);
@@ -52,7 +54,7 @@ const UsernameStep: React.FC<UsernameStepProps> = ({ onNext, onPrevious }) => {
         );
       }
     } catch (error) {
-      if ((error as AxiosError).response?.status === 409) {
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
         setErrorMessage("이미 사용 중인 닉네임입니다.");
         setShowModal(true);
         methods.setValue("username", "");
@@ -74,20 +76,24 @@ const UsernameStep: React.FC<UsernameStepProps> = ({ onNext, onPrevious }) => {
           <label htmlFor="username" className="block text-sm mb-2">
             닉네임
           </label>
-          <input
-            id="username"
-            type="text"
-            {...methods.register("username")}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-2 border"
-            placeholder="닉네임을 입력하세요"
-          />
-          {methods.formState.errors.username && (
-            <p className="text-red-500 text-sm mt-1">
-              {methods.formState.errors.username.message}
-            </p>
-          )}
+          <div className="flex items-center border-b">
+            <input
+              id="username"
+              type="text"
+              {...methods.register("username")}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full p-2 focus:outline-none"
+              placeholder="닉네임을 입력하세요"
+            />
+          </div>
+          <div className="text-red-500 text-sm mt-1 min-h-[1.25rem]">
+            {methods.formState.errors.username && (
+              <p className="text-red-500 text-sm mt-1">
+                {methods.formState.errors.username.message}
+              </p>
+            )}
+          </div>
         </div>
         <button
           type="submit"
