@@ -4,6 +4,7 @@ import { useLayoutEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MainPage } from "../pages/MainPage";
 import { LoginForm } from "../features/auth/components/LoginForm";
+import { MultiStepForm } from "../features/auth/components/MultiStepForm";
 import { useAtom } from "jotai";
 import { isLoggedInAtom } from "../features/auth/atoms/auth";
 
@@ -13,7 +14,6 @@ function App() {
 
   // 페이지 로드 시 로그인 상태 복원
   useLayoutEffect(() => {
-    // 랜더링 후에 동작
     const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
     if (token) {
       setIsLoggedIn(true); // 토큰이 존재하면 로그인 상태로 설정
@@ -25,32 +25,27 @@ function App() {
     setIsLoggedIn(true);
   };
 
+  // 로그아웃 핸들러
   const handleLogout = () => {
     setIsLoggedIn(false);
-    // 로그아웃 시 로컬 스토리지에서 토큰 삭제
-    localStorage.removeItem("token");
+    localStorage.removeItem("token"); // 로컬 스토리지에서 토큰 삭제
   };
 
   return (
-    <div>
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <MainPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-            }
-          />
-          <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
-          <Route
-            path="/main"
-            element={
-              <MainPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-            }
-          />
-        </Routes>
-      </Router>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={<MainPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
+        />
+        <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+        <Route path="/signup/*" element={<MultiStepForm />} />
+        <Route
+          path="/main"
+          element={<MainPage isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
+        />
+      </Routes>
+    </Router>
   );
 }
 

@@ -31,7 +31,7 @@ const MainPageComponent: React.FC<MainPageProps> = ({
 
   // 로그인 페이지로 이동하는 함수
   const handleLoginClick = useCallback(() => {
-    navigate("/login");
+    navigate("/login"); // 로그인 경로로 URL 이동
   }, [navigate]);
 
   return (

@@ -1,48 +1,83 @@
 // src/features/auth/components/MultiStepForm.tsx
 
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { useAtom } from "jotai";
+import { emailAtom, passwordAtom, usernameAtom } from "../atoms/auth";
 import { EmailStep } from "./EmailStep";
 import { PasswordStep } from "./PasswordStep";
 import { UsernameStep } from "./UsernameStep";
+import { FormLayout } from "../../../widgets/FormLayout";
 
 // 각 단계에 대한 타입 정의
 type Step = "email" | "password" | "username";
 
-type MultiStepFormProps = {
-  setTitle: (title: string) => void;
-};
-
 // `MultiStepForm` 컴포넌트 정의
-const MultiStepForm: React.FC<MultiStepFormProps> = ({ setTitle }) => {
-  // 현재 스텝 상태 관리
-  const [currentStep, setCurrentStep] = useState<Step>("email");
+const MultiStepForm: React.FC = () => {
+  // 로컬 스토리지에서 현재 스텝을 로드하거나 기본값 "email" 설정
+  const savedStep = (localStorage.getItem("currentStep") as Step) || "email";
+  const [currentStep, setCurrentStep] = useState<Step>(savedStep);
 
+  // 각 단계별로 전역 상태에서 데이터를 불러옴
+  const [email] = useAtom(emailAtom);
+  const [password] = useAtom(passwordAtom);
+  const [username] = useAtom(usernameAtom);
+
+  const location = useLocation(); // 라우트 경로를 가져오는 훅
+
+  // 단계별 제목 설정
+  const titleMap: Record<Step, string> = {
+    email: "새로운 이메일 주소로 회원가입 해주세요",
+    password: "새로운 비밀번호를 설정해주세요",
+    username: "닉네임을 설정해주세요",
+  };
+
+  // 전체 배경색을 렌더링 전에 설정
   useLayoutEffect(() => {
-    // currentStep이 변경될 때 title을 업데이트
-    const titleMap: Record<Step, string> = {
-      email: "새로운 이메일 주소로 회원가입 해주세요",
-      password: "새로운 비밀번호를 설정해주세요",
-      username: "닉네임을 설정해주세요",
+    document.documentElement.style.backgroundColor = "rgb(250, 250, 250)";
+    document.body.style.backgroundColor = "rgb(250, 250, 250)";
+
+    return () => {
+      document.documentElement.style.backgroundColor = "";
+      document.body.style.backgroundColor = "";
     };
-    setTitle(titleMap[currentStep]);
-  }, [currentStep, setTitle]);
+  }, []);
+
+  useEffect(() => {
+    const unregister = () => {
+      localStorage.removeItem("currentStep");
+      localStorage.removeItem("email");
+      localStorage.removeItem("password");
+      localStorage.removeItem("username");
+    };
+
+    return () => {
+      // 현재 경로가 `/signup`이 아닐 때에만 초기화
+      if (!location.pathname.startsWith("/signup")) {
+        unregister();
+      }
+    };
+  }, [location]);
 
   // 다음 스텝으로 이동하는 함수
   const goToNextStep = () => {
-    if (currentStep === "email") {
-      setCurrentStep("password");
-    } else if (currentStep === "password") {
-      setCurrentStep("username");
-    }
+    const nextStep = currentStep === "email" ? "password" : "username";
+    setCurrentStep(nextStep);
+    localStorage.setItem("currentStep", nextStep);
   };
 
   // 이전 스텝으로 이동하는 함수
   const goToPreviousStep = () => {
-    if (currentStep === "username") {
-      setCurrentStep("password");
-    } else if (currentStep === "password") {
-      setCurrentStep("email");
-    }
+    const prevStep = currentStep === "username" ? "password" : "email";
+    setCurrentStep(prevStep);
+    localStorage.setItem("currentStep", prevStep);
+  };
+
+  // 최종 제출 함수
+  const handleFinalSubmit = () => {
+    const formData = { email, password, username };
+    console.log("최종 제출 데이터:", formData);
+    // 추후 submitRegistrationForm 함수를 통해 백엔드로 전송 예정
   };
 
   // 각 스텝 컴포넌트 렌더링
@@ -56,14 +91,17 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ setTitle }) => {
         );
       case "username":
         return (
-          <UsernameStep onNext={goToNextStep} onPrevious={goToPreviousStep} />
+          <UsernameStep
+            onNext={handleFinalSubmit}
+            onPrevious={goToPreviousStep}
+          />
         );
       default:
         return null;
     }
   };
 
-  return <>{renderStep()}</>;
+  return <FormLayout title={titleMap[currentStep]}>{renderStep()}</FormLayout>;
 };
 
 export { MultiStepForm };
