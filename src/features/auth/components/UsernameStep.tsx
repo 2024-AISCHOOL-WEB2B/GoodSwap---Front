@@ -35,10 +35,18 @@ const UsernameStep: React.FC<UsernameStepProps> = ({
 
   const onSubmit = async (data: { username: string }) => {
     try {
-      const response = await axios.get<boolean>(
-        `/auth/check-nickname?nickname=${data.username}`
+      const response = await axios.get(
+        `/auth/check-nickname?nickname=${data.username}`,
+        {
+          headers: {
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        }
       );
-      if (response.status === 200 && !response.data) {
+
+      if (response.status === 200) {
         setUsername(data.username);
         await submitRegistrationForm(
           email || "",
@@ -47,13 +55,17 @@ const UsernameStep: React.FC<UsernameStepProps> = ({
           data.username
         );
         onSuccess(); // 성공 모달 표시를 위한 콜백 호출
-      } else {
-        setErrorMessage("이미 존재하는 닉네임입니다.");
-        setShowModal(true);
-        methods.setValue("username", "");
       }
     } catch (error) {
-      console.error("알 수 없는 오류 발생", error);
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
+        setErrorMessage("이미 존재하는 닉네임입니다.");
+        setShowModal(true);
+        methods.setValue("username", ""); // 입력 필드 초기화
+      } else {
+        setErrorMessage("알 수 없는 오류가 발생했습니다.");
+        setShowModal(true);
+        console.error("알 수 없는 오류 발생", error);
+      }
     }
   };
 
@@ -61,7 +73,7 @@ const UsernameStep: React.FC<UsernameStepProps> = ({
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <p className="text-center text-gray-500 text-sm mb-4 whitespace-pre-line">
-          5–32자 길이로 숫자, 특수문자 조합의 공통 닉네임이며,{"\n"}
+          5–32자 길이로 일반 문자, 숫자 조합의 공통 닉네임이며,{"\n"}
           나중에 계정 설정에서 변경할 수 있습니다.
         </p>
         <div className="mb-4">
@@ -100,7 +112,13 @@ const UsernameStep: React.FC<UsernameStepProps> = ({
           이전
         </p>
         {showModal && (
-          <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
+          <Modal
+            isVisible={showModal}
+            onClose={() => {
+              setShowModal(false);
+              methods.reset({ username: "" }); // 닫기 시 필드 초기화
+            }}
+          >
             <p>{errorMessage}</p>
           </Modal>
         )}

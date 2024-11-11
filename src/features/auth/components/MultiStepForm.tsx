@@ -80,18 +80,10 @@ const MultiStepForm: React.FC = () => {
       {showCompletionModal && (
         <Modal
           isVisible={showCompletionModal}
-          onClose={() => {
-            setShowCompletionModal(false);
-            navigate("/login"); // 모달 닫을 때 로그인 페이지로 이동
-          }}
+          onClose={() => navigate("/login")}
+          buttonText="로그인 이동" // 버튼 텍스트를 '로그인 이동'으로 설정
         >
           <p>회원가입이 완료되었습니다. 로그인 해주세요.</p>
-          <button
-            onClick={() => navigate("/login")}
-            className="mt-4 py-2 px-4 bg-gradient-to-r from-custom_magenta to-custom_appricot text-white rounded"
-          >
-            로그인 이동
-          </button>
         </Modal>
       )}
     </FormLayout>
