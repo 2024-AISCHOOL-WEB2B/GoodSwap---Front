@@ -3,6 +3,7 @@ import { useLayoutEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MainPage } from "../pages/MainPage";
 import { LoginForm } from "../features/auth/components/LoginForm";
+import { MultiStepForm } from "../features/auth/components/MultiStepForm";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
   isAuthenticatedAtom,
@@ -53,6 +54,7 @@ function App() {
             <MainPage isLoggedIn={isAuthenticated} onLogout={handleLogout} />
           }
         />
+        <Route path="/signup" element={<MultiStepForm />} />
       </Routes>
     </Router>
   );
