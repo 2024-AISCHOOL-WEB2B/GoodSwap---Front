@@ -1,18 +1,17 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../../shared/components/Header';
-import BackgroundImage from '../../shared/components/BackgroundImage';
-
+import BackgroundFrame from '../../shared/components/BackgroundFrame';
 
 const Post = () => {
   const { postId } = useParams<{ postId: string }>(); // URL에서 postId를 받아옴
 
   return (
-    <div className="relative w-full h-screen flex items-center justify-center bg-white">
+    <div className="relative w-full h-screen flex items-center justify-center bg-gray-100">
       
       {/* 배경 이미지 */}
       <div className="relative w-[768px] h-[1006px] bg-white border overflow-hidden">
-        <BackgroundImage src="/PostList/rectangle-970.svg" alt="rectangle" />
+        <BackgroundFrame />
 
         {/* 나머지 요소들 */}
         <div className="relative size-full">
@@ -34,11 +33,14 @@ const Post = () => {
               카테고리
             </div>
           </div> */}
-
+          
+          {/* 게시글 제목 */}
           <div className="text-[#292c33] text-left font-['Inter-Regular',_sans-serif] text-[50px] font-normal absolute left-[31px] top-[110px] w-[573px] h-[63px] flex items-center justify-start">
             테스트 제목
           </div>
 
+
+          {/* 게시자 정보 */}
           <img
             className="size-20 absolute left-[49px] top-[181px] overflow-visible"
             src="/Post/group-368300.svg"
@@ -53,15 +55,22 @@ const Post = () => {
             2024.10.09. 22:33 조회 7
           </div>
 
+          {/*신고*/}
+          <div className="text-[rgba(41,44,51,0.59)] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[calc(50%_-_-263px)] top-[calc(50%_-_288.5px)] w-[94px] h-[34px] flex items-center justify-center">
+           신고
+          </div>
+
           <div className="border-solid border-[rgba(0,0,0,0.46)] border-t border-x-0 border-b-0 w-[711px] h-0 absolute left-[31px] top-[273px]"></div>
 
+
+
+          {/* 클린봇 */}
           <div
             className="bg-var-sds-color-background-brand-tertiary rounded border-solid border-neutral-tertiary border p-2 flex flex-row gap-2 items-center justify-center w-[666px] h-[50px] absolute left-[51px] top-[770px] overflow-hidden"
             style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
           >
             <div className="text-var-sds-color-text-brand-on-brand text-left relative"></div>
           </div>
-
           <div className="text-[#000000] text-left font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[101.02px] top-[774.12px] w-[61.79px] h-[41.24px] flex items-center justify-start">
             클린봇
           </div>
@@ -90,6 +99,8 @@ const Post = () => {
             답글 쓰기
           </div>
 
+
+          {/* 댓글 구분선 */}
           <div className="border-solid border-[rgba(0,0,0,0.46)] border-t border-x-0 border-b-0 w-[711px] h-0 absolute left-[31px] top-[724px]"></div>
 
           <div className="text-[#000000] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[188px] top-[690px] size-[25px] flex items-center justify-center">

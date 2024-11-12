@@ -1,8 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../../shared/components/Header';
-import BackgroundImage from '../../shared/components/BackgroundImage';
-
+import BackgroundFrame from '../../shared/components/BackgroundFrame';
 const GoodsPost = () => {
   const { postId } = useParams<{ postId: string }>(); // URL에서 postId를 받아옴
 
@@ -11,7 +10,8 @@ const GoodsPost = () => {
       
       {/* 배경 이미지 */}
       <div className="relative w-[768px] h-[1006px] bg-white border overflow-hidden">
-        <BackgroundImage src="/PostList/rectangle-970.svg" alt="rectangle" />
+       <BackgroundFrame />
+
 
 
       {/* 상단 아이콘들 */}
@@ -30,6 +30,7 @@ const GoodsPost = () => {
         src="/GoodsPost/div0.png"
         alt="product"
       />
+
 
       {/* 가격 정보 */}
       <div className="text-[#000000] text-left absolute left-[calc(50%_-_-3px)] top-[calc(50%_-_223.5px)]">
@@ -62,6 +63,7 @@ const GoodsPost = () => {
         테스트 제목
       </div>
 
+
       {/* 판매자 정보 */}
       <img
         className="size-20 absolute left-[calc(50%_-_335px)] top-[calc(50%_-_330.5px)]"
@@ -74,9 +76,17 @@ const GoodsPost = () => {
       <div className="text-[rgba(41,44,51,0.59)] text-center text-xl absolute left-[calc(50%_-_295px)] top-[calc(50%_-_288.5px)] w-[346px] h-[34px] flex items-center justify-center">
         2024.10.09. 22:33 조회 7
       </div>
+      
+
+      {/*신고*/}
+      <div className="text-[rgba(41,44,51,0.59)] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[calc(50%_-_-263px)] top-[calc(50%_-_288.5px)] w-[94px] h-[34px] flex items-center justify-center">
+       신고
+      </div>
+
 
       {/* 구분선 */}
       <div className="border-solid border-[rgba(0,0,0,0.46)] border-t border-x-0 border-b-0 w-[711px] h-0 absolute left-[calc(50%_-_353px)] top-[calc(50%_-_238.5px)]" />
+
 
       {/* 클린봇 */}
       <div className="bg-gray-200 rounded border-solid border-neutral-tertiary border p-4 flex items-center justify-center w-[666px] h-[50px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_-258.5px)]"
@@ -105,8 +115,10 @@ const GoodsPost = () => {
         답글 쓰기
       </div>
 
+
       {/* 댓글 구분선 */}
       <div className="border-solid border-[rgba(0,0,0,0.46)] border-t border-x-0 border-b-0 w-[711px] h-0 absolute left-[calc(50%_-_353px)] top-[calc(50%_-_-212.5px)]" />
+
 
       {/* 댓글 정보 */}
       <div className="text-[#000000] text-center text-xl absolute left-[calc(50%_-_196px)] top-[calc(50%_-_-178.5px)] size-[25px] flex items-center justify-center">
@@ -137,6 +149,7 @@ const GoodsPost = () => {
         alt="rotate"
       />
 
+
       {/* 상품 정보 */}
       <div className="rounded border-solid border-neutral-tertiary border p-4 flex flex-row items-center justify-center w-[116px] h-[54px] absolute left-[calc(50%_-_-3px)] top-[calc(50%_-_113.5px)]"
         style={{
@@ -146,6 +159,7 @@ const GoodsPost = () => {
       >
         <div className="text-[#ffffff] text-left">바로구매</div>
       </div>
+
 
       {/* 수량 정보 */}
       <img
@@ -164,6 +178,7 @@ const GoodsPost = () => {
       <div className="text-[#000000] text-left absolute left-[calc(50%_-_-8px)] top-[calc(50%_-_38.5px)] w-[62px] h-4">
         수량
       </div>
+
 
       {/* 상품 설명 */}
       <div className="bg-gray-200 rounded border-solid border-default-default border p-4 flex flex-col items-start justify-start w-[371px] h-[140px] absolute left-[calc(50%_-_0px)] top-[calc(50%_-_-37.5px)]">

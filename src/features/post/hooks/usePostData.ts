@@ -50,6 +50,7 @@ const usePostData = ({ mode, page = 1, limit = 8 }: UsePostDataOptions) => {
             setHasMore(false); // 더 이상 게시글이 없으면 hasMore를 false로
           }
         } else {
+          
           // 페이지네이션 모드일 경우 새 게시글로 대체
           setPosts(
             data.map((post) => ({

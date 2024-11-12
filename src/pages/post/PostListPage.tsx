@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import Header from '../../shared/components/Header';
-import BackgroundImage from '../../shared/components/BackgroundImage';
 import PostPagination from '../../features/post/components/PostPagination';
 import useTemporaryPosts from '../../features/post/hooks/useTemporaryPosts';
 import ArtistDropdown from '../../shared/components/ArtistDropdown';
 import { selectedArtistAtom } from '../../shared/state/artistState';
+import BackgroundFrame from '../../shared/components/BackgroundFrame';
 
 const PostListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,48 +39,56 @@ const PostListPage = () => {
   };
 
   const handleArtistSelect = (artistId: number) => {
-    setSelectedArtist(artistId);
-    setShowDropdown(false); // 아티스트 선택 후 드롭다운 닫기
+    if (artistId === 0) {
+        setSelectedArtist(null); // 전체 게시판으로 돌아가기
+    } else {
+        setSelectedArtist(artistId);
+    }
+    setShowDropdown(false);
   };
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="relative w-[768px] h-[1006px] bg-white border overflow-visible">
-        <BackgroundImage src="/PostList/rectangle-970.svg" alt="rectangle" />
+        <BackgroundFrame />
         <Header />
 
 
-        {/* 커뮤니티 카테고리 */}
-        <div className="absolute flex flex-col gap-1 left-[120px] top-[96px] w-[198px] h-[40px] z-40">
-          <p className="text-gray-700 font-medium text-center">커뮤니티</p>
-        </div>
-        <img
-          className="absolute top-[96px] left-[150px] w-6 h-6 z-40"
-          src="/PostList/icon-lucide-icon2.svg"
-          alt="커뮤니티 아이콘"
-        />
 
-
-        {/* 아티스트 게시판 */}
+        {/* 아티스트 게시판 */} 
         <div
-          className="absolute flex flex-col gap-1 left-[455px] top-[96px] w-[198px] h-[40px] cursor-pointer z-40"
+          className="absolute flex flex-col gap-1 left-[120px] top-[96px] w-[198px] h-[40px] cursor-pointer z-40"
           onClick={handleArtistClick}
         >
           <p className="text-gray-700 font-medium text-center">아티스트</p>
         </div>
         <img
-          className="absolute top-[96px] left-[490px] w-6 h-6 z-40"
+          className="absolute top-[96px] left-[150px] size-6 z-40"
           src="/PostList/icon-favourite0.svg"
           alt="아티스트 게시판 아이콘"
         />
 
 
-        {/* 아티스트 드롭다운 */}
-        {showDropdown && (
-            <div className="absolute left-[520px] top-[136px] z-50">
+        {/* 커뮤니티 카테고리 */}
+        <div className="absolute flex flex-col gap-1 left-[455px] top-[96px] w-[198px] h-[40px] z-40">
+          <p className="text-gray-700 font-medium text-center">커뮤니티</p>
+        </div>
+        <img
+          className="absolute top-[96px] left-[490px] size-6 z-40"
+          src="/PostList/icon-lucide-icon2.svg"
+          alt="커뮤니티 아이콘"
+        />
+
+
+
+         {/* 아티스트 드롭다운 */}
+         {showDropdown && (
+            <div className="absolute left-[145px] top-[136px] z-50">
                 <ArtistDropdown onSelect={handleArtistSelect} />
             </div>
-        )}
+          )}
+
 
         
         {/* 게시글 작성 버튼 */}
@@ -93,6 +101,8 @@ const PostListPage = () => {
           </button>
         </div>
 
+
+
         {/* 굿즈 게시판으로 이동 버튼 */}
         <div
           className="absolute flex flex-col gap-1 left-[27px] top-[147px] w-[185px] h-[32px] bg-white border rounded cursor-pointer z-40"
@@ -104,13 +114,14 @@ const PostListPage = () => {
 
         {/* 검색 입력 필드 */}
         <div className="absolute top-[146px] left-[369px] flex items-center gap-2 p-2 w-[248px] h-[29px] bg-white border border-gray-400 rounded-lg z-40">
-          <img className="w-6 h-6" src="/PostList/icon-feather-icon12.svg" alt="search icon" />
+          <img className="size-6" src="/PostList/icon-feather-icon12.svg" alt="search icon" />
           <input
             type="text"
             placeholder="Search..."
             className="text-gray-500 bg-transparent border-none focus:outline-none"
           />
         </div>
+
 
         {/* 게시글 목록 */}
         <ul className="absolute top-[188px] left-[25px] flex flex-col space-y-2 z-10">
@@ -120,6 +131,8 @@ const PostListPage = () => {
               onClick={() => handlePostClick(post.id)}
               className="flex justify-between items-center w-[703px] h-[77px] bg-white border border-black rounded p-2 cursor-pointer hover:bg-gray-50"
             >
+
+
               <img
                 className="size-20 mr-2"
                 src={post.imageUrl ? post.imageUrl : '/PostList/icon-feather-icon3.svg'}
@@ -131,10 +144,16 @@ const PostListPage = () => {
                   {post.date} &nbsp;|&nbsp; {post.author}
                 </div>
               </div>
-              <img className="w-6 h-5 ml-auto mr-2" src="/PostList/vector0.svg" alt="좋아요" />
+
+              {/* 좋아요 아이콘 주석 처리 */}
+              {/*<img className="w-6 h-5 ml-auto mr-2" src="/PostList/vector0.svg" alt="좋아요" />*/}
+
+              {/* 좋아요 위치 공간 유지 */}
+              <div className="w-6 h-5 ml-auto mr-2"></div>
             </li>
           ))}
         </ul>
+
 
         {/* 페이지 네이션 */}
         <div className="absolute w-full bottom-10 flex justify-center z-10">

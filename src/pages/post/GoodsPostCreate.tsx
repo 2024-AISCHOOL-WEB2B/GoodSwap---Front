@@ -1,8 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../shared/components/Header';
-import BackgroundImage from '../../shared/components/BackgroundImage';
 import QuillEditor from '../../features/post/components/QuillEditor';
+import BackgroundFrame from '../../shared/components/BackgroundFrame';
+
+
+
+
+//굿즈 가격, 이름, 아티스트, 카테고리 입력 필드의 데이터를 goodsPostAtom에 저장하고, GoodsPostPage에서 표시되도록 구현할 예정
+
+
 
 
 const PostCreate: React.FC = () => {
@@ -20,7 +27,8 @@ const PostCreate: React.FC = () => {
 
          {/* 배경 이미지 */}
           <div className="relative w-[768px] h-[1006px] bg-white border overflow-hidden">
-         <BackgroundImage src="/PostList/rectangle-970.svg" alt="rectangle" />
+          <BackgroundFrame />
+
 
          {/* 상단 아이콘들 */}
          <div className="relative">
