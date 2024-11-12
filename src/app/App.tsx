@@ -11,6 +11,8 @@ import {
   logoutAtom,
 } from "../features/auth/atoms/auth";
 import { setupInterceptors } from "../features/auth/APIs/axiosInstance";
+import { logout } from "../features/auth/APIs/logout"; // 로그아웃 함수 임포트
+import { getAccessToken } from "../features/auth/utils/tokenUtils";
 
 function App() {
   const isAuthenticated = useAtomValue(isAuthenticatedAtom);
@@ -33,9 +35,11 @@ function App() {
     setLogin(token);
   };
 
+  // 로그아웃 핸들러 정의
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    setLogout();
+    if (!getAccessToken()) return; // accessToken이 없으면 실행하지 않음
+    console.log("Logout button clicked");
+    logout(setLogout);
   };
 
   return (
