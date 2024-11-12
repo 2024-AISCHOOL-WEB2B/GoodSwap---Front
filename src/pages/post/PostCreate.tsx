@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../shared/components/Header';
 import QuillEditor from '../../features/post/components/QuillEditor';
 import BackgroundFrame from '../../shared/components/BackgroundFrame';
+import axios from 'axios';
 
 
 const PostCreate: React.FC = () => {
@@ -14,11 +15,20 @@ const PostCreate: React.FC = () => {
     navigate(-1); // 이전 페이지로 이동
   };
 
+  const checkdata = async() => {
+    try{
+      const response = await axios.get("http://localhost:8081/api/order/test");
+    }
+    catch(error){
+      console.log("Error fetching data", error);
+    }
+  } 
+
     
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
 
-         {/* 배경 이미지 */}
+         {/* 배경 프레임 */}
           <div className="relative w-[768px] h-[1006px] bg-white border overflow-hidden">
           <BackgroundFrame />
 
@@ -65,15 +75,17 @@ const PostCreate: React.FC = () => {
          </div>
 
          
-         {/* 작성완료 버튼 */}
-         <div
-            className="rounded-lg border border-gray-400 p-4 flex items-center justify-center w-[92px] h-10 absolute left-[calc(50%_-_-259px)] top-[calc(50%_-_-421.5px)]"
-            style={{
-              background: 'linear-gradient(90deg, rgba(8, 204, 202, 1) 0%, rgba(24, 231, 156, 1) 100%)',
-            }}
+          {/* 작성완료 버튼 */}
+          <div
+            className="rounded-lg border border-gray-400 p-4 flex items-center justify-center w-[92px] h-10 absolute left-[calc(50%_-_-259px)] top-[calc(50%_-_-421.5px)] bg-gradient-to-r from-[rgba(8,204,202,1)] to-[rgba(24,231,156,1)] shadow-md"
           >
-            <div className="text-green-600 flex items-center justify-center whitespace-nowrap">작성완료</div>
-         </div>
+            <button
+              className="text-white flex items-center justify-center whitespace-nowrap"
+              onClick={checkdata}
+            >
+              작성완료
+            </button>
+          </div>
 
 
          {/* 뒤로 가기 버튼 */}

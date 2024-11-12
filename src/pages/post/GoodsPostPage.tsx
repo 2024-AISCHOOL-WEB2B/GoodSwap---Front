@@ -53,7 +53,6 @@ const GoodsPostPage = () => {
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-gray-100">
-     <BackgroundFrame /> 
       <div id="scrollableDiv" className="relative w-[768px] h-[1023px] bg-white overflow-y-scroll">
         <BackgroundFrame />
         <Header />

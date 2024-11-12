@@ -93,15 +93,14 @@ const PostCreate: React.FC = () => {
          </div>
 
          
-         {/* 작성완료 버튼 */}
-         <div
-            className="rounded-lg border border-gray-400 p-4 flex items-center justify-center w-[92px] h-10 absolute left-[calc(50%_-_-259px)] top-[calc(50%_-_-421.5px)]"
-            style={{
-              background: 'linear-gradient(90deg, rgba(8, 204, 202, 1) 0%, rgba(24, 231, 156, 1) 100%)',
-            }}
-          >
-            <div className="text-green-600 flex items-center justify-center whitespace-nowrap">작성완료</div>
-         </div>
+        {/* 작성완료 버튼 */}
+        <div
+          className="rounded-lg border border-gray-400 p-4 flex items-center justify-center w-[92px] h-10 absolute left-[calc(50%_-_-259px)] top-[calc(50%_-_-421.5px)] bg-gradient-to-r from-[#08CCC8] to-[#18E79C] shadow-md"
+        >
+          <div className="text-white flex items-center justify-center whitespace-nowrap">
+            작성완료
+          </div>
+        </div>
 
 
          {/* 뒤로 가기 버튼 */}

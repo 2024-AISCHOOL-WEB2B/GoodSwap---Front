@@ -21,15 +21,14 @@ const GoodsPost = () => {
 
 
       {/* 상품 이미지 */}
-      <img
-        className="border-solid border-[#000000] border flex flex-col items-center justify-center size-[300px] absolute left-[calc(50%_-_328px)] top-[calc(50%_-_217.5px)] overflow-hidden"
-        style={{
-          background: 'linear-gradient(to left, #e3e3e3, #e3e3e3)',
-          objectFit: 'cover',
-        }}
-        src="/GoodsPost/div0.png"
-        alt="product"
-      />
+      <div className="absolute inset-x-[calc(50%-328px)] top-[calc(50%-217.5px)] size-[300px] bg-gradient-to-l from-gray-200 to-gray-200 border border-black rounded-lg flex items-center justify-center overflow-hidden">
+        <img
+          className="size-full object-cover"
+          src="/GoodsPost/div0.png"
+          alt="product"
+        />
+      </div>
+
 
 
       {/* 가격 정보 */}
@@ -88,22 +87,12 @@ const GoodsPost = () => {
       <div className="border-solid border-[rgba(0,0,0,0.46)] border-t border-x-0 border-b-0 w-[711px] h-0 absolute left-[calc(50%_-_353px)] top-[calc(50%_-_238.5px)]" />
 
 
-      {/* 클린봇 */}
-      <div className="bg-gray-200 rounded border-solid border-neutral-tertiary border p-4 flex items-center justify-center w-[666px] h-[50px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_-258.5px)]"
-        style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
-      />
-      <div className="text-[#000000] text-left text-xl absolute left-[calc(50%_-_282.98px)] top-[calc(50%_-_-262.62px)] w-[61.79px] h-[41.24px] flex items-center justify-start">
-        클린봇
-      </div>
-      <img
-        className="w-[28.44px] h-[27.84px] absolute left-[calc(50%_-_316.33px)] top-[calc(50%_-_-270.87px)]"
-        src="/GoodsPost/shield0.svg"
-        alt="shield"
-      />
+
+
       <img
         className="w-[59px] h-[66px] absolute left-[calc(50%_-_331px)] top-[calc(50%_-_-313.5px)]"
         src="/GoodsPost/group-368330.svg"
-        alt="group"
+        alt="회원아이콘"
       />
       <div className="text-[#292c33] text-center text-xl absolute left-[calc(50%_-_283px)] top-[calc(50%_-_-308.5px)] w-[76px] h-[50px] flex items-center justify-center">
         회원1
@@ -150,34 +139,40 @@ const GoodsPost = () => {
       />
 
 
-      {/* 상품 정보 */}
-      <div className="rounded border-solid border-neutral-tertiary border p-4 flex flex-row items-center justify-center w-[116px] h-[54px] absolute left-[calc(50%_-_-3px)] top-[calc(50%_-_113.5px)]"
-        style={{
-          background: 'linear-gradient(90deg, rgba(8, 204, 202, 1) 0%, rgba(24, 231, 156, 1) 100%)',
-          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-        }}
+      {/* 구매버튼 */}
+      <div
+        className="absolute left-[calc(50%-3px)] top-[calc(50%-113.5px)] w-[116px] h-[54px] rounded border border-neutral-400 p-4 flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-400 shadow-lg"
       >
-        <div className="text-[#ffffff] text-left">바로구매</div>
+        <div className="text-white">바로구매</div>
       </div>
 
 
-      {/* 수량 정보 */}
-      <img
-        className="rounded-none w-[92px] h-8 absolute left-[calc(50%_-_-3px)] top-[calc(50%_-_15.5px)]"
-        src="/GoodsPost/rectangle-1140.svg"
-        alt="rectangle"
-      />
-      <img
-        className="w-6 h-7 absolute left-[calc(50%_-_-70px)] top-[calc(50%_-_13.5px)]"
-        src="/GoodsPost/plus0.svg"
-        alt="plus"
-      />
-      <div className="text-[#000000] text-left absolute left-[calc(50%_-_-45px)] top-[calc(50%_-_7.5px)] w-2">
-        1
-      </div>
-      <div className="text-[#000000] text-left absolute left-[calc(50%_-_-8px)] top-[calc(50%_-_38.5px)] w-[62px] h-4">
-        수량
-      </div>
+
+  {/* 수량 정보 */}
+  <div className="relative left-[calc(50%-3px)] top-[calc(50%-15.5px)] w-[92px] h-8 flex items-center justify-center">
+    {/* 수량 배경 이미지 */}
+    <img
+      className="size-full rounded-none"
+      src="/GoodsPost/rectangle-1140.svg"
+      alt="rectangle"
+    />
+
+    {/* 수량 텍스트 */}
+    <div className="absolute text-[#000000] text-center">1</div>
+
+    {/* 플러스 아이콘 */}
+    <img
+      className="w-6 h-7 absolute left-[calc(50%+20px)] top-[calc(50%-13.5px)]"
+      src="/GoodsPost/plus0.svg"
+      alt="plus"
+    />
+  </div>
+
+  {/* 수량 텍스트 */}
+  <div className="text-[#000000] text-left absolute left-[calc(50%+7px)] top-[calc(50%-38.5px)] w-[62px] h-4">
+    수량
+  </div>
+
 
 
       {/* 상품 설명 */}

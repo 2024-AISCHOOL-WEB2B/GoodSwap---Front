@@ -64,22 +64,7 @@ const Post = () => {
 
 
 
-          {/* 클린봇 */}
-          <div
-            className="bg-var-sds-color-background-brand-tertiary rounded border-solid border-neutral-tertiary border p-2 flex flex-row gap-2 items-center justify-center w-[666px] h-[50px] absolute left-[51px] top-[770px] overflow-hidden"
-            style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
-          >
-            <div className="text-var-sds-color-text-brand-on-brand text-left relative"></div>
-          </div>
-          <div className="text-[#000000] text-left font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[101.02px] top-[774.12px] w-[61.79px] h-[41.24px] flex items-center justify-start">
-            클린봇
-          </div>
-
-          <img
-            className="w-[28.44px] h-[27.84px] absolute left-[67.67px] top-[782.37px] overflow-visible"
-            src="/Post/shield0.svg"
-            alt="shield"
-          />
+          {/* 댓글 */}
 
           <img
             className="w-[59px] h-[66px] absolute left-[53px] top-[825px] overflow-visible"
@@ -139,12 +124,11 @@ const Post = () => {
         </div>
 
         <div
-          className="text-[#000000] text-left font-['Inter-SemiBold',_sans-serif] text-[55px] leading-[120%] font-semibold absolute left-[calc(50%_-_345px)] top-[calc(50%_-_215.5px)] w-[678px] h-[388px]"
-          style={{ letterSpacing: '-0.02em' }}
-           >
-         내용
-         <br />
-    </div>
+          className="text-[#000000] text-left font-['Inter-SemiBold',_sans-serif] text-[55px] leading-[120%] font-semibold absolute left-[calc(50%_-_345px)] top-[calc(50%_-_215.5px)] w-[678px] h-[388px] tracking-[-0.02em]"
+        >
+          내용
+          <br />
+        </div>
 
       </div>
     </div>
