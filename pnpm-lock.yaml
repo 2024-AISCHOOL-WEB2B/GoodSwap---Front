@@ -62,6 +62,9 @@ importers:
       sanitize-html:
         specifier: ^2.13.1
         version: 2.13.1
+      tailwind-scrollbar-hide:
+        specifier: ^1.1.7
+        version: 1.1.7
       tailwindcss:
         specifier: ^3.4.14
         version: 3.4.14
@@ -2504,6 +2507,9 @@ packages:
   synckit@0.9.2:
     resolution: {integrity: sha512-vrozgXDQwYO72vHjUb/HnFbQx1exDjoKzqx23aXEg2a9VIg2TSFZ8FmeZpTjUCFMYw7mpX4BE2SFu8wI7asYsw==}
     engines: {node: ^14.18.0 || >=16.0.0}
+
+  tailwind-scrollbar-hide@1.1.7:
+    resolution: {integrity: sha512-X324n9OtpTmOMqEgDUEA/RgLrNfBF/jwJdctaPZDzB3mppxJk7TLIDmOreEDm1Bq4R9LSPu4Epf8VSdovNU+iA==}
 
   tailwindcss@3.4.14:
     resolution: {integrity: sha512-IcSvOcTRcUtQQ7ILQL5quRDg7Xs93PdJEk1ZLbhhvJc7uj/OAhYOnruEiwnGgBvUtaUAJ8/mhSw1o8L2jCiENA==}
@@ -5336,6 +5342,8 @@ snapshots:
     dependencies:
       '@pkgr/core': 0.1.1
       tslib: 2.8.0
+
+  tailwind-scrollbar-hide@1.1.7: {}
 
   tailwindcss@3.4.14:
     dependencies:

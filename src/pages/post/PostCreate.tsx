@@ -71,7 +71,7 @@ const PostCreate: React.FC = () => {
           </div> */}
          
          <div className="absolute left-[calc(50%_-_333px)] top-[calc(50%_-_177px)]   bg-white">
-          <QuillEditor />
+          <QuillEditor className="h-[500px]" />
          </div>
 
          

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../shared/components/Header';
 import QuillEditor from '../../features/post/components/QuillEditor';
 import BackgroundFrame from '../../shared/components/BackgroundFrame';
+import ImageUploader from '../../shared/components/ImageUploader';
 
 
 
@@ -41,55 +42,60 @@ const PostCreate: React.FC = () => {
 
 
 
-         <div className="text-[#292c33] text-center font-['Inter-Regular',_sans-serif] text-[13px] font-normal absolute left-[calc(50%_-_326px)] top-[calc(50%_-_423px)] w-[55px] h-[18px] flex items-center justify-center">
+         <div className="text-[#292c33] text-center font-['Inter-Regular',_sans-serif] text-[13px] font-normal absolute left-[calc(50%_-_326px)] top-[calc(50%_-_440px)] w-[55px] h-[18px] flex items-center justify-center">
           아티스트
          </div>
-         <div className="flex flex-col gap-var-sds-size-space-200 items-start justify-start w-[301px] h-[30px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_400px)]">
+         <div className="flex flex-col gap-var-sds-size-space-200 items-start justify-start w-[301px] h-[30px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_420px)]">
           <div className="bg-var-sds-color-background-default-default rounded-[7.8px] border-solid border-var-sds-color-border-default-secondary border-[0.36px] p-var-sds-size-space-300 flex flex-row gap-0 items-center justify-start self-stretch flex-1 min-w-[86.45px] relative overflow-hidden"></div>
          </div>
 
 
-         <div className="text-[#292c33] text-center font-['Inter-Regular',_sans-serif] text-[13px] font-normal absolute left-[calc(50%_-_326px)] top-[calc(50%_-_353px)] w-[55px] h-[18px] flex items-center justify-center">
-          굿즈가격
-         </div>
-         <div className="flex flex-col gap-var-sds-size-space-200 items-start justify-start w-[301px] h-[30px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_330px)]">
-          <div className="bg-var-sds-color-background-default-default rounded-[7.8px] border-solid border-var-sds-color-border-default-secondary border-[0.36px] p-var-sds-size-space-300 flex flex-row gap-0 items-center justify-start self-stretch flex-1 min-w-[86.45px] relative overflow-hidden"></div>
-         </div>
-
-
-         <div className="text-[#292c33] text-center font-['Inter-Regular',_sans-serif] text-[13px] font-normal absolute left-[calc(50%_-_-38px)] top-[calc(50%_-_423px)] w-[60px] h-[18px] flex items-center justify-center">
-          카테고리
-         </div>
-         <div className="flex flex-col gap-var-sds-size-space-200 items-start justify-start w-[301px] h-[30px] absolute left-[calc(50%_-_-32px)] top-[calc(50%_-_400px)]">
-          <div className="bg-var-sds-color-background-default-default rounded-[7.8px] border-solid border-var-sds-color-border-default-secondary border-[0.36px] p-var-sds-size-space-300 flex flex-row gap-0 items-center justify-start self-stretch flex-1 min-w-[86.45px] relative overflow-hidden"></div>
-         </div>
-
-
-
-         <div className="text-[#292c33] text-center font-['Inter-Regular',_sans-serif] text-[13px] font-normal absolute left-[calc(50%_-_-38px)] top-[calc(50%_-_353px)] w-[60px] h-[18px] flex items-center justify-center">
+         <div className="text-[#292c33] text-center font-['Inter-Regular',_sans-serif] text-[13px] font-normal absolute left-[calc(50%_-_326px)] top-[calc(50%_-_380px)] w-[55px] h-[18px] flex items-center justify-center">
           굿즈이름
          </div>
-         <div className="flex flex-col gap-var-sds-size-space-200 items-start justify-start w-[301px] h-[30px] absolute left-[calc(50%_-_-32px)] top-[calc(50%_-_330px)]">
+         <div className="flex flex-col gap-var-sds-size-space-200 items-start justify-start w-[301px] h-[30px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_360px)]">
           <div className="bg-var-sds-color-background-default-default rounded-[7.8px] border-solid border-var-sds-color-border-default-secondary border-[0.36px] p-var-sds-size-space-300 flex flex-row gap-0 items-center justify-start self-stretch flex-1 min-w-[86.45px] relative overflow-hidden"></div>
          </div>
 
 
-         <div className="text-[#292c33] text-center font-['Inter-Regular',_sans-serif] text-[13px] font-normal absolute left-[calc(50%_-_326px)] top-[calc(50%_-_268px)] w-10 h-[18px] flex items-center justify-center">
+         <div className="text-[#292c33] text-center font-['Inter-Regular',_sans-serif] text-[13px] font-normal absolute left-[calc(50%_-_326px)] top-[calc(50%_-_320px)] w-[60px] h-[18px] flex items-center justify-center">
+          굿즈가격
+         </div>
+         <div className="flex flex-col gap-var-sds-size-space-200 items-start justify-start w-[301px] h-[30px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_300px)]">
+          <div className="bg-var-sds-color-background-default-default rounded-[7.8px] border-solid border-var-sds-color-border-default-secondary border-[0.36px] p-var-sds-size-space-300 flex flex-row gap-0 items-center justify-start self-stretch flex-1 min-w-[86.45px] relative overflow-hidden"></div>
+         </div>
+
+
+         <div className="text-[#292c33] text-center font-['Inter-Regular',_sans-serif] text-[13px] font-normal absolute left-[calc(50%_-_326px)] top-[calc(50%_-_260px)] w-[60px] h-[18px] flex items-center justify-center">
+          굿즈수량
+         </div>
+         <div className="flex flex-col gap-var-sds-size-space-200 items-start justify-start w-[301px] h-[30px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_240px)]">
+          <div className="bg-var-sds-color-background-default-default rounded-[7.8px] border-solid border-var-sds-color-border-default-secondary border-[0.36px] p-var-sds-size-space-300 flex flex-row gap-0 items-center justify-start self-stretch flex-1 min-w-[86.45px] relative overflow-hidden"></div>
+         </div>
+
+
+         <div className="text-[#292c33] text-center font-['Inter-Regular',_sans-serif] text-[13px] font-normal absolute left-[calc(50%_-_326px)] top-[calc(50%_-_200px)] w-10 h-[18px] flex items-center justify-center">
           제목
          </div>
-         <div className="flex flex-col gap-var-sds-size-space-200 items-start justify-start w-[666px] h-[30px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_245px)]">
+         <div className="flex flex-col gap-var-sds-size-space-200 items-start justify-start w-[301px] h-[30px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_180px)]">
           <div className="bg-var-sds-color-background-default-default rounded-[7.8px] border-solid border-var-sds-color-border-default-secondary border-[0.36px] p-var-sds-size-space-300 flex flex-row gap-0 items-center justify-start self-stretch flex-1 min-w-[86.45px] relative overflow-hidden"></div>
          </div>
 
 
+          {/* 이미지 업로더 */}
+          <div className="absolute left-[calc(50%_-_-70px)] top-[calc(50%_-_420px)]">
+            <ImageUploader />
+          </div>
+
         
+
          {/* QuillEditor */}
           {/* <div>
             <div className="bg-[#d9d9d9] w-[666px] h-[587px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_177px)]"></div>
           </div> */}
          
-         <div className="absolute left-[calc(50%_-_333px)] top-[calc(50%_-_177px)]   bg-white">
-          <QuillEditor />
+         <div className="absolute left-[calc(50%_-_333px)] top-[calc(50%_-_130px)]   bg-white">
+          <QuillEditor className="h-[500px]" />
          </div>
 
          

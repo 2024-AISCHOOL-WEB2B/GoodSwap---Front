@@ -18,6 +18,12 @@ export default defineConfig({
       url: "rollup-plugin-node-polyfills/polyfills/url",
     },
   },
+  define: {
+    'process.env': {}, // ✅ 수정된 부분: process.env를 빈 객체로 정의하여 브라우저 환경에서의 에러 방지
+  },
+  optimizeDeps: {
+    include: ['sanitize-html'], // ✅ 수정된 부분: sanitize-html을 미리 번들링하여 호환성 문제 해결
+  },
   css: {
     postcss: {
       plugins: [tailwindcss, autoprefixer],

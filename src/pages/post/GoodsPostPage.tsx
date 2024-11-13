@@ -8,7 +8,6 @@ import ArtistDropdown from '../../shared/components/ArtistDropdown';
 import { selectedArtistAtom } from '../../shared/state/artistState';
 import BackgroundFrame from '../../shared/components/BackgroundFrame';
 
-
 const GoodsPostPage = () => {
   const goodsPosts = useTemporaryPosts(30);
   const [hasMore, setHasMore] = useState(true);
@@ -31,30 +30,18 @@ const GoodsPostPage = () => {
   };
 
   const handleArtistSelect = (artistId: number) => {
-    if (artistId === 0) {
-        setSelectedArtist(null); // 전체 게시판으로 돌아가기
-    } else {
-        setSelectedArtist(artistId);
-    }
+    setSelectedArtist(artistId === 0 ? null : artistId);
     setShowDropdown(false);
-  };
-
-  const handlePostListPageNavigation = () => {
-    navigate('/postlist');
-  };
-
-  const handleCreateGoodsPostClick = () => {
-    navigate('/goods-post-create');
-  };
-
-  const handlePostClick = (postId: number) => {
-    navigate(`/goods-post/${postId}`);
   };
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-gray-100">
-      <div id="scrollableDiv" className="relative w-[768px] h-[1023px] bg-white overflow-y-scroll">
+      {/* 수정된 부분: BackgroundFrame을 fixed로 설정하고 z-index 조정 */}
+      <div className="fixed inset-0 z-[-1]">
         <BackgroundFrame />
+      </div>
+
+      <div id="scrollableDiv" className="relative w-[768px] h-[1023px] bg-white overflow-y-scroll scrollbar-hide">
         <Header />
 
         {/* 아티스트 게시판 */}
@@ -90,7 +77,7 @@ const GoodsPostPage = () => {
         {/* 게시글 작성 버튼 */}
         <div className="absolute top-[147px] left-[627px] z-40">
           <button
-            onClick={handleCreateGoodsPostClick}
+            onClick={() => navigate('/goods-post-create')}
             className="flex items-center justify-center w-[95px] h-[26px] bg-white border border-black rounded font-semibold text-black"
           >
             게시글 작성
@@ -100,7 +87,7 @@ const GoodsPostPage = () => {
         {/* PostListPage로 돌아가는 버튼 */}
         <div
           className="absolute flex flex-col gap-1 left-[27px] top-[147px] w-[185px] h-[32px] bg-white border rounded cursor-pointer z-40"
-          onClick={handlePostListPageNavigation}
+          onClick={() => navigate('/postlist')}
         >
           <p className="text-gray-700 font-medium text-center">자유 게시판 이동</p>
         </div>
@@ -122,7 +109,7 @@ const GoodsPostPage = () => {
               <div
                 key={post.id}
                 className="size-40 bg-white border rounded cursor-pointer"
-                onClick={() => handlePostClick(post.id)}
+                onClick={() => navigate(`/goods-post/${post.id}`)}
               >
                 {post.imageUrl ? (
                   <img className="size-full object-cover" src={post.imageUrl} alt={`Goods post ${post.id}`} />
