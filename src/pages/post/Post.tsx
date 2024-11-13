@@ -60,16 +60,58 @@ const Post = () => {
            신고
           </div>
 
+
+          {/* 상단 구분선 */}
           <div className="border-solid border-[rgba(0,0,0,0.46)] border-t border-x-0 border-b-0 w-[711px] h-0 absolute left-[31px] top-[273px]"></div>
 
+
+          {/*내용*/}
+          <div
+          className="text-[#000000] text-left font-['Inter-SemiBold',_sans-serif] text-[55px] leading-[120%] font-semibold absolute left-[calc(50%_-_345px)] top-[calc(50%_-_215.5px)] w-[678px] h-[388px] tracking-[-0.02em]"
+          >
+            내용
+          <br />
+          </div>
+
+
+          {/* 댓글 구분선 */}
+          <div className="border-solid border-[rgba(0,0,0,0.46)] border-t border-x-0 border-b-0 w-[711px] h-0 absolute left-[31px] top-[770px]"></div>
+
+          <img
+            className="w-[33px] h-[30px] absolute left-[68px] top-[730px] overflow-visible"
+            src="/Post/favorite0.svg"
+            alt="favorite"
+          />
+
+          <div className="text-[#000000] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[100px] top-[730px] size-[25px] flex items-center justify-center">
+            2
+          </div>
+
+          <img
+            className="w-[30.64px] h-[30px] absolute left-[140px] top-[730px] overflow-visible"
+            src="/Post/chat-bubble0.svg"
+            alt="chat"
+          />
+
+          <div className="text-[#000000] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[172px] top-[730px] size-[25px] flex items-center justify-center">
+            4
+          </div>
 
 
           {/* 댓글 */}
 
+          <div className="text-[#000000] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[49px] top-[780px] w-[68px] h-[34px] flex items-center justify-center">
+            등록순
+          </div>
+
+          <div className="text-[#000000] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[130px] top-[780px] w-[68px] h-[34px] flex items-center justify-center">
+            최신순
+          </div>
+
           <img
             className="w-[59px] h-[66px] absolute left-[53px] top-[825px] overflow-visible"
             src="/Post/group-368330.svg"
-            alt="group"
+            alt="회원이미지"
           />
 
           <div className="text-[#292c33] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[101px] top-[820px] w-[76px] h-[50px] flex items-center justify-center">
@@ -84,51 +126,9 @@ const Post = () => {
             답글 쓰기
           </div>
 
-
-          {/* 댓글 구분선 */}
-          <div className="border-solid border-[rgba(0,0,0,0.46)] border-t border-x-0 border-b-0 w-[711px] h-0 absolute left-[31px] top-[724px]"></div>
-
-          <div className="text-[#000000] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[188px] top-[690px] size-[25px] flex items-center justify-center">
-            4
-          </div>
-
-          <div className="text-[#000000] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[101px] top-[689px] size-[25px] flex items-center justify-center">
-            2
-          </div>
-
-          <img
-            className="w-[33px] h-[30px] absolute left-[68px] top-[689px] overflow-visible"
-            src="/Post/favorite0.svg"
-            alt="favorite"
-          />
-
-          <img
-            className="w-[30.64px] h-[30px] absolute left-[157px] top-[689px] overflow-visible"
-            src="/Post/chat-bubble0.svg"
-            alt="chat"
-          />
-
-          <div className="text-[#000000] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[49px] top-[719px] w-[90px] h-[43px] flex items-center justify-center">
-            등록순
-          </div>
-
-          <div className="text-[rgba(0,0,0,0.59)] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-36 top-[724px] w-[68px] h-[34px] flex items-center justify-center">
-            최신순
-          </div>
-
-          <img
-            className="w-[31px] h-[25px] absolute left-[219px] top-[728px] overflow-visible"
-            src="/Post/rotate-ccw0.svg"
-            alt="rotate"
-          />
         </div>
 
-        <div
-          className="text-[#000000] text-left font-['Inter-SemiBold',_sans-serif] text-[55px] leading-[120%] font-semibold absolute left-[calc(50%_-_345px)] top-[calc(50%_-_215.5px)] w-[678px] h-[388px] tracking-[-0.02em]"
-        >
-          내용
-          <br />
-        </div>
+
 
       </div>
     </div>

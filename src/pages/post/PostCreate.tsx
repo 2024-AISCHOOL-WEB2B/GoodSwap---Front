@@ -15,6 +15,7 @@ const PostCreate: React.FC = () => {
     navigate(-1); // 이전 페이지로 이동
   };
 
+  //데이터체크
   const checkdata = async() => {
     try{
       const response = await axios.get("http://localhost:8081/api/order/test");

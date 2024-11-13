@@ -4,6 +4,8 @@ import Header from '../../shared/components/Header';
 import QuillEditor from '../../features/post/components/QuillEditor';
 import BackgroundFrame from '../../shared/components/BackgroundFrame';
 import ImageUploader from '../../shared/components/ImageUploader';
+import axios from 'axios';
+
 
 
 
@@ -22,16 +24,26 @@ const PostCreate: React.FC = () => {
     navigate(-1); // 이전 페이지로 이동
   };
 
+   //데이터체크
+   const checkdata = async() => {
+    try{
+      const response = await axios.get("http://localhost:8081/api/order/test");
+    }
+    catch(error){
+      console.log("Error fetching data", error);
+    }
+  } 
+
     
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
 
-         {/* 배경 이미지 */}
+         {/* 배경 프레임 */}
           <div className="relative w-[768px] h-[1006px] bg-white border overflow-hidden">
           <BackgroundFrame />
 
 
-         {/* 상단 아이콘들 */}
+         {/* 상단 헤더 */}
          <div className="relative">
           <Header />
          </div>
@@ -103,9 +115,12 @@ const PostCreate: React.FC = () => {
         <div
           className="rounded-lg border border-gray-400 p-4 flex items-center justify-center w-[92px] h-10 absolute left-[calc(50%_-_-259px)] top-[calc(50%_-_-421.5px)] bg-gradient-to-r from-[#08CCC8] to-[#18E79C] shadow-md"
         >
-          <div className="text-white flex items-center justify-center whitespace-nowrap">
+          <button
+           className="text-white flex items-center justify-center whitespace-nowrap"
+           onClick={checkdata}
+          >
             작성완료
-          </div>
+          </button>
         </div>
 
 
