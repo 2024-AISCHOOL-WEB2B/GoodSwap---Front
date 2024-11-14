@@ -14,9 +14,9 @@ export default {
         ],
       },
       colors: {
-        light: "#ffffff",
-        primary: "#fcc89b",
-        hoverPrimary: "#ff5fa2",
+        customBackground: "rgb(246, 246, 250)",
+        custom_appricot: "#fcc89b",
+        custom_magenta: "#ff5fa2",
       },
     },
   },
