@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from "react";
 
 interface InfiniteScrollProps {
   loadMore: () => void;
@@ -7,7 +7,7 @@ interface InfiniteScrollProps {
   scrollableTarget?: string;
 }
 
-const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
+export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   loadMore,
   hasMore,
   children,
@@ -21,9 +21,14 @@ const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
     if (!target) return;
 
     // `window` 객체와 `HTMLElement`를 구분하여 처리
-    const scrollTop = target instanceof Window ? window.scrollY : target.scrollTop;
-    const scrollHeight = target instanceof Window ? document.documentElement.scrollHeight : target.scrollHeight;
-    const clientHeight = target instanceof Window ? window.innerHeight : target.clientHeight;
+    const scrollTop =
+      target instanceof Window ? window.scrollY : target.scrollTop;
+    const scrollHeight =
+      target instanceof Window
+        ? document.documentElement.scrollHeight
+        : target.scrollHeight;
+    const clientHeight =
+      target instanceof Window ? window.innerHeight : target.clientHeight;
 
     // 스크롤 위치가 끝에 도달했을 때
     if (scrollTop + clientHeight >= scrollHeight - 1 && hasMore) {
@@ -32,16 +37,16 @@ const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   }, [hasMore, loadMore, scrollableTarget]);
 
   useEffect(() => {
-    const target = scrollableTarget ? document.getElementById(scrollableTarget) : window;
+    const target = scrollableTarget
+      ? document.getElementById(scrollableTarget)
+      : window;
     if (!target) return;
 
-    target.addEventListener('scroll', handleScroll);
+    target.addEventListener("scroll", handleScroll);
     return () => {
-      target.removeEventListener('scroll', handleScroll);
+      target.removeEventListener("scroll", handleScroll);
     };
   }, [handleScroll, scrollableTarget]);
 
   return <div>{children}</div>;
 };
-
-export default InfiniteScroll;

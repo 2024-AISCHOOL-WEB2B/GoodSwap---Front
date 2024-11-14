@@ -1,15 +1,20 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 
 const ImageUploader: React.FC = () => {
-  const [imageFile, setImageFile] = useState<{ imageFile: File | null; viewUrl: string }>({
+  const [imageFile, setImageFile] = useState<{
+    imageFile: File | null;
+    viewUrl: string;
+  }>({
     imageFile: null,
-    viewUrl: '',
+    viewUrl: "",
   });
   const [loaded, setLoaded] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   // 이미지 업로드 핸들러
-  const onChangeUploadHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeUploadHandler = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     e.preventDefault();
     const file = e.target.files?.[0];
 
@@ -29,29 +34,29 @@ const ImageUploader: React.FC = () => {
 
       // 서버로 이미지 업로드
       const formData = new FormData();
-      formData.append('image', file);
+      formData.append("image", file);
 
       try {
-        const response = await fetch('http://localhost:8080/api/upload', {
-          method: 'POST',
+        const response = await fetch("http://localhost:8080/api/upload", {
+          method: "POST",
           body: formData,
         });
 
         if (response.ok) {
           const data = await response.json();
-          console.log('서버 URL:', data.url);
+          console.log("서버 URL:", data.url);
         } else {
-          console.error('이미지 업로드 실패:', response.statusText);
+          console.error("이미지 업로드 실패:", response.statusText);
         }
       } catch (error) {
-        console.error('이미지 업로드 중 오류 발생:', error);
+        console.error("이미지 업로드 중 오류 발생:", error);
       }
     }
   };
 
   // 이미지 삭제 핸들러
   const onClickDeleteHandler = () => {
-    setImageFile({ imageFile: null, viewUrl: '' });
+    setImageFile({ imageFile: null, viewUrl: "" });
     setLoaded(false);
   };
 
@@ -62,9 +67,16 @@ const ImageUploader: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <label htmlFor="image-upload" className="size-60 border-2 border-dashed border-gray-400 rounded-lg cursor-pointer flex items-center justify-center overflow-hidden">
+      <label
+        htmlFor="image-upload"
+        className="size-60 border-2 border-dashed border-gray-400 rounded-lg cursor-pointer flex items-center justify-center overflow-hidden"
+      >
         {loaded && imageFile.viewUrl ? (
-          <img src={imageFile.viewUrl} alt="미리보기" className="size-full object-cover" />
+          <img
+            src={imageFile.viewUrl}
+            alt="미리보기"
+            className="size-full object-cover"
+          />
         ) : (
           <span className="text-gray-500">상품 이미지 업로드</span>
         )}
@@ -91,4 +103,4 @@ const ImageUploader: React.FC = () => {
   );
 };
 
-export default ImageUploader;
+export { ImageUploader };
