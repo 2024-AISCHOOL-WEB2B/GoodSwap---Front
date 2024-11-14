@@ -129,9 +129,11 @@ const PostCreate: React.FC = () => {
           <div className="text-green-500 w-[51px] h-4" />
          </div>
 
-         <div onClick={handleGoBack} className="text-black text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[calc(50%_-_-173px)] top-[calc(50%_-_-431.5px)] w-[53px] h-5 flex items-center justify-center">
+         <button 
+         onClick={handleGoBack} 
+         className="text-black text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[calc(50%_-_-173px)] top-[calc(50%_-_-431.5px)] w-[53px] h-5 flex items-center justify-center">
             취소
-         </div>
+         </button>
         </div>
 
 

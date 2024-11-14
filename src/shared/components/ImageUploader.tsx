@@ -32,7 +32,7 @@ const ImageUploader: React.FC = () => {
       formData.append('image', file);
 
       try {
-        const response = await fetch('http://localhost:5000/api/upload', {
+        const response = await fetch('http://localhost:8080/api/upload', {
           method: 'POST',
           body: formData,
         });
@@ -66,7 +66,7 @@ const ImageUploader: React.FC = () => {
         {loaded && imageFile.viewUrl ? (
           <img src={imageFile.viewUrl} alt="미리보기" className="size-full object-cover" />
         ) : (
-          <span className="text-gray-500">이미지 업로드</span>
+          <span className="text-gray-500">상품 이미지 업로드</span>
         )}
       </label>
       <input
