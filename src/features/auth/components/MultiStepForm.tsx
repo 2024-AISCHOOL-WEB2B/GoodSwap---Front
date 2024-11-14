@@ -1,49 +1,64 @@
 // src/features/auth/components/MultiStepForm.tsx
 
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAtom } from "jotai";
+import { emailAtom, passwordAtom, usernameAtom } from "../atoms/auth";
 import { EmailStep } from "./EmailStep";
 import { PasswordStep } from "./PasswordStep";
 import { UsernameStep } from "./UsernameStep";
+import { FormLayout } from "../../../widgets/FormLayout";
+import { Modal } from "../../../widgets/Modal";
 
-// 각 단계에 대한 타입 정의
 type Step = "email" | "password" | "username";
 
-type MultiStepFormProps = {
-  setTitle: (title: string) => void;
-};
-
-// `MultiStepForm` 컴포넌트 정의
-const MultiStepForm: React.FC<MultiStepFormProps> = ({ setTitle }) => {
-  // 현재 스텝 상태 관리
+const MultiStepForm: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<Step>("email");
+  const [, setEmail] = useAtom(emailAtom);
+  const [, setPassword] = useAtom(passwordAtom);
+  const [, setUsername] = useAtom(usernameAtom);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
 
-  // 다음 스텝으로 이동하는 함수
+  // 페이지 이탈 시 상태 초기화
+  useEffect(() => {
+    return () => {
+      setEmail(null);
+      setPassword(null);
+      setUsername(null);
+    };
+  }, [location.pathname, setEmail, setPassword, setUsername]);
+
+  const titleMap: Record<Step, string> = {
+    email: "새로운 이메일 주소로 회원가입 해주세요",
+    password: "새로운 비밀번호를 설정해주세요",
+    username: "닉네임을 설정해주세요",
+  };
+
+  useLayoutEffect(() => {
+    document.documentElement.style.backgroundColor = "rgb(250, 250, 250)";
+    document.body.style.backgroundColor = "rgb(250, 250, 250)";
+
+    return () => {
+      document.documentElement.style.backgroundColor = "";
+      document.body.style.backgroundColor = "";
+    };
+  }, []);
+
   const goToNextStep = () => {
-    if (currentStep === "email") {
-      setCurrentStep("password");
-      setTitle("새로운 비밀번호를 설정하세요");
-    } else if (currentStep === "password") {
-      setCurrentStep("username");
-      setTitle("닉네임을 입력해주세요");
-    }
+    if (currentStep === "email") setCurrentStep("password");
+    else if (currentStep === "password") setCurrentStep("username");
   };
 
-  // 이전 스텝으로 이동하는 함수
   const goToPreviousStep = () => {
-    if (currentStep === "username") {
-      setCurrentStep("password");
-      setTitle("새로운 비밀번호를 설정하세요");
-    } else if (currentStep === "password") {
-      setCurrentStep("email");
-      setTitle("새로운 이메일 주소로 회원가입 해주세요");
-    }
+    if (currentStep === "password") setCurrentStep("email");
+    else if (currentStep === "username") setCurrentStep("password");
   };
 
-  // 각 스텝 컴포넌트 렌더링
   const renderStep = () => {
     switch (currentStep) {
       case "email":
-        setTitle("새로운 이메일 주소로 회원가입 해주세요");
         return <EmailStep onNext={goToNextStep} />;
       case "password":
         return (
@@ -51,14 +66,28 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ setTitle }) => {
         );
       case "username":
         return (
-          <UsernameStep onNext={goToNextStep} onPrevious={goToPreviousStep} />
+          <UsernameStep
+            onPrevious={goToPreviousStep}
+            onSuccess={() => setShowCompletionModal(true)} // 성공 시 모달 표시
+          />
         );
-      default:
-        return null;
     }
   };
 
-  return <>{renderStep()}</>;
+  return (
+    <FormLayout title={titleMap[currentStep]}>
+      {renderStep()}
+      {showCompletionModal && (
+        <Modal
+          isVisible={showCompletionModal}
+          onClose={() => navigate("/login")}
+          buttonText="로그인 이동" // 버튼 텍스트를 '로그인 이동'으로 설정
+        >
+          <p>회원가입이 완료되었습니다. 로그인 해주세요.</p>
+        </Modal>
+      )}
+    </FormLayout>
+  );
 };
 
 export { MultiStepForm };
