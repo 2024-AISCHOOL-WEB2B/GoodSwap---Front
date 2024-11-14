@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface BackgroundFrameProps {
   className?: string;
@@ -12,4 +12,4 @@ const BackgroundFrame: React.FC<BackgroundFrameProps> = ({ className }) => {
   );
 };
 
-export default BackgroundFrame;
+export { BackgroundFrame };

@@ -1,5 +1,5 @@
 // src/shared/components/BackgroundImage.tsx
-import React from 'react';
+import React from "react";
 
 interface BackgroundImageProps {
   src: string;
@@ -7,7 +7,11 @@ interface BackgroundImageProps {
   className?: string;
 }
 
-const BackgroundImage: React.FC<BackgroundImageProps> = ({ src, alt = "background", className }) => {
+const BackgroundImage: React.FC<BackgroundImageProps> = ({
+  src,
+  alt = "background",
+  className,
+}) => {
   return (
     <div className={`absolute inset-0 size-full -z-10 ${className}`}>
       <img className="size-full object-cover" src={src} alt={alt} />
@@ -15,4 +19,4 @@ const BackgroundImage: React.FC<BackgroundImageProps> = ({ src, alt = "backgroun
   );
 };
 
-export default BackgroundImage;
+export { BackgroundImage };

@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAtom } from 'jotai';
-import Header from '../../shared/components/Header';
-import InfiniteScroll from '../../features/post/components/InfiniteScroll';
-import useTemporaryPosts from '../../features/post/hooks/useTemporaryPosts';
-import ArtistDropdown from '../../shared/components/ArtistDropdown';
-import { selectedArtistAtom } from '../../shared/state/artistState';
-import BackgroundFrame from '../../shared/components/BackgroundFrame';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAtom } from "jotai";
+import { Header } from "../../shared/components/Header";
+import { InfiniteScroll } from "../../features/post/components/InfiniteScroll";
+import { useTemporaryPosts } from "../../features/post/hooks/useTemporaryPosts";
+import { ArtistDropdown } from "../../shared/components/ArtistDropdown";
+import { selectedArtistAtom } from "../../shared/state/artistState";
+import { BackgroundFrame } from "../../shared/components/BackgroundFrame";
 
 const GoodsPostPage = () => {
   const goodsPosts = useTemporaryPosts(30);
@@ -41,7 +41,10 @@ const GoodsPostPage = () => {
         <BackgroundFrame />
       </div>
 
-      <div id="scrollableDiv" className="relative w-[768px] h-[1023px] bg-white overflow-y-scroll scrollbar-hide">
+      <div
+        id="scrollableDiv"
+        className="relative w-[768px] h-[1023px] bg-white overflow-y-scroll scrollbar-hide"
+      >
         <Header />
 
         {/* 아티스트 게시판 */}
@@ -77,7 +80,7 @@ const GoodsPostPage = () => {
         {/* 게시글 작성 버튼 */}
         <div className="absolute top-[147px] left-[627px] z-40">
           <button
-            onClick={() => navigate('/goods-post-create')}
+            onClick={() => navigate("/goods-post-create")}
             className="flex items-center justify-center w-[95px] h-[26px] bg-white border border-black rounded font-semibold text-black"
           >
             게시글 작성
@@ -87,14 +90,20 @@ const GoodsPostPage = () => {
         {/* PostListPage로 돌아가는 버튼 */}
         <div
           className="absolute flex flex-col gap-1 left-[27px] top-[147px] w-[185px] h-[32px] bg-white border rounded cursor-pointer z-40"
-          onClick={() => navigate('/postlist')}
+          onClick={() => navigate("/postlist")}
         >
-          <p className="text-gray-700 font-medium text-center">자유 게시판 이동</p>
+          <p className="text-gray-700 font-medium text-center">
+            자유 게시판 이동
+          </p>
         </div>
 
         {/* 검색 입력 필드 */}
         <div className="absolute top-[146px] left-[369px] flex items-center gap-2 p-2 w-[248px] h-[29px] bg-white border border-gray-400 rounded-lg z-40">
-          <img className="size-6" src="/PostList/icon-feather-icon12.svg" alt="search icon" />
+          <img
+            className="size-6"
+            src="/PostList/icon-feather-icon12.svg"
+            alt="search icon"
+          />
           <input
             type="text"
             placeholder="Search..."
@@ -103,7 +112,11 @@ const GoodsPostPage = () => {
         </div>
 
         {/* 게시글 표시 영역 */}
-        <InfiniteScroll loadMore={loadMorePosts} hasMore={hasMore} scrollableTarget="scrollableDiv">
+        <InfiniteScroll
+          loadMore={loadMorePosts}
+          hasMore={hasMore}
+          scrollableTarget="scrollableDiv"
+        >
           <div className="grid grid-cols-3 gap-20 absolute top-[188px] left-[76px]">
             {filteredPosts.map((post) => (
               <div
@@ -112,9 +125,17 @@ const GoodsPostPage = () => {
                 onClick={() => navigate(`/goods-post/${post.id}`)}
               >
                 {post.imageUrl ? (
-                  <img className="size-full object-cover" src={post.imageUrl} alt={`Goods post ${post.id}`} />
+                  <img
+                    className="size-full object-cover"
+                    src={post.imageUrl}
+                    alt={`Goods post ${post.id}`}
+                  />
                 ) : (
-                  <img className="size-full object-cover" src="/GoodsPostPage/icon-feather-icon3.svg" alt="default icon" />
+                  <img
+                    className="size-full object-cover"
+                    src="/GoodsPostPage/icon-feather-icon3.svg"
+                    alt="default icon"
+                  />
                 )}
               </div>
             ))}
@@ -125,4 +146,4 @@ const GoodsPostPage = () => {
   );
 };
 
-export default GoodsPostPage;
+export { GoodsPostPage };

@@ -1,7 +1,7 @@
 // src/app/App.tsx
 
 import { useLayoutEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { MainPage } from "../pages/MainPage";
 import { LoginForm } from "../features/auth/components/LoginForm";
 import { ResetPasswordForm } from "../features/auth/components/ResetPasswordForm";
@@ -15,6 +15,12 @@ import {
 import { setupInterceptors } from "../features/auth/APIs/axiosInstance";
 import { logout } from "../features/auth/APIs/logout"; // 로그아웃 함수 임포트
 import { getAccessToken } from "../features/auth/utils/tokenUtils";
+import { PostListPage } from "../pages/post/PostListPage";
+import { PostCreate } from "../pages/post/PostCreate";
+import { GoodsPostPage } from "../pages/post/GoodsPostPage";
+import { GoodsPost } from "../pages/post/GoodsPost";
+import { Post } from "../pages/post/Post";
+import { GoodsPostCreate } from "../pages/post/GoodsPostCreate";
 
 function App() {
   const isAuthenticated = useAtomValue(isAuthenticatedAtom);
@@ -45,25 +51,29 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <MainPage isLoggedIn={isAuthenticated} onLogout={handleLogout} />
-          }
-        />
-        <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
-        <Route
-          path="/main"
-          element={
-            <MainPage isLoggedIn={isAuthenticated} onLogout={handleLogout} />
-          }
-        />
-        <Route path="/signup" element={<MultiStepForm />} />
-        <Route path="/auth/reset-password" element={<ResetPasswordForm />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <MainPage isLoggedIn={isAuthenticated} onLogout={handleLogout} />
+        }
+      />
+      <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+      <Route
+        path="/main"
+        element={
+          <MainPage isLoggedIn={isAuthenticated} onLogout={handleLogout} />
+        }
+      />
+      <Route path="/signup" element={<MultiStepForm />} />
+      <Route path="/auth/reset-password" element={<ResetPasswordForm />} />
+      <Route path="/postlist" element={<PostListPage />} />
+      <Route path="/post/create" element={<PostCreate />} />
+      <Route path="/post/:postId" element={<Post />} />
+      <Route path="/goods-post" element={<GoodsPostPage />} />
+      <Route path="/goods-post/:postId" element={<GoodsPost />} />
+      <Route path="/goods-post-create" element={<GoodsPostCreate />} />
+    </Routes>
   );
 }
 

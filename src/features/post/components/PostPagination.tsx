@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface PostPaginationProps {
   totalPosts: number;
@@ -7,7 +7,12 @@ interface PostPaginationProps {
   setCurrentPage: (pageNumber: number) => void;
 }
 
-const PostPagination: React.FC<PostPaginationProps> = ({ totalPosts, postsPerPage, currentPage, setCurrentPage }) => {
+const PostPagination: React.FC<PostPaginationProps> = ({
+  totalPosts,
+  postsPerPage,
+  currentPage,
+  setCurrentPage,
+}) => {
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
@@ -18,7 +23,10 @@ const PostPagination: React.FC<PostPaginationProps> = ({ totalPosts, postsPerPag
     <nav className="flex justify-center mt-5">
       <ul className="flex gap-2">
         {pageNumbers.map((number) => (
-          <li key={number} className={`${number === currentPage ? 'font-bold text-blue-600' : ''}`}>
+          <li
+            key={number}
+            className={`${number === currentPage ? "font-bold text-blue-600" : ""}`}
+          >
             <button
               onClick={() => setCurrentPage(number)}
               className="px-3 py-1 bg-gray-100 border border-gray-300 rounded hover:bg-gray-200"
@@ -32,4 +40,4 @@ const PostPagination: React.FC<PostPaginationProps> = ({ totalPosts, postsPerPag
   );
 };
 
-export default PostPagination;
+export { PostPagination };

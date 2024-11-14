@@ -1,28 +1,26 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import Header from '../../shared/components/Header';
-import BackgroundFrame from '../../shared/components/BackgroundFrame';
+import React from "react";
+import { useParams } from "react-router-dom";
+import { Header } from "../../shared/components/Header";
+import { BackgroundFrame } from "../../shared/components/BackgroundFrame";
 
 const Post = () => {
   const { postId } = useParams<{ postId: string }>(); // URL에서 postId를 받아옴
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-gray-100">
-      
       {/* 배경 이미지 */}
       <div className="relative w-[768px] h-[1006px] bg-white border overflow-hidden">
         <BackgroundFrame />
 
         {/* 나머지 요소들 */}
         <div className="relative size-full">
+          {/* 상단 아이콘들 */}
+          <div className="relative">
+            <Header />
+          </div>
 
-        {/* 상단 아이콘들 */}
-        <div className="relative">
-          <Header />
-        </div>
-
-        {/* 카테고리 */}
-        {/* <div className="w-[130px] h-[79px]">
+          {/* 카테고리 */}
+          {/* <div className="w-[130px] h-[79px]">
             <div
               className="rounded border-solid border-black border p-2 flex flex-row items-center justify-center w-[130px] h-9 absolute left-[19px] top-20 overflow-hidden"
               style={{
@@ -33,12 +31,11 @@ const Post = () => {
               카테고리
             </div>
           </div> */}
-          
+
           {/* 게시글 제목 */}
           <div className="text-[#292c33] text-left font-['Inter-Regular',_sans-serif] text-[50px] font-normal absolute left-[31px] top-[110px] w-[573px] h-[63px] flex items-center justify-start">
             테스트 제목
           </div>
-
 
           {/* 게시자 정보 */}
           <img
@@ -57,22 +54,17 @@ const Post = () => {
 
           {/*신고*/}
           <div className="text-[rgba(41,44,51,0.59)] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[calc(50%_-_-263px)] top-[calc(50%_-_288.5px)] w-[94px] h-[34px] flex items-center justify-center">
-           신고
+            신고
           </div>
-
 
           {/* 상단 구분선 */}
           <div className="border-solid border-[rgba(0,0,0,0.46)] border-t border-x-0 border-b-0 w-[711px] h-0 absolute left-[31px] top-[273px]"></div>
 
-
           {/*내용*/}
-          <div
-          className="text-[#000000] text-left font-['Inter-SemiBold',_sans-serif] text-[55px] leading-[120%] font-semibold absolute left-[calc(50%_-_345px)] top-[calc(50%_-_215.5px)] w-[678px] h-[388px] tracking-[-0.02em]"
-          >
+          <div className="text-[#000000] text-left font-['Inter-SemiBold',_sans-serif] text-[55px] leading-[120%] font-semibold absolute left-[calc(50%_-_345px)] top-[calc(50%_-_215.5px)] w-[678px] h-[388px] tracking-[-0.02em]">
             내용
-          <br />
+            <br />
           </div>
-
 
           {/* 댓글 구분선 */}
           <div className="border-solid border-[rgba(0,0,0,0.46)] border-t border-x-0 border-b-0 w-[711px] h-0 absolute left-[31px] top-[770px]"></div>
@@ -96,7 +88,6 @@ const Post = () => {
           <div className="text-[#000000] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[172px] top-[730px] size-[25px] flex items-center justify-center">
             4
           </div>
-
 
           {/* 댓글 */}
 
@@ -125,14 +116,10 @@ const Post = () => {
           <div className="text-[rgba(41,44,51,0.59)] text-center font-['Inter-Regular',_sans-serif] text-[15px] font-normal absolute left-[246px] top-[854px] w-24 h-8 flex items-center justify-center">
             답글 쓰기
           </div>
-
         </div>
-
-
-
       </div>
     </div>
   );
 };
 
-export default Post;
+export { Post };
