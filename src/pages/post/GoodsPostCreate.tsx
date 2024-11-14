@@ -1,15 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../shared/components/Header";
-import { QuillEditor } from "../../features/post/components/QuillEditor";
+// import { QuillEditor } from "../../features/post/components/QuillEditor";
 import { BackgroundFrame } from "../../shared/components/BackgroundFrame";
 import { ImageUploader } from "../../shared/components/ImageUploader";
 import axios from "axios";
+import Editor from "../../features/post/components/Editor"; //Editor.tsx설정
+import { useState } from "react"; //Editor.tsx설정
+
 
 //굿즈 가격, 이름, 아티스트, 카테고리 입력 필드의 데이터를 goodsPostAtom에 저장하고, GoodsPostPage에서 표시되도록 구현할 예정
 
 const GoodsPostCreate: React.FC = () => {
   const navigate = useNavigate();
+  const [content, setContent] = useState(""); //Editor.tsx설정
 
   // 뒤로가기 기능
   const handleGoBack = () => {
@@ -73,20 +77,35 @@ const GoodsPostCreate: React.FC = () => {
           </div>
 
           {/* 이미지 업로더 */}
-          <div className="absolute left-[calc(50%_-_-70px)] top-[calc(50%_-_420px)]">
+          <div className="absolute left-[calc(50%_-_-80px)] top-[calc(50%_-_430px)]">
             <ImageUploader />
           </div>
 
           {/* QuillEditor */}
           {/* <div>
             <div className="bg-[#d9d9d9] w-[666px] h-[587px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_177px)]"></div>
-          </div> */}
+          </div> 
 
           <div className="absolute left-[calc(50%_-_333px)] top-[calc(50%_-_130px)]   bg-white">
             <QuillEditor className="h-[500px]" />
+          </div> */}
+
+
+          {/* Editor 컴포넌트 사용 */}
+
+          <div className="absolute left-[calc(50%_-_333px)] top-[calc(50%_-_140px)] bg-white">
+            <Editor className="h-[500px] w-[666px]"
+              value={content}
+              onChange={(value) => setContent(value)}
+              placeholder="여기에 내용을 입력하세요..."
+            />
           </div>
 
+
+
+
           {/* 작성완료 버튼 */}
+
           <div className="rounded-lg border border-gray-400 p-4 flex items-center justify-center w-[92px] h-10 absolute left-[calc(50%_-_-259px)] top-[calc(50%_-_-421.5px)] bg-gradient-to-r from-[#08CCC8] to-[#18E79C] shadow-md">
             <button
               className="text-white flex items-center justify-center whitespace-nowrap"
@@ -96,7 +115,9 @@ const GoodsPostCreate: React.FC = () => {
             </button>
           </div>
 
+
           {/* 뒤로 가기 버튼 */}
+
           <div className="bg-white rounded-lg border border-gray-400 p-4 flex items-center justify-center w-[88px] h-10 absolute left-[calc(50%_-_-157px)] top-[calc(50%_-_-421.5px)] overflow-hidden">
             <div className="text-green-500 w-[51px] h-4" />
           </div>
