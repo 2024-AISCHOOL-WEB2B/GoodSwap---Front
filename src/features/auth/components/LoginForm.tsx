@@ -61,6 +61,10 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
     navigate("/signup");
   };
 
+  const handleForgotPasswordClick = () => {
+    navigate("/auth/reset-password"); // 비밀번호 재설정 페이지로 이동
+  };
+
   useLayoutEffect(() => {
     document.documentElement.style.backgroundColor = "rgb(250, 250, 250)";
     document.body.style.backgroundColor = "rgb(250, 250, 250)";
@@ -79,7 +83,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
           <PasswordField name="password" />
 
           <SubmitButton />
-          <ForgotPasswordText />
+          <ForgotPasswordText onClick={handleForgotPasswordClick} />
           <SignUpLink onClick={handleSignUpClick} />
         </form>
 
@@ -97,14 +101,26 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onLogin }) => {
 const SubmitButton = () => (
   <button
     type="submit"
-    className="w-full py-2 bg-gradient-to-r from-custom_magenta to-custom_appricot text-white font-semibold rounded"
+    className="w-full py-2 bg-gradient-to-r from-custom_magenta to-custom_appricot text-white font-semibold rounded transform transition-transform duration-200 hover:scale-95"
   >
     로그인
   </button>
 );
 
-const ForgotPasswordText = () => (
-  <p className="text-center mt-6">비밀번호를 잊어버리셨나요?</p>
+// ForgotPasswordText 컴포넌트 수정
+const ForgotPasswordText: React.FC<{ onClick: () => void }> = ({ onClick }) => (
+  <p className="text-center mt-6">
+    <a
+      href="#"
+      onClick={(e) => {
+        e.preventDefault();
+        onClick();
+      }}
+      className="text-black hover:underline hover:text-sm transition-all duration-200"
+    >
+      비밀번호를 잊어버리셨나요?
+    </a>
+  </p>
 );
 
 const SignUpLink: React.FC<{ onClick: () => void }> = ({ onClick }) => (
@@ -116,7 +132,7 @@ const SignUpLink: React.FC<{ onClick: () => void }> = ({ onClick }) => (
         e.preventDefault();
         onClick();
       }}
-      className="text-custom_magenta font-semibold"
+      className="text-custom_magenta font-semibold hover:underline"
     >
       덕업일치 계정으로 가입하기
     </a>

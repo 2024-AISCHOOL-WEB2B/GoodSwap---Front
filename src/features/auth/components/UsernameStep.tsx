@@ -101,7 +101,7 @@ const UsernameStep: React.FC<UsernameStepProps> = ({
         </div>
         <button
           type="submit"
-          className="w-full py-2 bg-gradient-to-r from-custom_magenta to-custom_appricot text-white font-semibold rounded"
+          className="w-full py-2 bg-gradient-to-r from-custom_magenta to-custom_appricot text-white font-semibold rounded transform transition-transform duration-200 hover:scale-95"
         >
           가입하기
         </button>

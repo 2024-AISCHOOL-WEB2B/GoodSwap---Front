@@ -1,8 +1,10 @@
 // src/app/App.tsx
+
 import { useLayoutEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MainPage } from "../pages/MainPage";
 import { LoginForm } from "../features/auth/components/LoginForm";
+import { ResetPasswordForm } from "../features/auth/components/ResetPasswordForm";
 import { MultiStepForm } from "../features/auth/components/MultiStepForm";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
@@ -59,6 +61,7 @@ function App() {
           }
         />
         <Route path="/signup" element={<MultiStepForm />} />
+        <Route path="/auth/reset-password" element={<ResetPasswordForm />} />
       </Routes>
     </Router>
   );
