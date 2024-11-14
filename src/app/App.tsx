@@ -26,7 +26,6 @@ function App() {
     const savedAccessToken = localStorage.getItem("accessToken");
     if (savedAccessToken) {
       setLogin(savedAccessToken); // 로그인 상태 복원
-    }
 
     // 인터셉터 설정 시 setLogout 전달
     setupInterceptors(setLogout);
