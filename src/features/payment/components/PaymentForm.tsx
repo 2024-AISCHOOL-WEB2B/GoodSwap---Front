@@ -79,7 +79,6 @@ export const PaymentForm = () => {
             postCode: postCode,
             request: memo,
         });
-        console.log('배송 정보 등록됨:', { name, phone, address, detailAddr, postCode, memo });
         closeModal(); // 모달 닫기
     };
 
@@ -108,35 +107,35 @@ export const PaymentForm = () => {
         }
 
         // PortOne 결제 요청
-        // const { IMP } = window;
-        // if (IMP) {
-        //     IMP.request_pay(
-        //         {
-        //             pg: 'html5_inicis', // 결제 PG사
-        //             pay_method: paymentMethod, // 결제 방법
-        //             merchant_uid: `mid_${new Date().getTime()}`, // 고유 주문 번호
-        //             name: orderInfo.selectedProduct.goods_name, // 상품명
-        //             amount: totalAmount, // 결제 금액
-        //             buyer_name: orderInfo.receiverName, // 구매자 이름
-        //             buyer_tel: orderInfo.receiverPhone, // 구매자 전화번호
-        //             buyer_postcode: orderInfo.postCode, // 구매자 우편번호
-        //             buyer_addr: orderInfo.deliveryAddr, // 구매자 주소
-        //         },
-        //         (response) => {
-        //             if (response.success) {
-        //                 alert('결제 성공');
-        //                 console.log('결제 성공:', response);
-        //                 window.location.href = '/payment-success'; // 결제 성공 페이지로 이동
-        //             } else {
-        //                 alert(`결제 실패: ${response.error_msg}`);
-        //                 console.log('결제 실패:', response.error_msg);
-        //             }
-        //         }
-        //     );
-        // } else {
-        //     alert('결제 모듈 로딩에 실패했습니다.');
-        //     console.error('포트원 모듈이 로드되지 않았습니다.');
-        // }
+        const { IMP } = window;
+        if (IMP) {
+            IMP.request_pay(
+                {
+                    pg: 'html5_inicis', // 결제 PG사
+                    pay_method: paymentMethod, // 결제 방법
+                    merchant_uid: `mid_${new Date().getTime()}`, // 고유 주문 번호
+                    name: orderInfo.selectedProduct.goods_name, // 상품명
+                    amount: totalAmount, // 결제 금액
+                    buyer_name: orderInfo.receiverName, // 구매자 이름
+                    buyer_tel: orderInfo.receiverPhone, // 구매자 전화번호
+                    buyer_postcode: orderInfo.postCode, // 구매자 우편번호
+                    buyer_addr: orderInfo.deliveryAddr, // 구매자 주소
+                },
+                (response) => {
+                    if (response.success) {
+                        alert('결제 성공');
+                        console.log('결제 성공:', response);
+                        window.location.href = '/payment-success'; // 결제 성공 페이지로 이동
+                    } else {
+                        alert(`결제 실패: ${response.error_msg}`);
+                        console.log('결제 실패:', response.error_msg);
+                    }
+                }
+            );
+        } else {
+            alert('결제 모듈 로딩에 실패했습니다.');
+            console.error('포트원 모듈이 로드되지 않았습니다.');
+        }
     };
 
     return (

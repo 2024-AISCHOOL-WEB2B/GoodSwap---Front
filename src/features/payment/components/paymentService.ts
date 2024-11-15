@@ -1,6 +1,6 @@
 // src/features/payment/components/paymentService.ts
 
-import axiosInstance from './axiosInstance';
+import axiosInstance from '../components/axiosInstance';
 import { PaymentRequestData, PaymentResponse } from '../entities/apiTypes';
 
 export const submitPayment = async (data: PaymentRequestData): Promise<PaymentResponse> => {
