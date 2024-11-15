@@ -5,7 +5,7 @@ import { MainPage } from '../pages/MainPage';
 import { LoginForm } from '../features/auth/components/LoginForm';
 import { useAtom } from 'jotai';
 import { isLoggedInAtom } from '../features/atoms/auth';
-import PaymentForm from '../features/payment/components/PaymentForm';
+import { PaymentForm } from '../features/payment/components/PaymentForm';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);

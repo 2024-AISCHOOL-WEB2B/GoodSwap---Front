@@ -1,12 +1,13 @@
 {
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "types": ["node"],
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "strict": true,
-    "skipLibCheck": false,
-    "baseUrl": "."
-  },
-  "include": ["src/**/*"] // src 디렉토리 안의 모든 파일 포함
+    "compilerOptions": {
+        "jsx": "react-jsx",
+        "types": ["node"],
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true,
+        "strict": true,
+        "skipLibCheck": false,
+        "baseUrl": ".",
+        "typeRoots": ["./node_modules/@types", "./src"] // 추가
+    },
+    "include": ["src/**/*.ts", "src/**/*.tsx", "src/global.d.ts"] // 이미 src 전체가 포함되어 있으면 유지
 }
