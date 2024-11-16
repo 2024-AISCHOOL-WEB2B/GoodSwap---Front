@@ -44,30 +44,57 @@ export const ResetPasswordForm: React.FC = () => {
   const { handleSubmit, register, watch, reset } = methods;
   const email = watch("email");
 
+  // 타이머 관리
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
-    if (isCodeSent && timeLeft > 0) {
+    if (timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
-    } else if (timeLeft === 0) {
+    } else {
       setIsCodeSent(false);
-      setTimeLeft(300);
+      setTimeLeft(0);
     }
 
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [isCodeSent, timeLeft]);
+  }, [timeLeft]);
 
+  // Polling으로 Redis TTL 동기화
+  useEffect(() => {
+    let pollingInterval: NodeJS.Timeout | null = null;
+
+    if (isCodeSent && !isCodeValidated) {
+      pollingInterval = setInterval(async () => {
+        try {
+          const response = await apiClient.get(
+            "/auth/reset-password/remaining-time",
+            {
+              params: { email },
+            }
+          );
+          setTimeLeft(response.data.remainingTime);
+        } catch {
+          setTimeLeft(0); // 에러 시 타이머 초기화
+        }
+      }, 20000); // 20초 간격으로 TTL 확인
+    }
+
+    return () => {
+      if (pollingInterval) clearInterval(pollingInterval);
+    };
+  }, [isCodeSent, isCodeValidated, email]);
+
+  // 인증 요청 시 타임스탬프 동기화 및 에러 초기화
   const onSubmit = async (data: ResetPasswordSchema) => {
     try {
       await apiClient.post("/auth/reset-password/request", {
         email: data.email,
       });
       setIsCodeSent(true);
-      setErrorMessage(null);
       setShowModal(false);
+      setErrorMessage(null);
     } catch (error) {
       const axiosError = error as AxiosError;
       if (axiosError.response?.status === 404) {
@@ -76,9 +103,11 @@ export const ResetPasswordForm: React.FC = () => {
         setErrorMessage("인증 요청 중 문제가 발생했습니다. 다시 시도해주세요.");
       }
       setShowModal(true);
+      reset();
     }
   };
 
+  // 인증 코드 제출 시 유효성 검증 및 실패 시 상태 초기화
   const onCodeSubmit = async () => {
     const resetCode = methods.getValues("resetCode");
     try {
@@ -87,14 +116,16 @@ export const ResetPasswordForm: React.FC = () => {
         resetCode,
       });
       setIsCodeValidated(true);
-      setErrorMessage(null);
+      setErrorMessage(null); // 에러 초기화
     } catch {
       setErrorMessage("인증 코드가 일치하지 않습니다.");
       setShowModal(true);
       methods.setValue("resetCode", ""); // 인증 실패 시 resetCode 초기화
+      setIsCodeSent(false); // 이메일 입력란과 인증 버튼 재활성화
     }
   };
 
+  // 비밀번호 재설정 실패 시 비밀번호 필드 초기화
   const onPasswordSubmit = async (data: PasswordConfirmationSchema) => {
     try {
       await apiClient.post("/auth/reset-password/update", {
@@ -108,6 +139,7 @@ export const ResetPasswordForm: React.FC = () => {
     } catch {
       setErrorMessage("비밀번호 재설정에 실패했습니다. 다시 시도해주세요.");
       setShowModal(true);
+      passwordMethods.reset(); // 비밀번호 필드 초기화
     }
   };
 
@@ -125,6 +157,21 @@ export const ResetPasswordForm: React.FC = () => {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
+  // 페이지 이탈 경고 표시
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      const confirmationMessage =
+        "진행 중인 작업이 초기화됩니다. 이동하시겠습니까?";
+      event.preventDefault();
+      event.returnValue = confirmationMessage;
+      return confirmationMessage;
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   return (
     <FormProvider {...methods}>
       <FormLayout title="비밀번호 재설정">
@@ -133,6 +180,7 @@ export const ResetPasswordForm: React.FC = () => {
           <button
             type="submit"
             className="w-full py-2 bg-gradient-to-r from-custom_magenta to-custom_appricot text-white font-semibold rounded mt-4"
+            disabled={isCodeSent} // 인증 후 버튼 비활성화
           >
             이메일 인증
           </button>
