@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { orderInfoAtom } from '../atoms/orderAtom';
 import { Modal } from '../../../widgets/Modal';
-import axiosInstance from './axiosInstance';
+import axiosInstance from '../components/axiosInstance';
 
 export const PaymentForm = () => {
     // 전역 상태에서 주문 정보 가져오기

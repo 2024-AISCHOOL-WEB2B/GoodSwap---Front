@@ -28,11 +28,5 @@ declare global {
                 }) => void
             ) => void;
         };
-        kakaoPostcode?: {
-            Postcode: new (options: {
-                oncomplete: (data: { address: string; zonecode: string }) => void;
-                onclose?: () => void;
-            }) => { open(): void };
-        };
     }
 }
