@@ -1,6 +1,6 @@
 // src/features/payment/components/paymentService.ts
 
-import axiosInstance from '../components/axiosInstance';
+import axiosInstance from './axiosInstance';
 import { PaymentRequestData, PaymentResponse } from '../entities/apiTypes';
 
 export const submitPayment = async (data: PaymentRequestData): Promise<PaymentResponse> => {
@@ -12,3 +12,4 @@ export const submitPayment = async (data: PaymentRequestData): Promise<PaymentRe
         throw new Error('Payment submission failed');
     }
 };
+// src/features/payment/components/paymentService.ts
