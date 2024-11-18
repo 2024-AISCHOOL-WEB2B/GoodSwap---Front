@@ -4,31 +4,29 @@ import React from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PasswordField } from "../shared/PasswordField";
-import { useSessionStorage } from "../hooks/useSessionStorage";
+import { useAtom } from "jotai";
 import { passwordConfirmationSchema } from "../entities/UserSchema";
+import { passwordAtom } from "../atoms/auth";
 
-// `PasswordStep` 컴포넌트 타입 정의
 type PasswordStepProps = {
-  onNext: () => void; // 다음 스텝으로 이동하는 콜백 함수
-  onPrevious: () => void; // 이전 단계로 이동하는 콜백 함수
+  onNext: () => void;
+  onPrevious: () => void;
 };
 
 const PasswordStep: React.FC<PasswordStepProps> = ({ onNext, onPrevious }) => {
-  const [storedPassword, setStoredPassword] = useSessionStorage("password", "");
+  const [password, setPassword] = useAtom(passwordAtom);
 
-  // React Hook Form을 이용한 폼 관리
   const methods = useForm({
     resolver: zodResolver(passwordConfirmationSchema),
-    mode: "onBlur",
-    defaultValues: { password: storedPassword || "", confirmPassword: "" },
+    mode: "onChange",
+    defaultValues: { password: password || "", confirmPassword: "" },
   });
 
   const { handleSubmit } = methods;
 
-  // 폼 제출 시 호출되는 함수
   const onSubmit = (data: { password: string; confirmPassword: string }) => {
-    setStoredPassword(data.password); // 비밀번호를 세션 스토리지에 저장
-    onNext(); // 다음 스텝으로 이동
+    setPassword(data.password);
+    onNext();
   };
 
   return (
@@ -44,7 +42,7 @@ const PasswordStep: React.FC<PasswordStepProps> = ({ onNext, onPrevious }) => {
         />
         <button
           type="submit"
-          className="w-full py-2 bg-gradient-to-r from-custom_magenta to-custom_appricot text-white font-semibold rounded"
+          className="w-full py-2 bg-gradient-to-r from-custom_magenta to-custom_appricot text-white font-semibold rounded transform transition-transform duration-200 hover:scale-95"
         >
           다음
         </button>

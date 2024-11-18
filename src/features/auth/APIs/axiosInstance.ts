@@ -1,52 +1,47 @@
 // src/features/auth/APIs/axiosInstance.ts
-
-import axios, { AxiosInstance } from "axios";
-
-// Axios 인스턴스를 생성하는 팩토리 함수
-export const createAxiosInstance = (baseURL: string): AxiosInstance => {
-  const instance = axios.create({
-    baseURL,
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  });
-
-  // JWT 토큰을 헤더에 추가하는 요청 인터셉터 설정 (임시 주석 처리)
-  /*
-  instance.interceptors.request.use(
-    (config) => {
-      const storedToken = localStorage.getItem("jwtToken");
-      if (storedToken) {
-        config.headers["Authorization"] = `Bearer ${storedToken}`;
-      }
-      return config;
-    },
-    (error) => {
-      console.error("Request error:", error);
-      return Promise.reject(error);
-    }
-  );
-
-  // 응답 인터셉터를 추가하여 body로 토큰을 받는 경우 처리 (임시 주석 처리)
-  instance.interceptors.response.use(
+import axios from "axios";
+import { setAccessToken } from "../utils/tokenUtils"; // 토큰 관리 유틸리티
+const apiClient = axios.create({
+  baseURL: "http://localhost:8081",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true, // 쿠키 포함 설정
+});
+// 401 에러 발생 시 refresh token으로 access token 재발급
+export const setupInterceptors = (setLogout: () => void) => {
+  apiClient.interceptors.response.use(
     (response) => {
-      if (response.data && response.data.token) {
-        localStorage.setItem("jwtToken", response.data.token);
-      }
+      const accessToken = response.headers["authorization"]?.split(" ")[1];
+      if (accessToken) setAccessToken(accessToken); // access token 저장
+
       return response;
     },
-    (error) => {
-      if (error.response?.status === 403) {
-        console.error("Access denied: Unauthorized or invalid token.");
+    async (error) => {
+      const originalRequest = error.config;
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        try {
+          const { headers } = await axios.post(
+            "/auth/refresh",
+            {},
+            { withCredentials: true }
+          );
+          const newAccessToken = headers["authorization"]?.split(" ")[1];
+          if (newAccessToken) {
+            setAccessToken(newAccessToken);
+            apiClient.defaults.headers.common["Authorization"] =
+              `Bearer ${newAccessToken}`;
+          }
+          return apiClient(originalRequest);
+        } catch (tokenError) {
+          setLogout(); // 컴포넌트에서 전달된 로그아웃 함수 호출
+          return Promise.reject(tokenError);
+        }
       }
       return Promise.reject(error);
     }
   );
-  */
-
-  return instance;
 };
 
-// 기본 인스턴스 생성
-export const axiosInstance = createAxiosInstance("http://localhost:8081");
+export { apiClient };

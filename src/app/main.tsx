@@ -1,7 +1,7 @@
 // src/app/main.tsx
-
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import { Provider } from "jotai"; // Jotai Provider 추가
 import { App } from "./App";
 import "../shared/styles/index.css"; // 글로벌 스타일 적용
@@ -16,10 +16,15 @@ const rootElement = document.getElementById("root");
 createRoot(rootElement!).render(
   // "!" 타입 가드용어
   <StrictMode>
-    {/* Jotai의 전역 상태 관리 제공 */}
-    <Provider>
-      {/* App 컴포넌트를 렌더링 */}
-      <App />
-    </Provider>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
+      <Provider>
+        <App />
+      </Provider>
+    </BrowserRouter>
   </StrictMode>
 );

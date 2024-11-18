@@ -46,3 +46,10 @@ export const passwordConfirmationSchema = z
 export type PasswordConfirmationSchema = z.infer<
   typeof passwordConfirmationSchema
 >;
+
+// 비밀번호 재설정 이메일 유효성 검사 스키마 추가
+export const resetPasswordSchema = z.object({
+  email: createEmailValidation(),
+  resetCode: z.string().optional(),
+});
+export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;

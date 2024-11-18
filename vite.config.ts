@@ -1,26 +1,46 @@
+
+// vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "tailwindcss";
 import autoprefixer from "autoprefixer";
-import { nodePolyfills } from 'vite-plugin-node-polyfills'; // 이름 있는 export 사용
+import { nodePolyfills } from "vite-plugin-node-polyfills";
+
 
 export default defineConfig({
   plugins: [
     react(),
     nodePolyfills({
-      exclude: ['fs'], // fs 모듈은 브라우저에서 사용할 수 없으므로 제외
+      exclude: ["fs"],
       protocolImports: true,
     }),
   ],
   resolve: {
     alias: {
-      // Node.js 호환 모듈을 브라우저 버전으로 대체
       url: "rollup-plugin-node-polyfills/polyfills/url",
+      // ✅ 수정된 부분: react-dom/client를 react-dom으로 리다이렉트
+      'react-dom/client': 'react-dom',
     },
+  },
+  define: {
+    'process.env': {}, // ✅ process.env 문제 해결
+  },
+  optimizeDeps: {
+    include: ['sanitize-html', 'react-quill'], // ✅ react-quill을 추가하여 호환성 문제 해결
   },
   css: {
     postcss: {
       plugins: [tailwindcss, autoprefixer],
+    },
+  },
+  server: {
+    proxy: {
+      '/api': 'http://192.168.20.206:8081',
+      "/auth": {
+        target: "http://localhost:8081", // 백엔드 서버 주소
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 });

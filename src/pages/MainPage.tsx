@@ -1,5 +1,4 @@
 // MainPage Component that aggregates all components for the main view
-import React from 'react';
 import {Header} from '../features/mainPage/components/Header';
 import {Carousel} from '../features/mainPage/components/Carousel';
 import {GoodsList} from '../features/mainPage/components/GoodsList';
@@ -7,17 +6,15 @@ import {PostList} from '../features/mainPage/components/PostList';
 import {ArtistGrid} from '../features/mainPage/components/ArtistGrid';
 import {Footer} from '../features/mainPage/components/Footer';
 import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위한 useNavigate 훅 추가
+import React, { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSetAtom } from "jotai";
+import { logoutAtom } from "../features/auth/atoms/auth";
+import { logout } from "../features/auth/APIs/logout";
 
 
 export const MainPage: React.FC<{ isLoggedIn: boolean, onLogout: () => void }> = ({ isLoggedIn, onLogout }) => {
-  // useLayoutEffect(() => {
-  //   document.documentElement.style.backgroundColor = "rgb(250, 250, 250)";
-  //   document.body.style.backgroundColor = "rgb(250, 250, 250)";
-  //   return () => {
-  //     document.documentElement.style.backgroundColor = "";
-  //     document.body.style.backgroundColor = "";
-  //   };
-  // }, []);
+ 
   const navigate = useNavigate(); // 페이지 이동을 위한 navigate 함수 생성
   
   const handleViewAllGoods = () => {
@@ -35,4 +32,8 @@ export const MainPage: React.FC<{ isLoggedIn: boolean, onLogout: () => void }> =
     </div>
   );
 };
-export default MainPage;
+  
+const MainPage = React.memo(MainPageComponent);
+MainPage.displayName = "MainPage";
+
+export { MainPage };

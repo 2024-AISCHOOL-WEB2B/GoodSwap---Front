@@ -8,7 +8,8 @@
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types", "./src"] // 추가
   },
-  "include": ["src/**/*"] // src 디렉토리 안의 모든 파일 포함
+  "include": ["src/**/*", "src/shared/assets/.tsx", "src/global.d.ts"] // src 디렉토리 안의 모든 파일 포함
 }
