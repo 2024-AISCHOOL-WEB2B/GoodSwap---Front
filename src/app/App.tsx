@@ -1,5 +1,4 @@
 // src/app/App.tsx
-
 import { useLayoutEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { MainPage } from "../pages/MainPage";
@@ -73,6 +72,7 @@ function App() {
       <Route path="/goods-post" element={<GoodsPostPage />} />
       <Route path="/goods-post/:postId" element={<GoodsPost />} />
       <Route path="/goods-post-create" element={<GoodsPostCreate />} />
+      <Route path="/payment" element={<PaymentForm />} /> {/* PaymentForm 경로 추가 */}
     </Routes>
   );
 }

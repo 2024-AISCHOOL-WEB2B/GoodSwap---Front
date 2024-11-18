@@ -1,5 +1,4 @@
 // src/pages/MainPage.tsx
-
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetAtom } from "jotai";
@@ -7,8 +6,8 @@ import { logoutAtom } from "../features/auth/atoms/auth";
 import { logout } from "../features/auth/APIs/logout";
 
 interface MainPageProps {
-  isLoggedIn: boolean;
-  onLogout: () => void;
+    isLoggedIn: boolean;
+    onLogout: () => void;
 }
 
 const MainPageComponent: React.FC<MainPageProps> = ({
