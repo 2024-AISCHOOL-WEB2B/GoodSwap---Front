@@ -20,13 +20,15 @@ import { GoodsPostPage } from "../pages/post/GoodsPostPage";
 import { GoodsPost } from "../pages/post/GoodsPost";
 import { Post } from "../pages/post/Post";
 import { GoodsPostCreate } from "../pages/post/GoodsPostCreate";
+import PostDetail from '../pages/PostDetail'; // 새로운 포스트 상세 페이지 컴포넌트 추가
+import GoodsDetailPage from '../pages/GoodsDetailPage';
+import GoodsList from '../features/mainPage/components/GoodsList'; 
 
 function App() {
   const isAuthenticated = useAtomValue(isAuthenticatedAtom);
   const setLogin = useSetAtom(loginAtom);
   const setLogout = useSetAtom(logoutAtom);
 
-  // 페이지 로드 시 로그인 상태 복원
   useLayoutEffect(() => {
     const savedAccessToken = localStorage.getItem("accessToken");
     if (savedAccessToken) {
@@ -73,6 +75,9 @@ function App() {
       <Route path="/goods-post/:postId" element={<GoodsPost />} />
       <Route path="/goods-post-create" element={<GoodsPostCreate />} />
       <Route path="/payment" element={<PaymentForm />} /> {/* PaymentForm 경로 추가 */}
+      <Route path="/post/:postId" element={<PostDetail />} /> {/* 새로운 포스트 상세 페이지 추가 */}
+      <Route path="/goods/:goodId" element={<GoodsDetailPage />} />
+      <Route path="/goods" element={<GoodsList />} />
     </Routes>
   );
 }
