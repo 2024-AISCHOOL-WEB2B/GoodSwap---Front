@@ -1,12 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../shared/components/Header";
-import { QuillEditor } from "../../features/post/components/QuillEditor";
+// import { QuillEditor } from "../../features/post/components/QuillEditor";
 import { BackgroundFrame } from "../../shared/components/BackgroundFrame";
 import axios from "axios";
+import Editor from "../../features/post/components/Editor"; //Editor.tsx설정
+import { useState } from "react"; //Editor.tsx설정
+
+
 
 const PostCreate: React.FC = () => {
   const navigate = useNavigate();
+  const [content, setContent] = useState(""); //Editor.tsx설정
 
   // 뒤로가기 기능
   const handleGoBack = () => {
@@ -58,11 +63,23 @@ const PostCreate: React.FC = () => {
           {/* QuillEditor */}
           {/* <div>
             <div className="bg-[#d9d9d9] w-[666px] h-[587px] absolute left-[calc(50%_-_333px)] top-[calc(50%_-_177px)]"></div>
-          </div> */}
+          </div> 
 
           <div className="absolute left-[calc(50%_-_333px)] top-[calc(50%_-_177px)]   bg-white">
             <QuillEditor className="h-[500px]" />
-          </div>
+          </div> */}
+
+
+            {/* Editor 컴포넌트 사용 */}
+ 
+            <div className="absolute left-[calc(50%_-_333px)] top-[calc(50%_-_177px)] bg-white">
+            <Editor className="h-[500px] w-[666px]"
+              value={content}
+              onChange={(value) => setContent(value)}
+              placeholder="여기에 내용을 입력하세요..."
+            />
+            </div>
+
 
           {/* 작성완료 버튼 */}
           <div className="rounded-lg border border-gray-400 p-4 flex items-center justify-center w-[92px] h-10 absolute left-[calc(50%_-_-259px)] top-[calc(50%_-_-421.5px)] bg-gradient-to-r from-[rgba(8,204,202,1)] to-[rgba(24,231,156,1)] shadow-md">

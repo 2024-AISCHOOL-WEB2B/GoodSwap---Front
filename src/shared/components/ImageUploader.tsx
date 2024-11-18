@@ -1,3 +1,6 @@
+//참고자료 
+//https://github.com/dowork0711/react-file-uploader
+
 import React, { useState, useRef } from "react";
 
 const ImageUploader: React.FC = () => {
@@ -19,18 +22,13 @@ const ImageUploader: React.FC = () => {
     const file = e.target.files?.[0];
 
     if (file) {
-      const fileReader = new FileReader();
-
-      // 파일을 읽고 미리보기를 업데이트
-      fileReader.onload = () => {
-        setImageFile({
-          imageFile: file,
-          viewUrl: fileReader.result as string,
-        });
-        setLoaded(true);
-      };
-
-      fileReader.readAsDataURL(file);
+      // 로컬 미리보기 URL 생성
+      const localImageUrl = URL.createObjectURL(file);
+      setImageFile({
+        imageFile: file,
+        viewUrl: localImageUrl,
+      });
+      setLoaded(true);
 
       // 서버로 이미지 업로드
       const formData = new FormData();
@@ -44,12 +42,22 @@ const ImageUploader: React.FC = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("서버 URL:", data.url);
+          const serverImageUrl = data.url;
+
+          // 서버 URL로 미리보기 업데이트
+          setImageFile({
+            imageFile: file,
+            viewUrl: serverImageUrl,
+          });
+          console.log("서버 URL:", serverImageUrl);
         } else {
           console.error("이미지 업로드 실패:", response.statusText);
         }
       } catch (error) {
         console.error("이미지 업로드 중 오류 발생:", error);
+      } finally {
+        // 메모리 해제
+        URL.revokeObjectURL(localImageUrl);
       }
     }
   };
