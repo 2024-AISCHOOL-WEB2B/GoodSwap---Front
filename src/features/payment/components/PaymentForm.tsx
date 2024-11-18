@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { orderInfoAtom } from '../atoms/orderAtom';
-import { Modal } from '../../../widgets/Modal';
 import axiosInstance from '../components/axiosInstance';
+import { PaymentModal } from './PaymentModal';
 
 export const PaymentForm = () => {
     // 전역 상태에서 주문 정보 가져오기
@@ -10,7 +10,7 @@ export const PaymentForm = () => {
     // 사용자가 입력한 포인트(할인 금액)
     const [discountAmount, setDiscountAmount] = useState(orderInfo.discountAmount || 0);
     // 배송 정보 등록 모달 상태
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     // 결제 방법 상태 (간편 결제/일반 결제)
     const [paymentMethod, setPaymentMethod] = useState(orderInfo.payMethod);
     // 총 결제 금액 상태
@@ -56,9 +56,9 @@ export const PaymentForm = () => {
     };
 
     // 배송 정보 등록 모달 열기
-    const openModal = () => setIsModalOpen(true);
+    const openPaymentModal = () => setIsPaymentModalOpen(true);
     // 배송 정보 등록 모달 닫기
-    const closeModal = () => setIsModalOpen(false);
+    const closePaymentModal = () => setIsPaymentModalOpen(false);
 
     // 배송 정보 등록 핸들러
     const handleRegister = (
@@ -79,7 +79,7 @@ export const PaymentForm = () => {
             postCode: postCode,
             request: memo,
         });
-        closeModal(); // 모달 닫기
+        closePaymentModal(); // 모달 닫기
     };
 
     // 결제 버튼 클릭 핸들러
@@ -166,7 +166,7 @@ export const PaymentForm = () => {
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-xl font-semibold">배송 정보</h2>
                         <button
-                            onClick={openModal}
+                            onClick={openPaymentModal}
                             className="px-3 py-1 text-white rounded bg-gradient-to-r from-pink-400 to-orange-400"
                         >
                             {orderInfo.receiverName ? '변경하기' : '등록하기'}
@@ -267,7 +267,7 @@ export const PaymentForm = () => {
             )}
 
             {/* 배송 정보 등록 모달 */}
-            <Modal isOpen={isModalOpen} onClose={closeModal} onRegister={handleRegister} />
+            <PaymentModal isOpen={isPaymentModalOpen} onClose={closePaymentModal} onRegister={handleRegister} />
         </div>
     );
 };
