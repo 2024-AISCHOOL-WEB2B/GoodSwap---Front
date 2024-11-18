@@ -31,7 +31,7 @@ importers:
         version: 2.1.0(axios@1.7.7)
       goodswap:
         specifier: 'file:'
-        version: file:(@types/react@18.3.12)(jquery@3.7.1)(rollup@4.24.0)(tailwindcss@3.4.14)(typescript@5.6.3)(vite@5.4.10(@types/node@22.7.9))
+        version: file:(@types/react@18.3.12)(jquery@3.7.1)(rollup@4.24.0)(typescript@5.6.3)(vite@5.4.10(@types/node@22.7.9))
       jotai:
         specifier: ^2.10.1
         version: 2.10.1(@types/react@18.3.12)(react@18.3.1)
@@ -59,12 +59,12 @@ importers:
       react-hook-form:
         specifier: ^7.53.1
         version: 7.53.1(react@18.3.1)
-      react-quill:
-        specifier: ^2.0.0
-        version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-icons:
         specifier: ^5.3.0
         version: 5.3.0(react@18.3.1)
+      react-quill:
+        specifier: ^2.0.0
+        version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router-dom:
         specifier: ^6.27.0
         version: 6.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -74,15 +74,15 @@ importers:
       sanitize-html:
         specifier: ^2.13.1
         version: 2.13.1
+      slick-carousel:
+        specifier: ^1.8.1
+        version: 1.8.1(jquery@3.7.1)
       tailwind-scrollbar-hide:
         specifier: ^1.1.7
         version: 1.1.7
       tailwindcss:
         specifier: ^3.4.14
         version: 3.4.14
-      slick-carousel:
-        specifier: ^1.8.1
-        version: 1.8.1(jquery@3.7.1)
       vite-plugin-node-polyfills:
         specifier: ^0.22.0
         version: 0.22.0(rollup@4.24.0)(vite@5.4.10(@types/node@22.7.9))
@@ -159,9 +159,6 @@ importers:
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
-      tailwindcss:
-        specifier: ^3.4.14
-        version: 3.4.14
       typescript:
         specifier: ^5.6.3
         version: 5.6.3
@@ -1895,10 +1892,11 @@ packages:
   lodash.clonedeep@4.5.0:
     resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
 
-  lodash.isequal@4.5.0:
-    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
   lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+
+  lodash.isequal@4.5.0:
+    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
 
   lodash.isplainobject@4.0.6:
     resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
@@ -4393,7 +4391,7 @@ snapshots:
       define-properties: 1.2.1
       gopd: 1.0.1
 
-  goodswap@file:(@types/react@18.3.12)(jquery@3.7.1)(rollup@4.24.0)(tailwindcss@3.4.14)(typescript@5.6.3)(vite@5.4.10(@types/node@22.7.9)):
+  goodswap@file:(@types/react@18.3.12)(jquery@3.7.1)(rollup@4.24.0)(typescript@5.6.3)(vite@5.4.10(@types/node@22.7.9)):
     dependencies:
       '@hookform/resolvers': 3.9.0(react-hook-form@7.53.1(react@18.3.1))
       '@noble/secp256k1': 2.1.0
@@ -4406,14 +4404,19 @@ snapshots:
       msw: 2.5.0(typescript@5.6.3)
       path-browserify: 1.0.1
       postcss: 8.4.47
+      quill: 2.0.2
+      quill-image-resize-module-react: 3.0.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-hook-form: 7.53.1(react@18.3.1)
       react-icons: 5.3.0(react@18.3.1)
+      react-quill: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router-dom: 6.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-slick: 0.30.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sanitize-html: 2.13.1
       slick-carousel: 1.8.1(jquery@3.7.1)
+      tailwind-scrollbar-hide: 1.1.7
+      tailwindcss: 3.4.14
       vite-plugin-node-polyfills: 0.22.0(rollup@4.24.0)(vite@5.4.10(@types/node@22.7.9))
       zod: 3.23.8
     transitivePeerDependencies:
@@ -4421,7 +4424,7 @@ snapshots:
       - debug
       - jquery
       - rollup
-      - tailwindcss
+      - ts-node
       - typescript
       - vite
 
@@ -4724,8 +4727,9 @@ snapshots:
 
   lodash.clonedeep@4.5.0: {}
 
-  lodash.isequal@4.5.0: {}
   lodash.debounce@4.0.8: {}
+
+  lodash.isequal@4.5.0: {}
 
   lodash.isplainobject@4.0.6: {}
 
