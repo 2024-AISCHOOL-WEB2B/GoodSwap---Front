@@ -1,42 +1,82 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import { Header } from "../../shared/components/Header";
 import { InfiniteScroll } from "../../features/post/components/InfiniteScroll";
-import { useTemporaryPosts } from "../../features/post/hooks/useTemporaryPosts";
 import { ArtistDropdown } from "../../shared/components/ArtistDropdown";
 import { selectedArtistAtom } from "../../shared/state/artistState";
 import { BackgroundFrame } from "../../shared/components/BackgroundFrame";
+import { fetchGoodsPosts } from "../../features/post/services/goodsPostService";
+
+interface GoodsPostData {
+  id: number;
+  artistId: number;
+  artist: string;
+  title: string;
+  content: string;
+  imageUrl: string;
+  goodsName: string;
+  price: number;
+  quantity: number;
+  createdAt: string;
+}
 
 const GoodsPostPage = () => {
-  const goodsPosts = useTemporaryPosts(30);
+  const [goodsPosts, setGoodsPosts] = useState<GoodsPostData[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedArtist, setSelectedArtist] = useAtom(selectedArtistAtom);
   const navigate = useNavigate();
 
+  // 게시글 불러오기 함수
+  const loadGoodsPosts = useCallback(async () => {
+    try {
+      const limit = 30;
+      const data = await fetchGoodsPosts(page, limit);
+      setGoodsPosts((prevPosts) => [...prevPosts, ...data]);
+
+      if (data.length < limit) {
+        setHasMore(false);
+      } else {
+        setPage((prevPage) => prevPage + 1);
+      }
+    } catch (error) {
+      console.error("게시글 데이터를 불러오는 중 오류 발생:", error);
+      setHasMore(false);
+    }
+  }, [page]);
+
+  // 데이터 로드
+  useEffect(() => {
+    loadGoodsPosts();
+  }, [loadGoodsPosts]);
+
+  // 아티스트 필터링
   const filteredPosts = selectedArtist
     ? goodsPosts.filter((post) => post.artistId === selectedArtist)
     : goodsPosts;
 
-  const loadMorePosts = () => {
-    if (goodsPosts.length >= 100) {
-      setHasMore(false);
-    }
-  };
-
+  // 아티스트 클릭 핸들러
   const handleArtistClick = () => {
     setShowDropdown((prev) => !prev);
   };
 
+  // 아티스트 선택 핸들러
   const handleArtistSelect = (artistId: number) => {
     setSelectedArtist(artistId === 0 ? null : artistId);
     setShowDropdown(false);
   };
 
+  // 게시글 더 불러오기
+  const loadMorePosts = () => {
+    if (hasMore) {
+      loadGoodsPosts();
+    }
+  };
+
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-gray-100">
-      {/* 수정된 부분: BackgroundFrame을 fixed로 설정하고 z-index 조정 */}
       <div className="fixed inset-0 z-[-1]">
         <BackgroundFrame />
       </div>
@@ -87,7 +127,7 @@ const GoodsPostPage = () => {
           </button>
         </div>
 
-        {/* PostListPage로 돌아가는 버튼 */}
+        {/* 자유 게시판 이동 버튼 */}
         <div
           className="absolute flex flex-col gap-1 left-[27px] top-[147px] w-[185px] h-[32px] bg-white border rounded cursor-pointer z-40"
           onClick={() => navigate("/postlist")}
@@ -95,20 +135,6 @@ const GoodsPostPage = () => {
           <p className="text-gray-700 font-medium text-center">
             자유 게시판 이동
           </p>
-        </div>
-
-        {/* 검색 입력 필드 */}
-        <div className="absolute top-[146px] left-[369px] flex items-center gap-2 p-2 w-[248px] h-[29px] bg-white border border-gray-400 rounded-lg z-40">
-          <img
-            className="size-6"
-            src="/PostList/icon-feather-icon12.svg"
-            alt="search icon"
-          />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="text-gray-500 bg-transparent border-none focus:outline-none"
-          />
         </div>
 
         {/* 게시글 표시 영역 */}

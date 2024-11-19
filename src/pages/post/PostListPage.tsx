@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import { Header } from "../../shared/components/Header";
@@ -30,19 +30,20 @@ const PostListPage = () => {
   // const posts = useTemporaryPosts(40);
 
   // 게시글 데이터를 API에서 가져오기
-  const loadPosts = async () => {
-    try {
-      const data = await fetchPosts(currentPage, postsPerPage);
-      setPosts(data);
-    } catch (error) {
-      console.error("게시글 데이터를 불러오는 중 오류 발생:", error);
-    }
-  };
+ // 게시글 데이터를 API에서 가져오기
+    const loadPosts = useCallback(async () => {
+      try {
+        const data = await fetchPosts(currentPage, postsPerPage);
+        setPosts(data);
+      } catch (error) {
+        console.error("게시글 데이터를 불러오는 중 오류 발생:", error);
+      }
+    }, [currentPage, postsPerPage]);
 
-  // 페이지 로드 시 게시글 데이터 불러오기
-  useEffect(() => {
-    loadPosts();
-  }, [currentPage]);
+    // 페이지 로드 시 게시글 데이터 불러오기
+    useEffect(() => {
+      loadPosts();
+    }, [loadPosts]);
 
   const filteredPosts = selectedArtist
     ? posts.filter((post) => post.artistId === selectedArtist)
