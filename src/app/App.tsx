@@ -20,10 +20,9 @@ import { GoodsPostPage } from "../pages/post/GoodsPostPage";
 import { GoodsPost } from "../pages/post/GoodsPost";
 import { Post } from "../pages/post/Post";
 import { GoodsPostCreate } from "../pages/post/GoodsPostCreate";
-import { PaymentForm } from "../features/payment/components/PaymentForm";
-import PostDetail from "../pages/PostDetail"; // 새로운 포스트 상세 페이지 컴포넌트 추가
-import GoodsDetailPage from "../pages/GoodsDetailPage";
-import GoodsList from "../features/mainPage/components/GoodsList";
+import PostDetail from '../pages/PostDetail'; // 새로운 포스트 상세 페이지 컴포넌트 추가
+import GoodsDetailPage from '../pages/GoodsDetailPage';
+import GoodsList from '../features/mainPage/components/GoodsList'; 
 
 function App() {
   const isAuthenticated = useAtomValue(isAuthenticatedAtom);
@@ -75,10 +74,8 @@ function App() {
       <Route path="/goods-post" element={<GoodsPostPage />} />
       <Route path="/goods-post/:postId" element={<GoodsPost />} />
       <Route path="/goods-post-create" element={<GoodsPostCreate />} />
-      <Route path="/payment" element={<PaymentForm />} />{" "}
-      {/* PaymentForm 경로 추가 */}
-      <Route path="/post/:postId" element={<PostDetail />} />{" "}
-      {/* 새로운 포스트 상세 페이지 추가 */}
+      <Route path="/payment" element={<PaymentForm />} /> {/* PaymentForm 경로 추가 */}
+      <Route path="/post/:postId" element={<PostDetail />} /> {/* 새로운 포스트 상세 페이지 추가 */}
       <Route path="/goods/:goodId" element={<GoodsDetailPage />} />
       <Route path="/goods" element={<GoodsList />} />
     </Routes>
