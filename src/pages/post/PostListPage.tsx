@@ -1,28 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import { Header } from "../../shared/components/Header";
 import { PostPagination } from "../../features/post/components/PostPagination";
-import { useTemporaryPosts } from "../../features/post/hooks/useTemporaryPosts";
+// import { useTemporaryPosts } from "../../features/post/hooks/useTemporaryPosts";
+import { fetchPosts } from "../../features/post/services/postService";
 import { ArtistDropdown } from "../../shared/components/ArtistDropdown";
 import { selectedArtistAtom } from "../../shared/state/artistState";
 import { BackgroundFrame } from "../../shared/components/BackgroundFrame";
+
+interface Post {
+  id: number;
+  title: string;
+  author: string;
+  date: string;
+  imageUrl?: string;
+  artistId: number;
+}
 
 const PostListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 8;
   const navigate = useNavigate();
   const [selectedArtist, setSelectedArtist] = useAtom(selectedArtistAtom);
-  const [showDropdown, setShowDropdown] = useState(false); // 드롭다운 표시 여부 상태
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  const posts = useTemporaryPosts(40);
+  // 임시 데이터 주석 처리
+  // const posts = useTemporaryPosts(40);
+
+  // 게시글 데이터를 API에서 가져오기
+ // 게시글 데이터를 API에서 가져오기
+    const loadPosts = useCallback(async () => {
+      try {
+        const data = await fetchPosts(currentPage, postsPerPage);
+        setPosts(data);
+      } catch (error) {
+        console.error("게시글 데이터를 불러오는 중 오류 발생:", error);
+      }
+    }, [currentPage, postsPerPage]);
+
+    // 페이지 로드 시 게시글 데이터 불러오기
+    useEffect(() => {
+      loadPosts();
+    }, [loadPosts]);
+
   const filteredPosts = selectedArtist
     ? posts.filter((post) => post.artistId === selectedArtist)
     : posts;
-
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
 
   const handlePostClick = (postId: number) => {
     navigate(`/post/${postId}`);
@@ -37,12 +62,12 @@ const PostListPage = () => {
   };
 
   const handleArtistClick = () => {
-    setShowDropdown((prev) => !prev); // 드롭다운 표시 상태 토글
+    setShowDropdown((prev) => !prev);
   };
 
   const handleArtistSelect = (artistId: number) => {
     if (artistId === 0) {
-      setSelectedArtist(null); // 전체 게시판으로 돌아가기
+      setSelectedArtist(null);
     } else {
       setSelectedArtist(artistId);
     }
@@ -105,23 +130,9 @@ const PostListPage = () => {
           </p>
         </div>
 
-        {/* 검색 입력 필드 */}
-        <div className="absolute top-[146px] left-[369px] flex items-center gap-2 p-2 w-[248px] h-[29px] bg-white border border-gray-400 rounded-lg z-40">
-          <img
-            className="size-6"
-            src="/PostList/icon-feather-icon12.svg"
-            alt="search icon"
-          />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="text-gray-500 bg-transparent border-none focus:outline-none"
-          />
-        </div>
-
         {/* 게시글 목록 */}
         <ul className="absolute top-[188px] left-[25px] flex flex-col space-y-2 z-10">
-          {currentPosts.map((post) => (
+          {filteredPosts.map((post) => (
             <li
               key={post.id}
               onClick={() => handlePostClick(post.id)}
@@ -129,11 +140,7 @@ const PostListPage = () => {
             >
               <img
                 className="size-20 mr-2"
-                src={
-                  post.imageUrl
-                    ? post.imageUrl
-                    : "/PostList/icon-feather-icon3.svg"
-                }
+                src={post.imageUrl || "/PostList/icon-feather-icon3.svg"}
                 alt="게시글 아이콘"
               />
               <div className="flex flex-col">
@@ -144,12 +151,6 @@ const PostListPage = () => {
                   {post.date} &nbsp;|&nbsp; {post.author}
                 </div>
               </div>
-
-              {/* 좋아요 아이콘 주석 처리 */}
-              {/*<img className="w-6 h-5 ml-auto mr-2" src="/PostList/vector0.svg" alt="좋아요" />*/}
-
-              {/* 좋아요 위치 공간 유지 */}
-              <div className="w-6 h-5 ml-auto mr-2"></div>
             </li>
           ))}
         </ul>

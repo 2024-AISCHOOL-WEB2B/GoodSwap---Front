@@ -2,8 +2,64 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { Header } from "../../shared/components/Header";
 import { BackgroundFrame } from "../../shared/components/BackgroundFrame";
+import { fetchGoodsPostById } from "../../features/post/services/goodsPostService";
+import { useState, useEffect } from "react";
+
+
+interface GoodsPostData {
+  title: string;
+  goodsName: string;
+  price: number;
+  quantity: number;
+  content: string;
+  artist: string;
+  imageUrl: string;
+  createdAt: string;
+  viewCount: number;
+}
+
 const GoodsPost = () => {
   const { postId } = useParams<{ postId: string }>(); // URL에서 postId를 받아옴
+  const [postData, setPostData] = useState<GoodsPostData | null>(null);
+
+
+    // 임시 데이터
+    const tempData: GoodsPostData = {
+      title: "테스트 제목",
+      goodsName: "테스트 판매 물품",
+      price: 100,
+      quantity: 1,
+      content: "회원님들 이번 굿즈는 **를 한 **입니다.\n35x85 사이즈로 제작되었으며 재질은 **입니다.",
+      artist: "회원2",
+      imageUrl: "/GoodsPost/div0.png",
+      createdAt: "2024.10.09. 22:33",
+      viewCount: 7,
+    };
+
+      // 데이터 불러오기
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            if (postId) {
+              const data = await fetchGoodsPostById(Number(postId));
+              setPostData(data);
+            }
+          } catch (error) {
+            console.error("게시글 데이터를 불러오는 중 오류 발생:", error);
+            setPostData(tempData); // 오류 발생 시 임시 데이터 사용
+          }
+        };
+      
+        fetchData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [postId]);
+      
+
+    // 데이터가 없는 경우 로딩 표시
+    if (!postData) {
+      return <div>로딩 중...</div>;
+    }
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -31,8 +87,9 @@ const GoodsPost = () => {
 
         {/* 상품 제목 */}
         <div className="text-[#292c33] text-left text-[50px] font-normal absolute left-[calc(50%_-_353px)] top-[calc(50%_-_395.5px)] w-[573px] h-[63px] flex items-center justify-start">
-          테스트 제목
+          {postData.title}
         </div>
+
 
         {/* 판매자 정보 */}
         <img
@@ -41,43 +98,49 @@ const GoodsPost = () => {
           alt="seller"
         />
         <div className="text-[#292c33] text-center text-[25px] absolute left-[calc(50%_-_269px)] top-[calc(50%_-_332.5px)] w-[122px] h-[55px] flex items-center justify-center">
-          회원2
+          {postData.artist}
         </div>
         <div className="text-[rgba(41,44,51,0.59)] text-center text-xl absolute left-[calc(50%_-_295px)] top-[calc(50%_-_288.5px)] w-[346px] h-[34px] flex items-center justify-center">
-          2024.10.09. 22:33 조회 7
+          {postData.createdAt} 조회 {postData.viewCount}
         </div>
+
 
         {/*신고*/}
         <div className="text-[rgba(41,44,51,0.59)] text-center font-['Inter-Regular',_sans-serif] text-xl font-normal absolute left-[calc(50%_-_-263px)] top-[calc(50%_-_288.5px)] w-[94px] h-[34px] flex items-center justify-center">
           신고
         </div>
 
+
+
         {/* 구분선 */}
         <div className="border-solid border-[rgba(0,0,0,0.46)] border-t border-x-0 border-b-0 w-[711px] h-0 absolute left-[calc(50%_-_353px)] top-[calc(50%_-_238.5px)]" />
+
+
 
         {/* 상품 이미지 */}
         <div className="absolute inset-x-[calc(50%-328px)] top-[calc(50%-217.5px)] size-[300px] bg-gradient-to-l from-gray-200 to-gray-200 border border-black rounded-lg flex items-center justify-center overflow-hidden">
           <img
             className="size-full object-cover"
-            src="/GoodsPost/div0.png"
+            src={postData.imageUrl}
             alt="product"
           />
         </div>
 
+
         {/* 가격 정보 */}
         <div className="text-[#000000] text-left absolute left-[calc(50%_-_-3px)] top-[calc(50%_-_223.5px)]">
-          테스트 판매 물품
+          {postData.goodsName}
         </div>
         <div className="text-[#000000] text-left text-[28px] font-semibold absolute left-[calc(50%_-_0px)] top-[calc(50%_-_188.5px)]">
           $
         </div>
         <div className="text-[#000000] text-center text-[55px] font-bold absolute left-[calc(50%_-_-15px)] top-[calc(50%_-_200.5px)] w-[100px] h-16">
-          100
+          {postData.price}
         </div>
 
         {/* 구매버튼 */}
         <div className="absolute left-[calc(50%-3px)] top-[calc(50%-113.5px)] w-[116px] h-[54px] rounded border border-neutral-400 p-4 flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-400 shadow-lg">
-          <div className="text-white">바로구매</div>
+          <button className="text-white">바로구매</button>
         </div>
 
         {/* 수량 정보 */}
@@ -89,8 +152,8 @@ const GoodsPost = () => {
             alt="rectangle"
           />
 
-          {/* 수량 텍스트 */}
-          <div className="absolute text-[#000000] text-center">1</div>
+          {/* 수량 숫자 */}
+          <div className="absolute text-[#000000] text-center">{postData.quantity}</div>
 
           {/* 플러스 아이콘
     <img
@@ -113,9 +176,7 @@ const GoodsPost = () => {
           </div>
           <div className="flex flex-row items-center justify-center w-full">
             <div className="text-[#000000] text-left flex-1">
-              회원님들 이번 굿즈는 **를 한 **입니다.
-              <br />
-              35x85 사이즈로 제작되었으며 재질은 **입니다.
+              {postData.content}
             </div>
           </div>
         </div>

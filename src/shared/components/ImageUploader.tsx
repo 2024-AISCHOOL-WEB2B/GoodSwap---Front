@@ -1,9 +1,10 @@
-//참고자료 
-//https://github.com/dowork0711/react-file-uploader
-
 import React, { useState, useRef } from "react";
 
-const ImageUploader: React.FC = () => {
+interface ImageUploaderProps {
+  onImageUpload: (url: string) => void;
+}
+
+const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) => {
   const [imageFile, setImageFile] = useState<{
     imageFile: File | null;
     viewUrl: string;
@@ -49,7 +50,9 @@ const ImageUploader: React.FC = () => {
             imageFile: file,
             viewUrl: serverImageUrl,
           });
-          console.log("서버 URL:", serverImageUrl);
+
+          // 부모 컴포넌트로 이미지 URL 전달
+          onImageUpload(serverImageUrl);
         } else {
           console.error("이미지 업로드 실패:", response.statusText);
         }
@@ -66,6 +69,7 @@ const ImageUploader: React.FC = () => {
   const onClickDeleteHandler = () => {
     setImageFile({ imageFile: null, viewUrl: "" });
     setLoaded(false);
+    onImageUpload(""); // 이미지 삭제 시 빈 문자열 전달
   };
 
   // 업로드 버튼 클릭 핸들러
