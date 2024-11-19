@@ -62,6 +62,11 @@ export const PostList: React.FC = () => {
     navigate(`/post/${postId}`); // 특정 포스트 클릭 시 해당 포스트의 상세 페이지로 이동
   };
 
+  const test = () => {
+    navigate(`/postlist`); // 전체 상품 보기 페이지로 이동
+  };
+
+
   return (
     <div style={{ margin: "20px auto", width: "90%" }}>
       <h2
@@ -70,7 +75,8 @@ export const PostList: React.FC = () => {
           fontWeight: "bold",
           marginBottom: "20px",
           color: "#ff69b4",
-        }}
+          cursor: 'pointer'
+        }} onClick={test}
       >
         Post
       </h2>
